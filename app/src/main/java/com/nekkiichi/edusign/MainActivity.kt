@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
-import com.nekkiichi.edusign.ui.theme.AppTypography
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
 
 class MainActivity : ComponentActivity() {
@@ -44,7 +43,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .padding(8.dp)) {
         PrimaryButton(onCLick = { /*TODO*/ }) {
-            Text(text = "Hello bro", style = AppTypography.labelLarge)
+            Text(text = "Hello bro")
         }
         Text(
             text = "Hello $name!", modifier = modifier

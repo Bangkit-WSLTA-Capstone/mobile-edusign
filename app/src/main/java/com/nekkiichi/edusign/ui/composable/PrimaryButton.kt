@@ -45,7 +45,7 @@ private fun ButtonPreview() {
                 }
                 PrimaryButton(onCLick = { /*TODO*/ }) {
                     Icon(Icons.Filled.Settings, contentDescription = "Settings icon")
-                    Text(text = "Primary Button with icon")
+                    Text(text = "with icon")
                 }
             }
         }
