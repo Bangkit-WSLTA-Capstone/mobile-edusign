@@ -59,7 +59,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun GuideScreen() {
+fun GuideScreen(modifier: Modifier = Modifier,navigateToLogin: () -> Unit = {}) {
     val pageList: List<@Composable RowScope.() -> Unit> =
         listOf({ GuideItem1() }, { GuideItem2() }, { GuideItem3() })
     val pagerState = rememberPagerState(pageCount = {
@@ -87,7 +87,10 @@ fun GuideScreen() {
                 .padding(innerPadding)
                 .padding(horizontal = 16.dp),
         ) {
-            Row(Modifier.align(Alignment.TopEnd).padding(top = 16.dp)) {
+            Row(
+                Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(top = 16.dp)) {
                 AnimatedVisibility(
                     visible = pagerState.currentPage < pagerState.pageCount - 1,
                     enter = fadeIn(),
@@ -215,7 +218,7 @@ private fun PageIndicatorItem(
 @Composable
 private fun GuideScreenPreview() {
     EduSignTheme() {
-        GuideScreen()
+        GuideScreen( navigateToLogin = {});
     }
 }
 
