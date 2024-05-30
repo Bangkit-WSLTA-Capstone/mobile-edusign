@@ -217,10 +217,16 @@ private fun PageIndicatorItem(
 
 @Preview
 @Composable
-private fun GuideScreenPreview() {
-    EduSignTheme() {
+private fun GuideScreenPreview(dark: Boolean = false) {
+    EduSignTheme(darkTheme = dark) {
         GuideScreen(navigateToLogin = {});
     }
+}
+
+@Preview
+@Composable
+private fun GuideScreenPreviewDark() {
+    GuideScreenPreview(true)
 }
 
 @Composable
