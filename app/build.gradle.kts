@@ -52,6 +52,14 @@ android {
 
 dependencies {
 
+    implementation("com.mikepenz:multiplatform-markdown-renderer-m3-android:0.20.0-coil2")
+    implementation(libs.multiplatform.markdown.renderer.android)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.gson)
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
