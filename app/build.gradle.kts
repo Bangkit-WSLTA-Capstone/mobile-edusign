@@ -53,6 +53,11 @@ android {
 dependencies {
 
     implementation(libs.multiplatform.markdown.renderer.android)
+    implementation(libs.retrofit)
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation(libs.gson)
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
