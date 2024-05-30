@@ -9,6 +9,7 @@ lifecycleRuntimeKtx = "2.6.1" # WARNING: dont upgrade to 2.8.x yet
 activityCompose = "1.9.0"
 composeBom = "2024.05.00"
 materialIconsExtended = "1.7.0-beta01"
+multiplatformMarkdownRendererAndroid = "v0.20.0-coil2"
 uiTextGoogleFonts = "1.6.7"
 coil = "2.6.0"
 navigationCompose = "2.8.0-beta01"
@@ -32,6 +33,7 @@ androidx-material-icons-extended = { group = "androidx.compose.material", name =
 androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+multiplatform-markdown-renderer-android = { module = "com.mikepenz:multiplatform-markdown-renderer-android", version.ref = "multiplatformMarkdownRendererAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
