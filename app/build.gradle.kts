@@ -52,9 +52,10 @@ android {
 
 dependencies {
 
+    implementation("com.mikepenz:multiplatform-markdown-renderer-m3-android:0.20.0-coil2")
     implementation(libs.multiplatform.markdown.renderer.android)
     implementation(libs.retrofit)
-    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation(libs.converter.gson)
     implementation(libs.gson)
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
