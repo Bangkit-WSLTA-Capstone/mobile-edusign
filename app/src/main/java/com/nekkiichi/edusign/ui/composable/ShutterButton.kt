@@ -4,7 +4,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Camera
+import androidx.compose.material.icons.filled.Stop
+import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -18,17 +19,25 @@ import com.nekkiichi.edusign.ui.theme.EduSignTheme
 
 
 @Composable
-fun ShutterButton(onClick: () -> Unit,modifier: Modifier = Modifier) {
+fun ShutterButton(onClick: () -> Unit, isPlayed: Boolean = false, modifier: Modifier = Modifier) {
+
     Button(
         onClick = onClick,
         Modifier
             .size(64.dp)
             .then(modifier),
         shape = CircleShape,
-        colors = ButtonDefaults.buttonColors(contentColor = Color.Black, containerColor = Color(0xFFffc524)),
+        colors = ButtonDefaults.buttonColors(
+            contentColor = Color.Black,
+            containerColor = Color(0xFFffc524)
+        ),
         contentPadding = PaddingValues(0.dp)
     ) {
-        Icon(Icons.Filled.Camera, contentDescription = "Shutter")
+        if (isPlayed) {
+            Icon(Icons.Filled.Stop, contentDescription = "Shutter")
+        } else {
+            Icon(Icons.Filled.Videocam, contentDescription = "Shutter")
+        }
     }
 }
 
