@@ -13,7 +13,6 @@ import com.nekkiichi.edusign.ui.screens.camera.no_permission.NoPermission_Camera
 fun CameraScreen() {
     val cameraPermissionState =
         rememberPermissionState(permission = android.Manifest.permission.CAMERA)
-
     CameraContent(
         hasPermission = cameraPermissionState.status.isGranted,
         onRequestPermission = cameraPermissionState::launchPermissionRequest

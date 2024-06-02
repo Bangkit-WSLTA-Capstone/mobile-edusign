@@ -31,7 +31,7 @@ private fun NoPermission_CameraContent(requestPermission: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(text = "Access Camera to get camera of course, so we can capture your sign :)")
-            PrimaryButton(onCLick = { /*TODO*/ }) {
+            PrimaryButton(onCLick = requestPermission) {
                 Text(text = "ALLOW CAMERA")
             }
         }
