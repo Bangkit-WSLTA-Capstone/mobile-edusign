@@ -51,13 +51,13 @@ android {
 }
 
 dependencies {
-    implementation("com.google.accompanist:accompanist-permissions:0.35.1-alpha")
-    implementation("androidx.camera:camera-core:1.4.0-beta01")
-    implementation("androidx.camera:camera-camera2:1.4.0-beta01")
-    implementation("androidx.camera:camera-view:1.4.0-beta01")
-    implementation("androidx.camera:camera-lifecycle:1.4.0-beta01")
+    implementation(libs.accompanist.permissions)
+    implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.androidx.camera.lifecycle)
 
-    implementation("com.mikepenz:multiplatform-markdown-renderer-m3-android:0.20.0-coil2")
+    implementation(libs.multiplatform.markdown.renderer.m3.android)
     implementation(libs.multiplatform.markdown.renderer.android)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
@@ -77,6 +77,10 @@ dependencies {
     implementation(libs.androidx.ui.text.google.fonts)
     implementation(libs.coil)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.camera.video)
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.exoplayer.dash)
+    implementation(libs.androidx.media3.ui)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
