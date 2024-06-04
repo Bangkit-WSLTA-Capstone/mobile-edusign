@@ -24,7 +24,7 @@ fun ShutterButton(onClick: () -> Unit, isPlayed: Boolean = false, modifier: Modi
     Button(
         onClick = onClick,
         Modifier
-            .size(64.dp)
+            .size(72.dp)
             .then(modifier),
         shape = CircleShape,
         colors = ButtonDefaults.buttonColors(
