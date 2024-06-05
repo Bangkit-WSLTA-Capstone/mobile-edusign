@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,7 +32,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -56,18 +54,38 @@ import com.nekkiichi.edusign.ui.composable.TextButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
 import kotlinx.coroutines.launch
 
+private data class Guide(val title: String? = null, val description: String)
+
+private val guides = listOf(
+    Guide(
+        "Welcome",
+        "Welcome to EduSign, American Sign Translation app with mini course included!"
+    ),
+    Guide("Woah!", "You can translate your sign language on the go!"),
+    Guide("Also,", "Use Mini-Courses to learn more about sign language!"),
+)
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun GuideScreen(modifier: Modifier = Modifier, navigateToLogin: () -> Unit = {}) {
-    val pageList: List<@Composable RowScope.() -> Unit> =
-        listOf({ GuideItem1() }, { GuideItem2() }, { GuideItem3() })
+fun WelcomeScreen(modifier: Modifier = Modifier, navigateToLogin: () -> Unit = {}) {
     val pagerState = rememberPagerState(pageCount = {
-        pageList.size
+        guides.size
     })
     val coroutineScope = rememberCoroutineScope()
 
     var isSkipButtonEnabled by remember { mutableStateOf(true) }
+
+    fun skipToEnd() {
+        coroutineScope.launch {
+            pagerState.animateScrollToPage(2)
+        }
+    }
+
+    fun nextPage() {
+        coroutineScope.launch {
+            pagerState.animateScrollToPage(pagerState.currentPage + 1)
+        }
+    }
 
     LaunchedEffect(key1 = pagerState) {
         snapshotFlow { pagerState.currentPage }.collect { page ->
@@ -98,9 +116,7 @@ fun GuideScreen(modifier: Modifier = Modifier, navigateToLogin: () -> Unit = {})
                     exit = fadeOut()
                 ) {
                     TextButton(onCLick = {
-                        coroutineScope.launch {
-                            pagerState.animateScrollToPage(2)
-                        }
+                        skipToEnd()
                     }) {
                         Text(text = "Skip ->")
                     }
@@ -113,10 +129,8 @@ fun GuideScreen(modifier: Modifier = Modifier, navigateToLogin: () -> Unit = {})
                     .fillMaxWidth()
                     .padding(24.dp)
             ) {
-                when (it) {
-                    0 -> GuideItem1()
-                    1 -> GuideItem2()
-                    2 -> GuideItem3()
+                with(guides[it]) {
+                    GuideItem(title = title ?: "", description = description)
                 }
             }
             Column(
@@ -144,9 +158,7 @@ fun GuideScreen(modifier: Modifier = Modifier, navigateToLogin: () -> Unit = {})
                     if (it) {
                         PrimaryButton(
                             onCLick = {
-                                coroutineScope.launch {
-                                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
-                                }
+                                nextPage()
                             },
                         ) {
                             Text(text = "NEXT")
@@ -223,7 +235,7 @@ private fun PageIndicatorItem(
 @Composable
 private fun GuideScreenPreview(dark: Boolean = false) {
     EduSignTheme(darkTheme = dark) {
-        GuideScreen(navigateToLogin = {});
+        WelcomeScreen(navigateToLogin = {});
     }
 }
 
@@ -248,56 +260,10 @@ private fun GuideItemLayout(content: @Composable (ColumnScope.() -> Unit)) {
 
 
 @Composable
-private fun GuideItem1() {
+private fun GuideItem(title: String, description: String) {
     GuideItemLayout {
-        Text(text = "Welcome", style = MaterialTheme.typography.headlineLarge)
-        Text(text = "Welcome to EduSign, American Sign Translation app with mini course included!")
+        Text(text = title, style = MaterialTheme.typography.headlineLarge)
+        Text(text = description)
     }
 
-}
-
-@Preview
-@Composable
-private fun GuideItem1Preview() {
-    EduSignTheme(dynamicColor = false) {
-        Surface {
-            GuideItem1()
-        }
-    }
-}
-
-@Composable
-private fun GuideItem2() {
-    GuideItemLayout {
-        Text(text = "Woah", style = MaterialTheme.typography.headlineLarge)
-        Text(text = "You can translate your sign language on the go!")
-    }
-}
-
-@Preview
-@Composable
-private fun GuideItem2Preview() {
-    EduSignTheme(dynamicColor = false) {
-        Surface {
-            GuideItem2()
-        }
-    }
-}
-
-@Composable
-private fun GuideItem3() {
-    GuideItemLayout {
-        Text(text = "Also,", style = MaterialTheme.typography.headlineLarge)
-        Text(text = "Use Mini-Courses to learn more about sign language!")
-    }
-}
-
-@Preview
-@Composable
-private fun GuideItem3Preview() {
-    EduSignTheme(dynamicColor = false) {
-        Surface {
-            GuideItem3()
-        }
-    }
 }
