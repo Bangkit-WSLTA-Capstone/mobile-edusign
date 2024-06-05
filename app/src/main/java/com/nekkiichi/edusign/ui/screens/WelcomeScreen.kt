@@ -97,7 +97,11 @@ fun GuideScreen(modifier: Modifier = Modifier, navigateToLogin: () -> Unit = {})
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
-                    TextButton(onCLick = { /*TODO*/ }) {
+                    TextButton(onCLick = {
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(2)
+                        }
+                    }) {
                         Text(text = "Skip ->")
                     }
 
