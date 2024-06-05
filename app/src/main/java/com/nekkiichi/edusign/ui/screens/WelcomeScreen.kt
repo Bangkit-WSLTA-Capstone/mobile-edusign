@@ -97,7 +97,11 @@ fun GuideScreen(modifier: Modifier = Modifier, navigateToLogin: () -> Unit = {})
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
-                    TextButton(onCLick = { /*TODO*/ }) {
+                    TextButton(onCLick = {
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(2)
+                        }
+                    }) {
                         Text(text = "Skip ->")
                     }
 
@@ -217,10 +221,16 @@ private fun PageIndicatorItem(
 
 @Preview
 @Composable
-private fun GuideScreenPreview() {
-    EduSignTheme() {
+private fun GuideScreenPreview(dark: Boolean = false) {
+    EduSignTheme(darkTheme = dark) {
         GuideScreen(navigateToLogin = {});
     }
+}
+
+@Preview
+@Composable
+private fun GuideScreenPreviewDark() {
+    GuideScreenPreview(true)
 }
 
 @Composable
