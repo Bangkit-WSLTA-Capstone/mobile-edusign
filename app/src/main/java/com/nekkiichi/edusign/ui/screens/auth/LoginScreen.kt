@@ -1,5 +1,6 @@
 package com.nekkiichi.edusign.ui.screens.auth
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Login
 import androidx.compose.material.icons.rounded.Email
@@ -30,6 +32,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -47,6 +52,13 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController)
     var loginForm: LoginForm? by remember {
         mutableStateOf(null)
     }
+    var isLoginEnable by remember {
+        mutableStateOf(false)
+    }
+    LaunchedEffect(loginForm) {
+        isLoginEnable = loginForm != null
+        Log.d("LoginScreen", "Login enabled ${loginForm}")
+    }
 
     Scaffold { paddingScaffold ->
         Column(Modifier.padding(paddingScaffold)) {
@@ -54,12 +66,19 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController)
                 Modifier
                     .defaultMinSize(minHeight = 200.dp)
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.primaryContainer)
+                    .background(MaterialTheme.colorScheme.primary)
                     .padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.Center,
             ) {
-                Text(text = "Welcome Back!", style = MaterialTheme.typography.headlineLarge)
-                Text(text = "Let's Sign in with your account!")
+                Text(
+                    text = "Welcome Back!",
+                    style = MaterialTheme.typography.headlineLarge,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+                Text(
+                    text = "Let's Sign in with your account!",
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             }
             LoginForm(
                 Modifier.padding(horizontal = 16.dp, vertical = 24.dp),
@@ -73,7 +92,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController)
             ) {
                 PrimaryButton(onCLick = {
                     //TODO: call viewmodel to check login
-                }, Modifier.fillMaxWidth()) {
+                }, Modifier.fillMaxWidth(), enabled = isLoginEnable) {
                     Text(text = "SIGN IN")
                     Spacer(modifier = Modifier.width(8.dp))
                     Icon(Icons.AutoMirrored.Rounded.Login, contentDescription = "")
@@ -110,10 +129,13 @@ private fun LoginForm(modifier: Modifier = Modifier, onChange: (form: LoginForm?
     }
 
     LaunchedEffect(emailError, passwordError) {
-        if (emailError.isEmpty() && passwordError.isEmpty())
-            onChange.invoke(LoginForm(email, password))
-        else
+        if (email.isEmpty() && password.isEmpty()) {
             onChange.invoke(null)
+        } else if (emailError.isEmpty() && passwordError.isEmpty()) {
+            onChange.invoke(LoginForm(email, password))
+        } else {
+            onChange.invoke(null)
+        }
     }
 
     Column(Modifier.then(modifier), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -124,14 +146,19 @@ private fun LoginForm(modifier: Modifier = Modifier, onChange: (form: LoginForm?
                 emailError = email.isValidEmail() ?: ""
             },
             Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(8.dp),
+            singleLine = true,
+            shape = RoundedCornerShape(4.dp),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Next
+            ),
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent,
                 errorIndicatorColor = Color.Transparent
             ),
-            label = { Text(text = "Username") },
+            placeholder = { Text(text = "Username") },
             leadingIcon = {
                 Icon(Icons.Rounded.Email, contentDescription = "Username / Email")
             },
@@ -150,14 +177,20 @@ private fun LoginForm(modifier: Modifier = Modifier, onChange: (form: LoginForm?
                 passwordError = password.isValidPassword() ?: ""
             },
             Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(8.dp),
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done
+            ),
+            visualTransformation = PasswordVisualTransformation(),
+            shape = RoundedCornerShape(4.dp),
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent,
                 errorIndicatorColor = Color.Transparent
             ),
-            label = { Text(text = "Password") },
+            placeholder = { Text(text = "Password") },
             leadingIcon = {
                 Icon(Icons.Rounded.Lock, contentDescription = "Password")
             },

@@ -23,9 +23,9 @@ val ButtonShape = RoundedCornerShape(4.dp)
 
 @Composable
 fun PrimaryButton(
-    onCLick: () -> Unit, modifier: Modifier = Modifier, content: @Composable() (RowScope.() -> Unit)
+    onCLick: () -> Unit, modifier: Modifier = Modifier, enabled: Boolean = true, content: @Composable() (RowScope.() -> Unit)
 ) {
-    Button(onClick = onCLick, modifier = modifier, shape = ButtonShape) {
+    Button(onClick = onCLick, modifier = modifier, shape = ButtonShape, enabled = enabled) {
         ProvideTextStyle(value = AppTypography.labelLarge.copy(fontFamily = geistMonoFamily)) {
             content()
         }
