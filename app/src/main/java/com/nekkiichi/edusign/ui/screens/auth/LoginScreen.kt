@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Login
@@ -22,8 +21,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -31,7 +28,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -39,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.nekkiichi.edusign.ui.composable.FilledTextField
 import com.nekkiichi.edusign.ui.composable.OutlineButton
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
@@ -139,7 +136,7 @@ private fun LoginForm(modifier: Modifier = Modifier, onChange: (form: LoginForm?
     }
 
     Column(Modifier.then(modifier), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        TextField(
+        FilledTextField(
             email,
             onValueChange = {
                 email = it
@@ -147,17 +144,11 @@ private fun LoginForm(modifier: Modifier = Modifier, onChange: (form: LoginForm?
             },
             Modifier.fillMaxWidth(),
             singleLine = true,
-            shape = RoundedCornerShape(4.dp),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Next
             ),
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent,
-                errorIndicatorColor = Color.Transparent
-            ),
+
             placeholder = { Text(text = "Username") },
             leadingIcon = {
                 Icon(Icons.Rounded.Email, contentDescription = "Username / Email")
@@ -170,7 +161,7 @@ private fun LoginForm(modifier: Modifier = Modifier, onChange: (form: LoginForm?
                 }
             }
         )
-        TextField(
+        FilledTextField(
             password,
             onValueChange = {
                 password = it
@@ -183,13 +174,6 @@ private fun LoginForm(modifier: Modifier = Modifier, onChange: (form: LoginForm?
                 imeAction = ImeAction.Done
             ),
             visualTransformation = PasswordVisualTransformation(),
-            shape = RoundedCornerShape(4.dp),
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent,
-                errorIndicatorColor = Color.Transparent
-            ),
             placeholder = { Text(text = "Password") },
             leadingIcon = {
                 Icon(Icons.Rounded.Lock, contentDescription = "Password")
@@ -208,7 +192,7 @@ private fun LoginForm(modifier: Modifier = Modifier, onChange: (form: LoginForm?
 @Preview
 @Composable
 private fun LoginScreenPreview(modifier: Modifier = Modifier) {
-    EduSignTheme(darkTheme = true) {
+    EduSignTheme(darkTheme = false) {
         Surface {
             LoginScreen(Modifier, rememberNavController())
         }
