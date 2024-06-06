@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
-import com.nekkiichi.edusign.ui.screens.WelcomeScreen
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
 
 
@@ -26,8 +25,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             EduSignTheme(dynamicColor = false) {
-//                NavigationRootRoutes()
-                WelcomeScreen()
+                NavigationRootRoutes()
+//                WelcomeScreen()
             }
         }
     }
