@@ -1,6 +1,5 @@
 package com.nekkiichi.edusign.ui.screens.auth
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,9 +34,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.nekkiichi.edusign.Screen
 import com.nekkiichi.edusign.ui.composable.FilledTextField
 import com.nekkiichi.edusign.ui.composable.OutlineButton
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
+import com.nekkiichi.edusign.ui.composable.TextButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
 import com.nekkiichi.edusign.utils.isValidEmail
 import com.nekkiichi.edusign.utils.isValidPassword
@@ -48,13 +49,6 @@ private data class LoginForm(val email: String, val password: String)
 fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController) {
     var loginForm: LoginForm? by remember {
         mutableStateOf(null)
-    }
-    var isLoginEnable by remember {
-        mutableStateOf(false)
-    }
-    LaunchedEffect(loginForm) {
-        isLoginEnable = loginForm != null
-        Log.d("LoginScreen", "Login enabled ${loginForm}")
     }
 
     Scaffold { paddingScaffold ->
@@ -89,19 +83,19 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController)
             ) {
                 PrimaryButton(onCLick = {
                     //TODO: call viewmodel to check login
-                }, Modifier.fillMaxWidth(), enabled = isLoginEnable) {
+                }, Modifier.fillMaxWidth(), enabled = loginForm != null) {
                     Text(text = "SIGN IN")
                     Spacer(modifier = Modifier.width(8.dp))
                     Icon(Icons.AutoMirrored.Rounded.Login, contentDescription = "")
                 }
                 HorizontalDivider(Modifier.padding(8.dp))
                 OutlineButton(onCLick = {
-                    navController.navigate("register")
+                    navController.navigate(Screen.Register.route)
                 }, Modifier.fillMaxWidth()) {
                     Text(text = "CREATE ACCOUNT")
                 }
-                OutlineButton(onCLick = {
-                    navController.navigate("dashboard")
+                TextButton(onCLick = {
+                    navController.navigate(Screen.Dashboard.route)
                 }, Modifier.fillMaxWidth()) {
                     Text(text = "SKIP ->")
                 }
@@ -192,7 +186,7 @@ private fun LoginForm(modifier: Modifier = Modifier, onChange: (form: LoginForm?
 @Preview
 @Composable
 private fun LoginScreenPreview(modifier: Modifier = Modifier) {
-    EduSignTheme(darkTheme = false) {
+    EduSignTheme() {
         Surface {
             LoginScreen(Modifier, rememberNavController())
         }

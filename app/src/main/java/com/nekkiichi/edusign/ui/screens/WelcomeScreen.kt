@@ -49,9 +49,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.nekkiichi.edusign.Screen
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
 import com.nekkiichi.edusign.ui.composable.TextButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
+import com.nekkiichi.edusign.utils.popUpToTop
 import kotlinx.coroutines.launch
 
 private data class Guide(val title: String? = null, val description: String)
@@ -67,7 +71,7 @@ private val guides = listOf(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun WelcomeScreen(modifier: Modifier = Modifier, navigateToLogin: () -> Unit = {}) {
+fun WelcomeScreen(modifier: Modifier = Modifier, navController: NavHostController) {
     val pagerState = rememberPagerState(pageCount = {
         guides.size
     })
@@ -165,15 +169,19 @@ fun WelcomeScreen(modifier: Modifier = Modifier, navigateToLogin: () -> Unit = {
                         }
                     } else {
                         PrimaryButton(
-                            onCLick = { /*TODO*/ },
+                            onCLick = {
+                                navController.navigate(Screen.Register.route) {
+                                    popUpToTop(navController)
+                                }
+                            },
                         ) {
-                            Text(text = "Start")
+                            Text(text = "START")
                         }
                     }
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(text = "Already have account?")
-                    TextButton(onCLick = { navigateToLogin() }, Modifier) {
+                    TextButton(onCLick = { navController.navigate(Screen.Login.route) }, Modifier) {
                         Text(
                             text = "Login Here",
                             style = MaterialTheme.typography.bodyLarge.copy(
@@ -235,7 +243,7 @@ private fun PageIndicatorItem(
 @Composable
 private fun GuideScreenPreview(dark: Boolean = false) {
     EduSignTheme(darkTheme = dark) {
-        WelcomeScreen(navigateToLogin = {});
+        WelcomeScreen(navController = rememberNavController())
     }
 }
 

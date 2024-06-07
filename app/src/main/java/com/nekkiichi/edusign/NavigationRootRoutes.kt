@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.nekkiichi.edusign.ui.screens.WelcomeScreen
 import com.nekkiichi.edusign.ui.screens.auth.LoginScreen
+import com.nekkiichi.edusign.ui.screens.auth.RegisterScreen
 
 
 sealed class Screen(val route: String) {
@@ -44,12 +45,10 @@ fun NavigationRootRoutes() {
             LoginScreen(navController = navController)
         }
         composable(Screen.Register.route) {
-            Column {
-
-            }
+            RegisterScreen(navController = navController)
         }
         composable(Screen.Welcome.route) {
-            WelcomeScreen(navigateToLogin = { navController.navigate(Screen.Login.route) })
+            WelcomeScreen(navController = navController)
         }
         composable(Screen.Dashboard.route) {
             Column {
