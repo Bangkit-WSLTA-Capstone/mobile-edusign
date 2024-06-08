@@ -70,7 +70,7 @@ private val guides = listOf(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun WelcomeScreen(modifier: Modifier = Modifier, navController: NavHostController) {
+fun WelcomeScreen(navController: NavHostController) {
     val pagerState = rememberPagerState(pageCount = {
         guides.size
     })

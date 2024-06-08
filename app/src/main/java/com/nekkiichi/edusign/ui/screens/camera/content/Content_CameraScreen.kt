@@ -21,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,7 +39,6 @@ fun Content_CameraScreen(modifier: Modifier = Modifier) {
         Handler(Looper.getMainLooper())
     }
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
     val camController = remember {
         LifecycleCameraController(context).apply {
             setEnabledUseCases(

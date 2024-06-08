@@ -71,10 +71,10 @@ internal fun CameraPreview(
 
 @Composable
 internal fun BottomCamControl(
+    modifier: Modifier = Modifier,
     onRecordCLick: () -> Unit,
     onCameraFlipClick: () -> Unit,
     isRecording: Boolean = false,
-    modifier: Modifier = Modifier
 ) {
     var toggleFlipPressed by remember {
         mutableStateOf(false)
