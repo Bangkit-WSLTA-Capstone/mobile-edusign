@@ -55,7 +55,6 @@ import com.nekkiichi.edusign.Screen
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
 import com.nekkiichi.edusign.ui.composable.TextButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
-import com.nekkiichi.edusign.utils.popUpToTop
 import kotlinx.coroutines.launch
 
 private data class Guide(val title: String? = null, val description: String)
@@ -171,7 +170,7 @@ fun WelcomeScreen(modifier: Modifier = Modifier, navController: NavHostControlle
                         PrimaryButton(
                             onCLick = {
                                 navController.navigate(Screen.Register.route) {
-                                    popUpToTop(navController)
+                                    popUpTo(0)
                                 }
                             },
                         ) {
