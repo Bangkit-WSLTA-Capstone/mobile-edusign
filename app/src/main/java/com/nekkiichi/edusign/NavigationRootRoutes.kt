@@ -1,6 +1,5 @@
 package com.nekkiichi.edusign
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -8,17 +7,14 @@ import androidx.navigation.compose.rememberNavController
 import com.nekkiichi.edusign.ui.screens.WelcomeScreen
 import com.nekkiichi.edusign.ui.screens.auth.LoginScreen
 import com.nekkiichi.edusign.ui.screens.auth.RegisterScreen
+import com.nekkiichi.edusign.ui.screens.home.HomeRootScreen
 
 
-sealed class Screen(val route: String) {
-    object Home : Screen("home")
-    object Login : Screen("login")
-    object Register : Screen("register")
-    object Welcome : Screen("welcome")
-    object Dashboard : Screen("dashboard")
-    object Translate : Screen("translate")
-    object Profile : Screen("profile")
-    object Settings : Screen("settings")
+sealed class RootNavRoutes(val route: String) {
+    object Home : RootNavRoutes("home")
+    object Login : RootNavRoutes("login")
+    object Register : RootNavRoutes("register")
+    object Welcome : RootNavRoutes("welcome")
 
     fun withArgs(vararg arg: String): String {
         return buildString {
@@ -35,40 +31,18 @@ sealed class Screen(val route: String) {
 fun NavigationRootRoutes() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = Screen.Welcome.route) {
-        composable(Screen.Home.route) {
-            Column {
-
-            }
-        }
-        composable(Screen.Login.route) {
+    NavHost(navController = navController, startDestination = RootNavRoutes.Welcome.route) {
+        composable(RootNavRoutes.Login.route) {
             LoginScreen(navController = navController)
         }
-        composable(Screen.Register.route) {
+        composable(RootNavRoutes.Register.route) {
             RegisterScreen(navController = navController)
         }
-        composable(Screen.Welcome.route) {
+        composable(RootNavRoutes.Welcome.route) {
             WelcomeScreen(navController = navController)
         }
-        composable(Screen.Dashboard.route) {
-            Column {
-
-            }
-        }
-        composable(Screen.Translate.route) {
-            Column {
-
-            }
-        }
-        composable(Screen.Profile.route) {
-            Column {
-
-            }
-        }
-        composable(Screen.Settings.route) {
-            Column {
-
-            }
+        composable(RootNavRoutes.Home.route) {
+            HomeRootScreen(navController = navController)
         }
     }
 }
