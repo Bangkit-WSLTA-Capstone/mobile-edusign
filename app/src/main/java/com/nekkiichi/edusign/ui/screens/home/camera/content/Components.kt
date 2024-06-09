@@ -1,4 +1,4 @@
-package com.nekkiichi.edusign.ui.screens.camera.content
+package com.nekkiichi.edusign.ui.screens.home.camera.content
 
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -96,7 +96,7 @@ internal fun BottomCamControl(
         horizontalArrangement = Arrangement.SpaceAround,
     ) {
         Text(text = "PREV")
-        ShutterButton(onClick = onRecordCLick, isRecording)
+        ShutterButton(onClick = onRecordCLick, isPlayed = isRecording)
         IconButton(onClick = {
             toggleFlipPressed = !toggleFlipPressed
             onCameraFlipClick()

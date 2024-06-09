@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.nekkiichi.edusign.ui.screens
+package com.nekkiichi.edusign.ui.screens.home
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
