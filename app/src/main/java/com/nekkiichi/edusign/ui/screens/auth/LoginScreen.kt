@@ -47,7 +47,7 @@ import com.nekkiichi.edusign.utils.isValidPassword
 private data class LoginForm(val email: String, val password: String)
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController) {
+fun LoginScreen(navController: NavHostController) {
     var loginForm: LoginForm? by remember {
         mutableStateOf(null)
     }
@@ -193,7 +193,7 @@ private fun LoginForm(modifier: Modifier = Modifier, onChange: (form: LoginForm?
 private fun LoginScreenPreview(modifier: Modifier = Modifier) {
     EduSignTheme() {
         Surface {
-            LoginScreen(Modifier, rememberNavController())
+            LoginScreen(rememberNavController())
         }
     }
 }

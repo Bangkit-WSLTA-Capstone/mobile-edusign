@@ -15,7 +15,7 @@ import com.nekkiichi.edusign.ui.composable.PrimaryButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
 
 @Composable
-fun NoPermission_CameraScreen(modifier: Modifier = Modifier, requestPermission: () -> Unit = {}) {
+fun NoPermission_CameraScreen(requestPermission: () -> Unit = {}) {
     NoPermission_CameraContent(requestPermission = requestPermission)
 }
 

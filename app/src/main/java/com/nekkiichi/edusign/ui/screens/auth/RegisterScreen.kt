@@ -48,7 +48,7 @@ import com.nekkiichi.edusign.utils.isValidPassword
 data class RegisterData(val email: String, val username: String, val password: String)
 
 @Composable
-fun RegisterScreen(modifier: Modifier = Modifier, navController: NavHostController) {
+fun RegisterScreen(navController: NavHostController) {
     var registerData: RegisterData? by remember {
         mutableStateOf(null)
     }
