@@ -1,4 +1,4 @@
-package com.nekkiichi.edusign.ui.screens.camera.content
+package com.nekkiichi.edusign.ui.screens.home.camera.content
 
 import android.os.Handler
 import android.os.Looper
@@ -19,6 +19,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -28,13 +29,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavHostController
+import com.nekkiichi.edusign.ui.screens.home.TranslateScreen
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
 import com.nekkiichi.edusign.utils.FileExt
 import com.nekkiichi.edusign.utils.toFormattedTime
 
 
 @Composable
-fun Content_CameraScreen(modifier: Modifier = Modifier) {
+fun Content_CameraScreen(navController: NavHostController, modifier: Modifier = Modifier) {
     val handler = remember {
         Handler(Looper.getMainLooper())
     }
@@ -52,7 +55,7 @@ fun Content_CameraScreen(modifier: Modifier = Modifier) {
     }
 
     var startTime by remember {
-        mutableStateOf(SystemClock.elapsedRealtime())
+        mutableLongStateOf(SystemClock.elapsedRealtime())
     }
     var currentTime by remember {
         mutableStateOf("")
@@ -60,8 +63,8 @@ fun Content_CameraScreen(modifier: Modifier = Modifier) {
 
     val updateTimer = object : Runnable {
         override fun run() {
-            val _currentTime = SystemClock.elapsedRealtime() - startTime
-            val timeStr = _currentTime.toFormattedTime()
+            val currTime = SystemClock.elapsedRealtime() - startTime
+            val timeStr = currTime.toFormattedTime()
             currentTime = timeStr
             handler.postDelayed(this, 1000)
         }
@@ -98,6 +101,10 @@ fun Content_CameraScreen(modifier: Modifier = Modifier) {
                     } else {
                         Toast.makeText(context, "Recording successfully", Toast.LENGTH_SHORT).show()
                         Log.d("CameraScreen", "path: ${outputFile.path}")
+                        navController.previousBackStackEntry?.savedStateHandle?.set(
+                            TranslateScreen.VIDEO_FILE,
+                            outputFile
+                        )
                     }
                 }
 

@@ -1,4 +1,4 @@
-package com.nekkiichi.edusign.ui.screens.camera.no_permission
+package com.nekkiichi.edusign.ui.screens.home.camera.no_permission
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
