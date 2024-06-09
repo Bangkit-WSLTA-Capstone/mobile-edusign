@@ -27,6 +27,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -34,7 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.nekkiichi.edusign.Screen
+import com.nekkiichi.edusign.RootNavRoutes
 import com.nekkiichi.edusign.ui.composable.FilledTextField
 import com.nekkiichi.edusign.ui.composable.OutlineButton
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
@@ -63,7 +64,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController)
             ) {
                 Text(
                     text = "Welcome Back!",
-                    style = MaterialTheme.typography.headlineLarge,
+                    style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold),
                     color = MaterialTheme.colorScheme.onPrimary
                 )
                 Text(
@@ -90,12 +91,16 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController)
                 }
                 HorizontalDivider(Modifier.padding(8.dp))
                 OutlineButton(onCLick = {
-                    navController.navigate(Screen.Register.route)
+                    navController.navigate(RootNavRoutes.Register.route)
                 }, Modifier.fillMaxWidth()) {
                     Text(text = "CREATE ACCOUNT")
                 }
                 TextButton(onCLick = {
-                    navController.navigate(Screen.Dashboard.route)
+                    navController.navigate(RootNavRoutes.Home.route) {
+                        popUpTo(RootNavRoutes.Login.route) {
+                            inclusive = true
+                        }
+                    }
                 }, Modifier.fillMaxWidth()) {
                     Text(text = "SKIP ->")
                 }
@@ -143,7 +148,7 @@ private fun LoginForm(modifier: Modifier = Modifier, onChange: (form: LoginForm?
                 imeAction = ImeAction.Next
             ),
 
-            placeholder = { Text(text = "Username") },
+            placeholder = { Text(text = "Email") },
             leadingIcon = {
                 Icon(Icons.Rounded.Email, contentDescription = "Username / Email")
             },
