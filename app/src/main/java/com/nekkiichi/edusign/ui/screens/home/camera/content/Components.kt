@@ -60,7 +60,7 @@ internal fun CameraPreview(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT
                     )
-                scaleType = PreviewView.ScaleType.FILL_CENTER
+                scaleType = PreviewView.ScaleType.FIT_CENTER
             }.also { previewView ->
                 previewView.controller = controller
                 controller.bindToLifecycle(lifecycleOwner)

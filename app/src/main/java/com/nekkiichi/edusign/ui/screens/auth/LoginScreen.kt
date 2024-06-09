@@ -37,8 +37,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.nekkiichi.edusign.RootNavRoutes
 import com.nekkiichi.edusign.ui.composable.FilledTextField
-import com.nekkiichi.edusign.ui.composable.OutlineButton
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
+import com.nekkiichi.edusign.ui.composable.SecondaryButton
 import com.nekkiichi.edusign.ui.composable.TextButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
 import com.nekkiichi.edusign.utils.isValidEmail
@@ -90,7 +90,7 @@ fun LoginScreen(navController: NavHostController) {
                     Icon(Icons.AutoMirrored.Rounded.Login, contentDescription = "")
                 }
                 HorizontalDivider(Modifier.padding(8.dp))
-                OutlineButton(onCLick = {
+                SecondaryButton(onCLick = {
                     navController.navigate(RootNavRoutes.Register.route)
                 }, Modifier.fillMaxWidth()) {
                     Text(text = "CREATE ACCOUNT")
@@ -102,7 +102,7 @@ fun LoginScreen(navController: NavHostController) {
                         }
                     }
                 }, Modifier.fillMaxWidth()) {
-                    Text(text = "SKIP ->")
+                    Text(text = "START AS GUEST")
                 }
             }
         }

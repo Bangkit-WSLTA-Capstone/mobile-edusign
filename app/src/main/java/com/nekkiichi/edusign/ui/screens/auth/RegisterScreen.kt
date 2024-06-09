@@ -37,8 +37,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.nekkiichi.edusign.RootNavRoutes
 import com.nekkiichi.edusign.ui.composable.FilledTextField
-import com.nekkiichi.edusign.ui.composable.OutlineButton
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
+import com.nekkiichi.edusign.ui.composable.SecondaryButton
 import com.nekkiichi.edusign.ui.composable.TextButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
 import com.nekkiichi.edusign.utils.isValidEmail
@@ -64,12 +64,12 @@ fun RegisterScreen(navController: NavHostController) {
                 verticalArrangement = Arrangement.Center,
             ) {
                 Text(
-                    text = "Welcome Back!",
+                    text = "Create an\nAccount for You!",
                     style = MaterialTheme.typography.headlineLarge,
                     color = MaterialTheme.colorScheme.onPrimary
                 )
                 Text(
-                    text = "Let's Sign in with your account!",
+                    text = "",
                     color = MaterialTheme.colorScheme.onPrimary
                 )
             }
@@ -91,7 +91,7 @@ fun RegisterScreen(navController: NavHostController) {
                     Icon(Icons.AutoMirrored.Rounded.Login, contentDescription = "")
                 }
                 HorizontalDivider(Modifier.padding(8.dp))
-                OutlineButton(
+                SecondaryButton(
                     onCLick = {
                         //back to login page, if not, navigate to login page
                         if (!navController.popBackStack()) {
@@ -112,7 +112,7 @@ fun RegisterScreen(navController: NavHostController) {
                     },
                     Modifier.fillMaxWidth(),
                 ) {
-                    Text(text = "SKIP ->")
+                    Text(text = "START AS GUEST")
                 }
             }
         }
