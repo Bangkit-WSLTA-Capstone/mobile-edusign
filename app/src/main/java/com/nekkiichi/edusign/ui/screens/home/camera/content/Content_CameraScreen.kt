@@ -29,7 +29,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import com.nekkiichi.edusign.ui.screens.home.TranslateScreen
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
 import com.nekkiichi.edusign.utils.FileExt
@@ -37,7 +37,7 @@ import com.nekkiichi.edusign.utils.toFormattedTime
 
 
 @Composable
-fun Content_CameraScreen(navController: NavHostController, modifier: Modifier = Modifier) {
+fun Content_CameraScreen(navController: NavController, modifier: Modifier = Modifier) {
     val handler = remember {
         Handler(Looper.getMainLooper())
     }
@@ -101,10 +101,14 @@ fun Content_CameraScreen(navController: NavHostController, modifier: Modifier = 
                     } else {
                         Toast.makeText(context, "Recording successfully", Toast.LENGTH_SHORT).show()
                         Log.d("CameraScreen", "path: ${outputFile.path}")
+
+
                         navController.previousBackStackEntry?.savedStateHandle?.set(
                             TranslateScreen.VIDEO_FILE,
                             outputFile
                         )
+
+                        navController.popBackStack()
                     }
                 }
 
@@ -148,6 +152,8 @@ fun Content_CameraScreen(navController: NavHostController, modifier: Modifier = 
             )
         }
     }
+
+
 }
 
 
