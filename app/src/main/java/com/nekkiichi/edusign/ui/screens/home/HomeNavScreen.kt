@@ -20,6 +20,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -27,6 +29,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
+import com.nekkiichi.edusign.viewModel.HomeViewModel
 
 
 sealed class HomeNavRoutes(var route: String, val icon: ImageVector?, var title: String) {
@@ -40,20 +43,37 @@ sealed class HomeNavRoutes(var route: String, val icon: ImageVector?, var title:
 
 
 @Composable
-fun HomeRootScreen(navController: NavHostController) {
+fun HomeNavScreen(navController: NavController, homeViewModel: HomeViewModel) {
     val bottomBarNavController = rememberNavController()
     Scaffold(bottomBar = {
         BottomNavBar(bottomNavController = bottomBarNavController)
     }) {
-        Box(modifier = Modifier.padding(it)) {
-            Navigations(bottomNavController = bottomBarNavController, navController = navController)
+        Box(modifier = Modifier.padding(bottom = it.calculateBottomPadding())) {
+            NavHost(
+                navController = bottomBarNavController,
+                startDestination = HomeNavRoutes.Dashboard.route
+            ) {
+                composable(HomeNavRoutes.Dashboard.route) {
+                    Text(text = "Dashboard")
+                }
+                composable(HomeNavRoutes.Translate.route) {
+                    TranslateScreen(navController = navController, homeViewModel)
+                }
+                composable(HomeNavRoutes.Notification.route) {
+                    Text(text = "Notification")
+                }
+                composable(HomeNavRoutes.Account.route) {
+                    Text(text = "Account")
+                }
+
+            }
         }
     }
 }
 
 
 @Composable
-fun BottomNavBar(
+private fun BottomNavBar(
     modifier: Modifier = Modifier, bottomNavController: NavHostController
 ) {
     val items = listOf(
@@ -98,29 +118,10 @@ fun BottomNavBar(
     }
 }
 
-@Composable
-fun Navigations(bottomNavController: NavHostController, navController: NavHostController) {
-    NavHost(navController = bottomNavController, startDestination = HomeNavRoutes.Dashboard.route) {
-        composable(HomeNavRoutes.Dashboard.route) {
-            Text(text = "Dashboard")
-        }
-        composable(HomeNavRoutes.Translate.route) {
-            Text(text = "Translate")
-        }
-        composable(HomeNavRoutes.Notification.route) {
-            Text(text = "Notification")
-        }
-        composable(HomeNavRoutes.Account.route) {
-            Text(text = "Account")
-        }
-
-    }
-}
-
 @Preview
 @Composable
 private fun HomeRootScreenPreview() {
     EduSignTheme {
-        HomeRootScreen(navController = rememberNavController())
+        HomeNavScreen(navController = rememberNavController(), viewModel())
     }
 }

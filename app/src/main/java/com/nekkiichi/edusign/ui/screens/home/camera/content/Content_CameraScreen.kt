@@ -29,7 +29,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import com.nekkiichi.edusign.ui.screens.home.TranslateScreen
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
 import com.nekkiichi.edusign.utils.FileExt
@@ -37,7 +37,7 @@ import com.nekkiichi.edusign.utils.toFormattedTime
 
 
 @Composable
-fun Content_CameraScreen(navController: NavHostController, modifier: Modifier = Modifier) {
+fun Content_CameraScreen(navController: NavController, modifier: Modifier = Modifier) {
     val handler = remember {
         Handler(Looper.getMainLooper())
     }
@@ -90,21 +90,26 @@ fun Content_CameraScreen(navController: NavHostController, modifier: Modifier = 
         // start recording video
         val outputFile = FileExt.createTempVideoFile(context)
         recording = camController.startRecording(
-            FileOutputOptions.Builder(outputFile).build(),
+            FileOutputOptions.Builder(outputFile).setDurationLimitMillis(10000L).build(),
             AudioConfig.AUDIO_DISABLED,
             ContextCompat.getMainExecutor(context.applicationContext)
         ) {
             when (it) {
                 is VideoRecordEvent.Finalize -> {
-                    if (it.hasError()) {
+                    if (it.hasError()&& it.error != VideoRecordEvent.Finalize.ERROR_DURATION_LIMIT_REACHED) {
                         Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
                     } else {
+                        recording = null
                         Toast.makeText(context, "Recording successfully", Toast.LENGTH_SHORT).show()
                         Log.d("CameraScreen", "path: ${outputFile.path}")
+
+
                         navController.previousBackStackEntry?.savedStateHandle?.set(
                             TranslateScreen.VIDEO_FILE,
                             outputFile
                         )
+
+                        navController.popBackStack()
                     }
                 }
 
@@ -148,6 +153,8 @@ fun Content_CameraScreen(navController: NavHostController, modifier: Modifier = 
             )
         }
     }
+
+
 }
 
 
@@ -179,7 +186,6 @@ private fun CameraScreenPreview(modifier: Modifier = Modifier, dark: Boolean = f
                         isRecording = false,
                         onRecordCLick = {
                         },
-
                         onCameraFlipClick = { },
                         modifier = Modifier.align(Alignment.BottomCenter)
                     )

@@ -14,8 +14,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
 
@@ -26,7 +28,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             EduSignTheme(dynamicColor = false) {
                 NavigationRootRoutes()
-//                WelcomeScreen()
+//                CameraScreen(navController = rememberNavController())
             }
         }
     }

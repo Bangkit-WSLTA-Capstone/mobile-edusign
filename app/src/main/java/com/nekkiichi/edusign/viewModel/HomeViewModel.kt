@@ -6,8 +6,12 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import java.io.File
 
-class TranslateViewModel : ViewModel() {
+class HomeViewModel : ViewModel() {
     var videoFile: File? by mutableStateOf(null)
+    fun uploadVideo() {
 
-
+    }
+    fun clearVideo() {
+        videoFile = null
+    }
 }

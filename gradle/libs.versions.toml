@@ -1,9 +1,10 @@
 [versions]
 accompanistPermissions = "0.35.1-alpha"
-agp = "8.4.0"
+agp = "8.4.1"
 cameraCore = "1.4.0-beta01"
 converterGson = "2.11.0"
 gson = "2.11.0"
+hiltAndroidCompiler = "2.44"
 kotlin = "1.9.24"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -26,7 +27,10 @@ media3Exoplayer = "1.3.1"
 media3ExoplayerDash = "1.3.1"
 media3Ui = "1.3.1"
 
+
 [libraries]
+
+
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 androidx-camera-video = { group = "androidx.camera", name = "camera-video", version.ref = "cameraCore" }
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraCore" }
@@ -37,6 +41,8 @@ androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroidCompiler" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

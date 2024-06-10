@@ -32,7 +32,7 @@ fun FilledTextField(
         singleLine = singleLine,
         keyboardOptions =keyboardOptions,
         visualTransformation = visualTransformation,
-        shape = RoundedCornerShape(4.dp),
+        shape = RoundedCornerShape(8.dp),
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
