@@ -8,4 +8,10 @@ import java.io.File
 
 class HomeViewModel : ViewModel() {
     var videoFile: File? by mutableStateOf(null)
+    fun uploadVideo() {
+
+    }
+    fun clearVideo() {
+        videoFile = null
+    }
 }

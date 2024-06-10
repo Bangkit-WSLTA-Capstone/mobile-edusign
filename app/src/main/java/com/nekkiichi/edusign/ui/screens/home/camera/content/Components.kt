@@ -95,7 +95,9 @@ internal fun BottomCamControl(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceAround,
     ) {
-        Text(text = "PREV")
+        IconButton(onClick = { /*TODO*/ }) {
+            
+        }
         ShutterButton(onClick = onRecordCLick, isPlayed = isRecording)
         IconButton(onClick = {
             toggleFlipPressed = !toggleFlipPressed

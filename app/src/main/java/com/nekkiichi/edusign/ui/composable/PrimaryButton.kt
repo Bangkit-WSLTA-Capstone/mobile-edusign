@@ -26,22 +26,36 @@ val ButtonShape = RoundedCornerShape(16.dp)
 
 @Composable
 fun PrimaryButton(
-    onCLick: () -> Unit, modifier: Modifier = Modifier, enabled: Boolean = true, content: @Composable() (RowScope.() -> Unit)
+    onCLick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    content: @Composable() (RowScope.() -> Unit)
 ) {
     Button(onClick = onCLick, modifier = modifier, shape = ButtonShape, enabled = enabled) {
-        ProvideTextStyle(value = AppTypography.labelLarge.copy(fontFamily = geistMonoFamily)) {
+        ProvideTextStyle(value = AppTypography.labelLarge) {
             content()
         }
     }
 }
 
 @Composable
-fun SecondaryButton(onCLick: () -> Unit, modifier: Modifier = Modifier, enabled: Boolean = true, content: @Composable() (RowScope.() -> Unit)) {
-    Button(onClick = onCLick, modifier = modifier, shape = ButtonShape, enabled = enabled, colors = ButtonDefaults.buttonColors(
-        containerColor = MaterialTheme.colorScheme.tertiary,
-        contentColor = MaterialTheme.colorScheme.onTertiary
-    )) {
-        ProvideTextStyle(value = AppTypography.labelLarge.copy(fontFamily = geistMonoFamily)) {
+fun SecondaryButton(
+    onCLick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    content: @Composable() (RowScope.() -> Unit)
+) {
+    Button(
+        onClick = onCLick,
+        modifier = modifier,
+        shape = ButtonShape,
+        enabled = enabled,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.tertiary,
+            contentColor = MaterialTheme.colorScheme.onTertiary
+        )
+    ) {
+        ProvideTextStyle(value = AppTypography.labelLarge) {
             content()
         }
     }
@@ -51,10 +65,17 @@ fun SecondaryButton(onCLick: () -> Unit, modifier: Modifier = Modifier, enabled:
 fun OutlineButton(
     onCLick: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     content: @Composable (RowScope.() -> Unit)
 ) {
-    OutlinedButton(onClick = onCLick, modifier = modifier, shape = ButtonShape, border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary) ) {
-        ProvideTextStyle(value = AppTypography.labelLarge.copy(fontFamily = geistMonoFamily)) {
+    OutlinedButton(
+        onClick = onCLick,
+        modifier = modifier,
+        shape = ButtonShape,
+        enabled = enabled,
+        border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
+    ) {
+        ProvideTextStyle(value = AppTypography.labelLarge) {
             content()
         }
     }
@@ -64,11 +85,13 @@ fun OutlineButton(
 fun TextButton(
     onCLick: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     content: @Composable (RowScope.() -> Unit)
 ) {
     androidx.compose.material3.TextButton(
         onClick = onCLick,
         modifier = modifier,
+        enabled = enabled,
         shape = ButtonShape
     ) {
         ProvideTextStyle(value = AppTypography.labelLarge.copy(fontFamily = geistMonoFamily)) {

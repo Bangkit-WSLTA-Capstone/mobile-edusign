@@ -5,12 +5,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Camera
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.History
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -50,6 +54,8 @@ import androidx.media3.ui.PlayerView
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.nekkiichi.edusign.RootNavRoutes
+import com.nekkiichi.edusign.ui.composable.PrimaryButton
+import com.nekkiichi.edusign.ui.composable.SecondaryButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
 import com.nekkiichi.edusign.viewModel.HomeViewModel
 
@@ -64,40 +70,38 @@ private val tabTitles = listOf("Video", "Text")
 @Composable
 fun TranslateScreen(navController: NavController, homeViewModel: HomeViewModel) {
     var tabState by remember { mutableStateOf(0) }
+
+
     fun showCamera() {
         navController.navigate(RootNavRoutes.Camera.route)
     }
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Live Translate") },
-                actions = {
-                    IconButton(onClick = { /* doSomething() */ }) {
-                        Icon(
-                            imageVector = Icons.Rounded.History,
-                            contentDescription = "Share"
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainer
+    Scaffold(topBar = {
+        TopAppBar(title = { Text("Live Translate") }, actions = {
+            IconButton(onClick = { /* doSomething() */ }) {
+                Icon(
+                    imageVector = Icons.Rounded.History, contentDescription = "Share"
                 )
-            )
-        }
-    ) {
-
+            }
+        }, colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainer
+        )
+        )
+    }) {
         Column(
-            Modifier
-                .padding(it)
+            Modifier.padding(it)
         ) {
             PrimaryTabRow(
                 selectedTabIndex = tabState,
                 containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
             ) {
                 tabTitles.forEachIndexed { index, s ->
-                    Tab(selected = tabState == index, onClick = { tabState = index }) {
-                        Text(text = s, overflow = TextOverflow.Ellipsis)
+                    Tab(
+                        selected = tabState == index,
+                        onClick = { tabState = index },
+                        Modifier.defaultMinSize(minHeight = 36.dp)
+                    ) {
+                        Text(text = s, minLines = 2, overflow = TextOverflow.Ellipsis)
                     }
                 }
             }
@@ -113,21 +117,18 @@ fun TranslateScreen(navController: NavController, homeViewModel: HomeViewModel) 
                         VideoViewer(
                             Modifier
                                 .padding(16.dp)
-                                .fillMaxSize(),
+                                .fillMaxWidth()
+                                .height(450.dp),
                             mediaSource = mediaSource
                         )
                     } else {
-                        Surface(
-                            modifier = Modifier
-                                .padding(16.dp)
-                                .fillMaxSize()
-                                .clip(RoundedCornerShape(8.dp)),
-                            tonalElevation = 4.dp,
-                            onClick = {
-                                showCamera()
-                            }
-                        ) {
-
+                        Surface(modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth()
+                            .height(450.dp)
+                            .clip(RoundedCornerShape(8.dp)), tonalElevation = 4.dp, onClick = {
+                            showCamera()
+                        }) {
                             Box {
                                 Box(modifier = Modifier.align(Alignment.Center)) {
                                     Row {
@@ -143,6 +144,29 @@ fun TranslateScreen(navController: NavController, homeViewModel: HomeViewModel) 
                             }
                         }
                     }
+                    Row(
+                        Modifier.padding(horizontal = 16.dp)
+                    ) {
+                        PrimaryButton(
+                            onCLick = { homeViewModel.uploadVideo() },
+                            Modifier
+                                .weight(3f),
+                            enabled = homeViewModel.videoFile != null
+                        ) {
+                            Text(text = "TRANSLATE")
+                        }
+                        Spacer(modifier = Modifier.width(8.dp))
+                        SecondaryButton(
+                            onCLick = {
+                                homeViewModel.clearVideo()
+                            },
+                            enabled = homeViewModel.videoFile != null
+                        ) {
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Icon(Icons.Rounded.Delete, contentDescription = "Delete")
+                        }
+                    }
+
 
                 }
 
@@ -159,7 +183,6 @@ fun TranslateScreen(navController: NavController, homeViewModel: HomeViewModel) 
 @Composable
 private fun VideoViewer(modifier: Modifier = Modifier, mediaSource: MediaSource) {
     val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
     val exoplayer = ExoPlayer.Builder(context).build()
 
     LaunchedEffect(mediaSource) {
@@ -178,15 +201,24 @@ private fun VideoViewer(modifier: Modifier = Modifier, mediaSource: MediaSource)
                 player = exoplayer
 
             }
-        },
-        Modifier.fillMaxSize()
+        }, Modifier.clip(RoundedCornerShape(8.dp)).then(modifier)
     )
 }
 
-@Preview
+@Preview()
 @Composable
 private fun TranslateScreenPreview() {
     EduSignTheme {
+        Surface {
+            TranslateScreen(rememberNavController(), viewModel())
+        }
+    }
+}
+
+@Preview()
+@Composable
+private fun TranslateScreenPreviewDark() {
+    EduSignTheme(darkTheme = true) {
         Surface {
             TranslateScreen(rememberNavController(), viewModel())
         }

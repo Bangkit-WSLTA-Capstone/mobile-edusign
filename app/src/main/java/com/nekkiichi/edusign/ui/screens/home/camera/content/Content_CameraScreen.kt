@@ -186,7 +186,6 @@ private fun CameraScreenPreview(modifier: Modifier = Modifier, dark: Boolean = f
                         isRecording = false,
                         onRecordCLick = {
                         },
-
                         onCameraFlipClick = { },
                         modifier = Modifier.align(Alignment.BottomCenter)
                     )
