@@ -1,7 +1,6 @@
 package com.nekkiichi.edusign.ui.screens.home
 
 import android.content.res.Configuration
-import android.inputmethodservice.Keyboard
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,7 +13,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CameraAlt
 import androidx.compose.material.icons.rounded.LocalLibrary
 import androidx.compose.material.icons.rounded.TaskAlt
-import androidx.compose.material.icons.rounded.TextFields
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -23,7 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,7 +33,24 @@ import com.nekkiichi.edusign.ui.theme.EduSignTheme
 
 
 @Composable
-fun DashboardScreen(navController: NavController) {
+fun DashboardScreen(bottomNavController: NavController) {
+
+    fun navigateToTranslate() {
+        bottomNavController.navigate(HomeNavRoutes.Translate.route) {
+            bottomNavController.graph.startDestinationRoute?.let {
+                popUpTo(it) {
+                    saveState = true
+                }
+            }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
+
+    fun navigateToGlossary() {
+        bottomNavController.navigate(HomeNavRoutes.Notification.route)
+    }
+
     Scaffold {
         Surface(Modifier.fillMaxSize()) {
 
@@ -132,7 +146,17 @@ fun DashboardScreen(navController: NavController) {
                     //Button Section
                     Spacer(modifier = Modifier.size(16.dp))
                     Column {
-                        DashboardButton(icon = { Icon(Icons.Rounded.CameraAlt, contentDescription = null) }, label = "Open Camera", description = "Video translate")
+                        DashboardButton(
+                            onClick = {
+                                navigateToTranslate()
+                            },
+                            icon = {
+                                Icon(
+                                    Icons.Rounded.CameraAlt,
+                                    contentDescription = null
+                                )
+                            }, label = "Open Camera", description = "Video translate"
+                        )
                     }
 
                     Spacer(modifier = Modifier.size(16.dp))
@@ -143,7 +167,7 @@ fun DashboardScreen(navController: NavController) {
                     )
                     Text(text = "Help us to improve our product!")
                     Spacer(modifier = Modifier.size(16.dp))
-                    DashboardButton(label = "Link to repository")
+                    DashboardButton(onClick = {}, label = "Link to repository")
                 }
             }
         }
@@ -157,6 +181,6 @@ fun DashboardScreen(navController: NavController) {
 @Composable
 private fun DashboardScreenPreview() {
     EduSignTheme {
-        DashboardScreen(navController = rememberNavController())
+        DashboardScreen(bottomNavController = rememberNavController())
     }
 }
