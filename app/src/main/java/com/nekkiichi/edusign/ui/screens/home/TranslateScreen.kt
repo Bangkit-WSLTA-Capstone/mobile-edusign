@@ -20,6 +20,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -28,10 +29,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -40,6 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -69,15 +73,21 @@ private val tabTitles = listOf("Video", "Text")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TranslateScreen(navController: NavController, homeViewModel: HomeViewModel) {
-    var tabState by remember { mutableStateOf(0) }
+    var tabState by remember { mutableIntStateOf(0) }
 
+    val sheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
+    var showBottomSheet by remember { mutableStateOf(false) }
 
     fun showCamera() {
         navController.navigate(RootNavRoutes.Camera.route)
     }
     Scaffold(topBar = {
         TopAppBar(title = { Text("Live Translate") }, actions = {
-            IconButton(onClick = { /* doSomething() */ }) {
+            IconButton(onClick = {
+                //TODO: switch screen to history screen
+                showBottomSheet = true
+            }) {
                 Icon(
                     imageVector = Icons.Rounded.History, contentDescription = "Share"
                 )
@@ -88,7 +98,8 @@ fun TranslateScreen(navController: NavController, homeViewModel: HomeViewModel) 
         )
     }) {
         Column(
-            Modifier.padding(it)
+            Modifier
+                .padding(it)
         ) {
             PrimaryTabRow(
                 selectedTabIndex = tabState,
@@ -126,9 +137,11 @@ fun TranslateScreen(navController: NavController, homeViewModel: HomeViewModel) 
                             .padding(16.dp)
                             .fillMaxWidth()
                             .height(450.dp)
-                            .clip(RoundedCornerShape(8.dp)), tonalElevation = 4.dp, onClick = {
-                            showCamera()
-                        }) {
+                            .clip(RoundedCornerShape(8.dp)),
+                            tonalElevation = 4.dp,
+                            onClick = {
+                                showCamera()
+                            }) {
                             Box {
                                 Box(modifier = Modifier.align(Alignment.Center)) {
                                     Row {
@@ -174,7 +187,24 @@ fun TranslateScreen(navController: NavController, homeViewModel: HomeViewModel) 
                     TextField(value = "", onValueChange = {})
                 }
             }
+        }
+        if (showBottomSheet) {
+            ModalBottomSheet(onDismissRequest = {
+                showBottomSheet = false
+            },sheetState = sheetState) {
+                Column(Modifier.padding(16.dp)) {
+                    Text(text = "Translated Text: ", style = MaterialTheme.typography.titleMedium)
+                    Column(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(text = "Translate result", textAlign = TextAlign.Center)
+                    }
 
+                }
+            }
         }
     }
 }
@@ -201,7 +231,10 @@ private fun VideoViewer(modifier: Modifier = Modifier, mediaSource: MediaSource)
                 player = exoplayer
 
             }
-        }, Modifier.clip(RoundedCornerShape(8.dp)).then(modifier)
+        },
+        Modifier
+            .clip(RoundedCornerShape(8.dp))
+            .then(modifier)
     )
 }
 
