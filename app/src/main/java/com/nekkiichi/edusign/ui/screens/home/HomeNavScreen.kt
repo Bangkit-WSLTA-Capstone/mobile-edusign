@@ -54,7 +54,7 @@ fun HomeNavScreen(navController: NavController, homeViewModel: HomeViewModel) {
                 startDestination = HomeNavRoutes.Dashboard.route
             ) {
                 composable(HomeNavRoutes.Dashboard.route) {
-                    Text(text = "Dashboard")
+                    DashboardScreen(navController = navController)
                 }
                 composable(HomeNavRoutes.Translate.route) {
                     TranslateScreen(navController = navController, homeViewModel)

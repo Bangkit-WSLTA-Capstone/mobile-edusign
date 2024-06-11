@@ -67,6 +67,7 @@ dependencies {
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.lifecycle)
     implementation("io.coil-kt:coil-gif:2.6.0")
+    implementation("io.coil-kt:coil-compose:2.6.0")
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
