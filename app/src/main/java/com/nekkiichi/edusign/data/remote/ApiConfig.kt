@@ -1,13 +1,15 @@
 package com.nekkiichi.edusign.data.remote
 
 import com.nekkiichi.edusign.BuildConfig
+import com.nekkiichi.edusign.data.local.AuthDataStore
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiConfig {
-    fun provideApiService(): ApiService {
+    fun provideApiService(authDataStore: AuthDataStore): ApiService {
+
         val baseUrl = ""
         val loggingInterceptor =
             HttpLoggingInterceptor().setLevel(
