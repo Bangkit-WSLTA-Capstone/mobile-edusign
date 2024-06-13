@@ -59,6 +59,7 @@ import com.nekkiichi.edusign.RootRoutes
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
 import com.nekkiichi.edusign.ui.composable.TextButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
+import com.nekkiichi.edusign.utils.popUpToTop
 import kotlinx.coroutines.launch
 
 @Immutable
@@ -107,9 +108,7 @@ fun WelcomeScreen(navController: NavHostController) {
 
     fun navigateToRegister() {
         navController.navigate(RootRoutes.Register.route) {
-            popUpTo(RootRoutes.Welcome.route) {
-                inclusive = true
-            }
+            popUpToTop(navController)
         }
     }
 
