@@ -1,7 +1,7 @@
 package com.nekkiichi.edusign.data
 
 import android.content.Context
-import com.nekkiichi.edusign.data.local.AuthDataStore
+import com.nekkiichi.edusign.data.local.AuthManager
 import com.nekkiichi.edusign.data.remote.ApiConfig
 import com.nekkiichi.edusign.data.remote.ApiService
 import dagger.Module
@@ -17,9 +17,9 @@ import javax.inject.Singleton
 object Injection {
     @Provides
     @Singleton
-    fun provideAppService(authDataStore: AuthDataStore): ApiService = ApiConfig.provideApiService(authDataStore)
+    fun provideAppService(authManager: AuthManager): ApiService = ApiConfig.provideApiService(authManager)
 
     @Provides
     @Singleton
-    fun provideAuthDataStore(@ApplicationContext context: Context): AuthDataStore = AuthDataStore(context)
+    fun provideAuthManager(@ApplicationContext context: Context): AuthManager = AuthManager(context)
 }
