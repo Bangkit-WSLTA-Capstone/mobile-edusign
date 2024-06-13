@@ -62,17 +62,18 @@ android {
 
 dependencies {
 
-    implementation("androidx.datastore:datastore-preferences:1.1.1")
+    implementation(libs.androidx.datastore.preferences)
 
     implementation(libs.accompanist.permissions)
     implementation(libs.androidx.camera.core)
     implementation(libs.androidx.camera.camera2)
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.lifecycle)
-    implementation("io.coil-kt:coil-gif:2.6.0")
-    implementation("io.coil-kt:coil-compose:2.6.0")
+    implementation(libs.coil.gif)
+    implementation(libs.coil.compose)
 
     implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
     kapt(libs.hilt.android.compiler)
 
     implementation(libs.multiplatform.markdown.renderer.m3.android)
