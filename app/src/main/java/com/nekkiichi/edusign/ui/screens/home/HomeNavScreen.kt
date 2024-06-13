@@ -54,10 +54,10 @@ fun HomeNavScreen(navController: NavController, homeViewModel: HomeViewModel) {
                 startDestination = HomeNavRoutes.Dashboard.route
             ) {
                 composable(HomeNavRoutes.Dashboard.route) {
-                    DashboardScreen(bottomNavController = bottomBarNavController)
+                    DashboardScreen(bottomBarNavController)
                 }
                 composable(HomeNavRoutes.Translate.route) {
-                    TranslateScreen(navController = navController, homeViewModel)
+                    TranslateScreen(navController, homeViewModel)
                 }
                 composable(HomeNavRoutes.Notification.route) {
                     Text(text = "Notification")
@@ -90,7 +90,7 @@ private fun BottomNavBar(
     }
     val navBackStackEntry by bottomNavController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
-    NavigationBar {
+    NavigationBar(modifier) {
         items.forEachIndexed { index, navigationItem ->
             NavigationBarItem(selected = currentDestination?.hierarchy?.any { it.route == navigationItem.route } == true,
                 onClick = {

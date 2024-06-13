@@ -57,7 +57,7 @@ import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import androidx.media3.ui.PlayerView
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.nekkiichi.edusign.RootNavRoutes
+import com.nekkiichi.edusign.RootRoutes
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
 import com.nekkiichi.edusign.ui.composable.SecondaryButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
@@ -67,7 +67,7 @@ object TranslateScreen {
     const val VIDEO_FILE = "video_file"
 }
 
-private val tabTitles = listOf("Video", "Text")
+private val tabTitles = listOf("Video", "History")
 
 @androidx.annotation.OptIn(UnstableApi::class)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -75,12 +75,13 @@ private val tabTitles = listOf("Video", "Text")
 fun TranslateScreen(navController: NavController, homeViewModel: HomeViewModel) {
     var tabState by remember { mutableIntStateOf(0) }
 
+
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
 
     fun showCamera() {
-        navController.navigate(RootNavRoutes.Camera.route)
+        navController.navigate(RootRoutes.Camera.route)
     }
     Scaffold(topBar = {
         TopAppBar(title = { Text("Live Translate") }, actions = {
@@ -184,6 +185,7 @@ fun TranslateScreen(navController: NavController, homeViewModel: HomeViewModel) 
                 }
 
                 else -> {
+
                     TextField(value = "", onValueChange = {})
                 }
             }

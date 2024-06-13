@@ -35,7 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.nekkiichi.edusign.RootNavRoutes
+import com.nekkiichi.edusign.RootRoutes
 import com.nekkiichi.edusign.ui.composable.FilledTextField
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
 import com.nekkiichi.edusign.ui.composable.SecondaryButton
@@ -95,7 +95,7 @@ fun RegisterScreen(navController: NavHostController) {
                     onCLick = {
                         //back to login page, if not, navigate to login page
                         if (!navController.popBackStack()) {
-                            navController.navigate(RootNavRoutes.Login.route)
+                            navController.navigate(RootRoutes.Login.route)
                         }
                     },
                     Modifier.fillMaxWidth(),
@@ -104,8 +104,8 @@ fun RegisterScreen(navController: NavHostController) {
                 }
                 TextButton(
                     onCLick = {
-                        navController.navigate(RootNavRoutes.Home.route) {
-                            popUpTo(RootNavRoutes.Register.route) {
+                        navController.navigate(RootRoutes.Home.route) {
+                            popUpTo(RootRoutes.Register.route) {
                                 inclusive = true
                             }
                         }

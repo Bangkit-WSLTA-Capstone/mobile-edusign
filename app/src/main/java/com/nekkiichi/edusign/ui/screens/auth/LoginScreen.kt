@@ -35,7 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.nekkiichi.edusign.RootNavRoutes
+import com.nekkiichi.edusign.RootRoutes
 import com.nekkiichi.edusign.ui.composable.FilledTextField
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
 import com.nekkiichi.edusign.ui.composable.SecondaryButton
@@ -91,13 +91,13 @@ fun LoginScreen(navController: NavHostController) {
                 }
                 HorizontalDivider(Modifier.padding(8.dp))
                 SecondaryButton(onCLick = {
-                    navController.navigate(RootNavRoutes.Register.route)
+                    navController.navigate(RootRoutes.Register.route)
                 }, Modifier.fillMaxWidth()) {
                     Text(text = "CREATE ACCOUNT")
                 }
                 TextButton(onCLick = {
-                    navController.navigate(RootNavRoutes.Home.route) {
-                        popUpTo(RootNavRoutes.Login.route) {
+                    navController.navigate(RootRoutes.Home.route) {
+                        popUpTo(RootRoutes.Login.route) {
                             inclusive = true
                         }
                     }

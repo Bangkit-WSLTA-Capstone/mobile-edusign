@@ -55,7 +55,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.mikepenz.markdown.m3.Markdown
 import com.nekkiichi.edusign.R
-import com.nekkiichi.edusign.RootNavRoutes
+import com.nekkiichi.edusign.RootRoutes
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
 import com.nekkiichi.edusign.ui.composable.TextButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
@@ -98,16 +98,16 @@ fun WelcomeScreen(navController: NavHostController) {
     }
 
     fun navigateToLogin() {
-        navController.navigate(RootNavRoutes.Login.route) {
-            popUpTo(RootNavRoutes.Welcome.route) {
+        navController.navigate(RootRoutes.Login.route) {
+            popUpTo(RootRoutes.Welcome.route) {
                 inclusive = true
             }
         }
     }
 
     fun navigateToRegister() {
-        navController.navigate(RootNavRoutes.Register.route) {
-            popUpTo(RootNavRoutes.Welcome.route) {
+        navController.navigate(RootRoutes.Register.route) {
+            popUpTo(RootRoutes.Welcome.route) {
                 inclusive = true
             }
         }
