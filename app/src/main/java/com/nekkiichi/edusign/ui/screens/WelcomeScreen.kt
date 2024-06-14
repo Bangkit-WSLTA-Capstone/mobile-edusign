@@ -59,7 +59,7 @@ import com.nekkiichi.edusign.RootRoutes
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
 import com.nekkiichi.edusign.ui.composable.TextButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
-import com.nekkiichi.edusign.utils.popUpToTop
+import com.nekkiichi.edusign.utils.extension.popUpToTop
 import kotlinx.coroutines.launch
 
 @Immutable

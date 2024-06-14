@@ -12,7 +12,7 @@ import com.nekkiichi.edusign.ui.screens.auth.RegisterScreen
 import com.nekkiichi.edusign.ui.screens.home.HomeNavScreen
 import com.nekkiichi.edusign.ui.screens.home.TranslateScreen
 import com.nekkiichi.edusign.ui.screens.home.camera.CameraScreen
-import com.nekkiichi.edusign.utils.popUpToTop
+import com.nekkiichi.edusign.utils.extension.popUpToTop
 import com.nekkiichi.edusign.viewModel.AuthViewModel
 import com.nekkiichi.edusign.viewModel.HomeViewModel
 import java.io.File

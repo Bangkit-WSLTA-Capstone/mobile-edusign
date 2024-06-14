@@ -32,8 +32,8 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.nekkiichi.edusign.ui.screens.home.TranslateScreen
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
-import com.nekkiichi.edusign.utils.FileExt
-import com.nekkiichi.edusign.utils.toFormattedTime
+import com.nekkiichi.edusign.utils.extension.FileExt
+import com.nekkiichi.edusign.utils.extension.toFormattedTime
 
 
 @Composable
@@ -109,7 +109,7 @@ fun Content_CameraScreen(navController: NavController, modifier: Modifier = Modi
                             outputFile
                         )
 
-                        navController.popBackStack()
+                        navController.navigateUp()
                     }
                 }
 

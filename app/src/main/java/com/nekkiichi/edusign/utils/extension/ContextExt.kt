@@ -1,4 +1,4 @@
-package com.nekkiichi.edusign.utils
+package com.nekkiichi.edusign.utils.extension
 
 import android.content.Context
 
