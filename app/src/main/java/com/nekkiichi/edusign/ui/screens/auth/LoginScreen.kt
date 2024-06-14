@@ -47,19 +47,31 @@ import com.nekkiichi.edusign.utils.isValidEmail
 import com.nekkiichi.edusign.utils.isValidPassword
 import com.nekkiichi.edusign.viewModel.AuthViewModel
 
-private data class LoginForm(val email: String, val password: String)
+internal data class LoginForm(val email: String, val password: String)
+
+internal class LoginHandler {
+    var login: (LoginForm) -> Unit = {}
+}
 
 @Composable
 fun LoginScreen(navController: NavController, authViewModel: AuthViewModel) {
     val loginState = authViewModel.loginStatus
-    LoginScreenContent(navController, loginState, login = {
-        authViewModel.login(it.email, it.password)
-    })
+    val handler = remember {
+        LoginHandler().apply {
+            login = { form ->
+                authViewModel.login(form.email, form.password)
+            }
+        }
+    }
+
+
+
+    LoginScreenContent(navController, loginState, handler)
 }
 
 @Composable
 private fun LoginScreenContent(
-    navController: NavController, loginState: Status<LoginResponse>?, login: (LoginForm) -> Unit
+    navController: NavController, loginState: Status<LoginResponse>?, handler: LoginHandler
 ) {
     var loading by remember {
         mutableStateOf(false)
@@ -106,7 +118,7 @@ private fun LoginScreenContent(
                 PrimaryButton(
                     onCLick = {
                         val form = loginForm ?: return@PrimaryButton
-                        login(form)
+                        handler.login.invoke(form)
                     },
                     Modifier.fillMaxWidth(),
                     enabled = loginForm != null && !loading // enable button if not in loading state
@@ -206,7 +218,7 @@ private fun LoginForm(modifier: Modifier = Modifier, onChange: (form: LoginForm?
 private fun LoginScreenPreview(modifier: Modifier = Modifier) {
     EduSignTheme() {
         Surface {
-            LoginScreenContent(navController = rememberNavController(), null, {})
+            LoginScreenContent(navController = rememberNavController(), null, LoginHandler())
         }
     }
 }
