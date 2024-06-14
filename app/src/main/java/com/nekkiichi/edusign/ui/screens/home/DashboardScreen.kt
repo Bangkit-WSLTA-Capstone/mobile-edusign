@@ -36,7 +36,7 @@ import com.nekkiichi.edusign.ui.theme.EduSignTheme
 fun DashboardScreen(bottomNavController: NavController) {
 
     fun navigateToTranslate() {
-        bottomNavController.navigate(HomeNavRoutes.Translate.route) {
+        bottomNavController.navigate(HomeRoutes.Translate.route) {
             bottomNavController.graph.startDestinationRoute?.let {
                 popUpTo(it) {
                     saveState = true
@@ -48,7 +48,7 @@ fun DashboardScreen(bottomNavController: NavController) {
     }
 
     fun navigateToGlossary() {
-        bottomNavController.navigate(HomeNavRoutes.Notification.route)
+        bottomNavController.navigate(HomeRoutes.Notification.route)
     }
 
     Scaffold {
