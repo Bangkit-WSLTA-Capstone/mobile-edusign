@@ -10,6 +10,9 @@ import com.nekkiichi.edusign.data.remote.response.RegisterResponse
 import com.nekkiichi.edusign.utils.Status
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import javax.inject.Inject
 
@@ -49,24 +52,33 @@ class EdusignRepository @Inject constructor(
     // remove token from android app
     fun logout() = flow {
         emit(Status.Loading)
-        try {
+        val result = try {
             authManager.logout()
-            emit(Status.Success("Logout complete"))
+            Status.Success("Logout complete")
         } catch (e: Exception) {
-            emit(Status.Failed(e.message.toString()))
+            Status.Failed(e.message.toString())
         }
+        emit(result)
     }
 
 
-    fun translateVideo(videoFile: File) {
-
+    fun translateVideo(videoFile: File) = flow {
+        emit(Status.Loading)
+        val result = try {
+            val videoRequestFile = videoFile.asRequestBody("video/mp4".toMediaType())
+            val videoPartFile = MultipartBody.Part.create(videoRequestFile)
+            val result = apiService.uploadVideoTranslate(videoPartFile)
+            Status.Success(result)
+        }catch (e: Exception) {
+            Status.Failed(e.message.toString())
+        }
+        emit(result)
     }
 
     fun getTranslateHistories(): Flow<Status<List<TranslateHistory>>> = flow {
         emit(Status.Loading)
-        try {
+        val result = try {
             val result = apiService.getHistory()
-
             val lists = result.data?.histories?.map { data ->
                 TranslateHistory(
                     fileURl = data.fileLink,
@@ -74,9 +86,10 @@ class EdusignRepository @Inject constructor(
                 )
             } ?: listOf()
 
-            emit(Status.Success(lists))
+            Status.Success(lists)
         } catch (e: Exception) {
-            emit(Status.Failed("Error message"))
+            Status.Failed("Error message")
         }
+        emit(result)
     }
 }
