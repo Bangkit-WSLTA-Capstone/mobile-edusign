@@ -1,6 +1,7 @@
 package com.nekkiichi.edusign.data
 
 import com.nekkiichi.edusign.data.entities.TranslateHistory
+import com.nekkiichi.edusign.data.local.AuthManager
 import com.nekkiichi.edusign.data.remote.ApiService
 import com.nekkiichi.edusign.data.remote.request.LoginRequest
 import com.nekkiichi.edusign.data.remote.request.RegisterRequest
@@ -13,7 +14,8 @@ import java.io.File
 import javax.inject.Inject
 
 class EdusignRepository @Inject constructor(
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    private val authManager: AuthManager
 ) {
 
     fun login(email: String, password: String): Flow<Status<LoginResponse>> = flow {
@@ -45,8 +47,14 @@ class EdusignRepository @Inject constructor(
     }
 
     // remove token from android app
-    fun logout() {
-
+    fun logout() = flow {
+        emit(Status.Loading)
+        try {
+            authManager.logout()
+            emit(Status.Success("Logout complete"))
+        } catch (e: Exception) {
+            emit(Status.Failed(e.message.toString()))
+        }
     }
 
 
@@ -58,7 +66,15 @@ class EdusignRepository @Inject constructor(
         emit(Status.Loading)
         try {
             val result = apiService.getHistory()
-            emit(Status.Success(listOf()))
+
+            val lists = result.data?.histories?.map { data ->
+                TranslateHistory(
+                    fileURl = data.fileLink,
+                    result = data.result
+                )
+            } ?: listOf()
+
+            emit(Status.Success(lists))
         } catch (e: Exception) {
             emit(Status.Failed("Error message"))
         }

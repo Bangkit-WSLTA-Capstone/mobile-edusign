@@ -21,7 +21,8 @@ class AuthManager @Inject constructor(@ApplicationContext private val context: C
     private val _logoutEvent = MutableSharedFlow<Unit>()
     val logoutEvent = _logoutEvent.asSharedFlow()
 
-    suspend fun onLogout() {
+    suspend fun logout() {
+        saveToken("")
         _logoutEvent.emit(Unit)
     }
 

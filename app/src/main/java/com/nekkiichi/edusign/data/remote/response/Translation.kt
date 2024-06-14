@@ -2,18 +2,16 @@ package com.nekkiichi.edusign.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 
-
-data class LoginResponse(
+data class TranslationResponse(
     @field:SerializedName("status")
     val status: String?,
     @field:SerializedName("message")
     val message: String?,
     @field:SerializedName("data")
-    val data: LoginDataResponse?
+    val data: TranslationBodyResponse?
 )
 
-
-data class LoginDataResponse(
-    @field:SerializedName("token")
-    val token: String?
+data class TranslationBodyResponse(
+    @field:SerializedName("history")
+    val history: History
 )

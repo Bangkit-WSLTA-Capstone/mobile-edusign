@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     authManager: AuthManager,
-    val repository: EdusignRepository
+    private val repository: EdusignRepository
 ) : ViewModel() {
     val logoutEvent = authManager.logoutEvent
 

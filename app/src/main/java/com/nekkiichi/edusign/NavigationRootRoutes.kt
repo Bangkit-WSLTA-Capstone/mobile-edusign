@@ -57,7 +57,7 @@ fun NavigationRootRoutes() {
             LoginScreen(navController, authViewModel)
         }
         composable(RootRoutes.Register.route) {
-            RegisterScreen(navController)
+            RegisterScreen(navController, authViewModel)
         }
         composable(RootRoutes.Welcome.route) {
             WelcomeScreen(navController)

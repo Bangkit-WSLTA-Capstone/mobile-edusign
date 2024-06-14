@@ -32,7 +32,7 @@ object ApiConfig {
                 val response = chain.proceed(requestBuilder.build())
                 if (response.code == HttpURLConnection.HTTP_UNAUTHORIZED) {
                     authManager.saveToken("")
-                    authManager.onLogout()
+                    authManager.logout()
                 }
                 response
             }

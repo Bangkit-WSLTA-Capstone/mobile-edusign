@@ -6,5 +6,5 @@ data class Account(
     @field:SerializedName("username")
     val username: String,
     @field:SerializedName("email")
-    val email: String
+    val email: String,
 )

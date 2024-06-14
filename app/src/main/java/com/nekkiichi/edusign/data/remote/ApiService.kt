@@ -2,11 +2,15 @@ package com.nekkiichi.edusign.data.remote
 
 import com.nekkiichi.edusign.data.remote.request.LoginRequest
 import com.nekkiichi.edusign.data.remote.request.RegisterRequest
+import com.nekkiichi.edusign.data.remote.response.HistoryResponse
 import com.nekkiichi.edusign.data.remote.response.LoginResponse
 import com.nekkiichi.edusign.data.remote.response.RegisterResponse
+import com.nekkiichi.edusign.data.remote.response.TranslationResponse
+import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Part
 
 
 interface ApiService{
@@ -21,6 +25,11 @@ interface ApiService{
         @Body body: LoginRequest
     ): LoginResponse
 
+    @POST("translation")
+    suspend fun uploadVideoTranslate(
+        @Part video: MultipartBody.Part
+    ): TranslationResponse
+
     @GET("history")
-    suspend fun getHistory(): String
+    suspend fun getHistory(): HistoryResponse
 }
