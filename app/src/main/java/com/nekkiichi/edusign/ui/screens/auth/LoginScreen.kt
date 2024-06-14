@@ -33,23 +33,43 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.nekkiichi.edusign.RootRoutes
+import com.nekkiichi.edusign.data.remote.response.LoginResponse
 import com.nekkiichi.edusign.ui.composable.FilledTextField
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
 import com.nekkiichi.edusign.ui.composable.SecondaryButton
 import com.nekkiichi.edusign.ui.composable.TextButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
+import com.nekkiichi.edusign.utils.Status
 import com.nekkiichi.edusign.utils.isValidEmail
 import com.nekkiichi.edusign.utils.isValidPassword
+import com.nekkiichi.edusign.viewModel.AuthViewModel
 
 private data class LoginForm(val email: String, val password: String)
 
 @Composable
-fun LoginScreen(navController: NavHostController) {
+fun LoginScreen(navController: NavController, authViewModel: AuthViewModel) {
+    val loginState = authViewModel.loginStatus
+    LoginScreenContent(navController, loginState, login = {
+        authViewModel.login(it.email, it.password)
+    })
+}
+
+@Composable
+private fun LoginScreenContent(
+    navController: NavController, loginState: Status<LoginResponse>?, login: (LoginForm) -> Unit
+) {
+    var loading by remember {
+        mutableStateOf(false)
+    }
     var loginForm: LoginForm? by remember {
         mutableStateOf(null)
+    }
+
+    LaunchedEffect(loginState) {
+        loading = loginState is Status.Loading
     }
 
     Scaffold { paddingScaffold ->
@@ -74,7 +94,8 @@ fun LoginScreen(navController: NavHostController) {
             }
             LoginForm(
                 Modifier.padding(horizontal = 16.dp, vertical = 24.dp),
-                onChange = { loginForm = it })
+                onChange = { loginForm = it }
+            )
             Spacer(modifier = Modifier.weight(1f))
             Column(
                 Modifier
@@ -82,9 +103,14 @@ fun LoginScreen(navController: NavHostController) {
                     .padding(bottom = 8.dp)
                     .widthIn(320.dp)
             ) {
-                PrimaryButton(onCLick = {
-                    //TODO: call viewmodel to check login
-                }, Modifier.fillMaxWidth(), enabled = loginForm != null) {
+                PrimaryButton(
+                    onCLick = {
+                        val form = loginForm ?: return@PrimaryButton
+                        login(form)
+                    },
+                    Modifier.fillMaxWidth(),
+                    enabled = loginForm != null && !loading // enable button if not in loading state
+                ) {
                     Text(text = "SIGN IN")
                     Spacer(modifier = Modifier.width(8.dp))
                     Icon(Icons.AutoMirrored.Rounded.Login, contentDescription = "")
@@ -135,33 +161,22 @@ private fun LoginForm(modifier: Modifier = Modifier, onChange: (form: LoginForm?
     }
 
     Column(Modifier.then(modifier), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        FilledTextField(
-            email,
-            onValueChange = {
-                email = it
-                emailError = email.isValidEmail() ?: ""
-            },
-            Modifier.fillMaxWidth(),
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email,
-                imeAction = ImeAction.Next
-            ),
+        FilledTextField(email, onValueChange = {
+            email = it
+            emailError = email.isValidEmail() ?: ""
+        }, Modifier.fillMaxWidth(), singleLine = true, keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Email, imeAction = ImeAction.Next
+        ),
 
-            placeholder = { Text(text = "Email") },
-            leadingIcon = {
+            placeholder = { Text(text = "Email") }, leadingIcon = {
                 Icon(Icons.Rounded.Email, contentDescription = "Username / Email")
-            },
-            isError = emailError.isNotEmpty(),
-            supportingText = {
+            }, isError = emailError.isNotEmpty(), supportingText = {
                 // show error is email error contain text
                 if (emailError.isNotEmpty()) {
                     Text(emailError)
                 }
-            }
-        )
-        FilledTextField(
-            password,
+            })
+        FilledTextField(password,
             onValueChange = {
                 password = it
                 passwordError = password.isValidPassword() ?: ""
@@ -169,8 +184,7 @@ private fun LoginForm(modifier: Modifier = Modifier, onChange: (form: LoginForm?
             Modifier.fillMaxWidth(),
             singleLine = true,
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Done
+                keyboardType = KeyboardType.Password, imeAction = ImeAction.Done
             ),
             visualTransformation = PasswordVisualTransformation(),
             placeholder = { Text(text = "Password") },
@@ -182,8 +196,7 @@ private fun LoginForm(modifier: Modifier = Modifier, onChange: (form: LoginForm?
                 if (passwordError.isNotEmpty()) {
                     Text(passwordError)
                 }
-            }
-        )
+            })
     }
 }
 
@@ -193,7 +206,7 @@ private fun LoginForm(modifier: Modifier = Modifier, onChange: (form: LoginForm?
 private fun LoginScreenPreview(modifier: Modifier = Modifier) {
     EduSignTheme() {
         Surface {
-            LoginScreen(rememberNavController())
+            LoginScreenContent(navController = rememberNavController(), null, {})
         }
     }
 }

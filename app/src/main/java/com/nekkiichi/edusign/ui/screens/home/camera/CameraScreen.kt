@@ -13,13 +13,11 @@ import com.nekkiichi.edusign.ui.screens.home.camera.no_permission.NoPermission_C
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun CameraScreen(
-    modifier: Modifier = Modifier,
     navController: NavController
 ) {
     val cameraPermissionState =
         rememberPermissionState(permission = android.Manifest.permission.CAMERA)
     CameraContent(
-        modifier,
         hasPermission = cameraPermissionState.status.isGranted,
         onRequestPermission = cameraPermissionState::launchPermissionRequest,
         navController = navController

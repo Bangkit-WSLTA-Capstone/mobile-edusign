@@ -2,6 +2,7 @@ package com.nekkiichi.edusign
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -41,7 +42,7 @@ fun NavigationRootRoutes() {
     val navController = rememberNavController()
     val homeViewModel: HomeViewModel = viewModel()
 
-    val authViewModel: AuthViewModel = viewModel()
+    val authViewModel: AuthViewModel = hiltViewModel()
 
     LaunchedEffect(Unit) {
         authViewModel.logoutEvent.collect {
@@ -53,20 +54,20 @@ fun NavigationRootRoutes() {
 
     NavHost(navController = navController, startDestination = RootRoutes.Welcome.route) {
         composable(RootRoutes.Login.route) {
-            LoginScreen(navController = navController)
+            LoginScreen(navController, authViewModel)
         }
         composable(RootRoutes.Register.route) {
-            RegisterScreen(navController = navController)
+            RegisterScreen(navController)
         }
         composable(RootRoutes.Welcome.route) {
-            WelcomeScreen(navController = navController)
+            WelcomeScreen(navController)
         }
         composable(RootRoutes.Home.route) {
             homeViewModel.videoFile = it.savedStateHandle.get<File>(TranslateScreen.VIDEO_FILE)
-            HomeNavScreen(navController = navController, homeViewModel)
+            HomeNavScreen(navController, homeViewModel)
         }
         composable(RootRoutes.Camera.route) {
-            CameraScreen(navController = navController)
+            CameraScreen(navController)
         }
     }
 }
