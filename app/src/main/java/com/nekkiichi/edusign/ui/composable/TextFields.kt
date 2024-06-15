@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -27,12 +28,17 @@ fun FilledTextField(
 ) {
     TextField(
         value,
+        modifier = modifier,
         onValueChange = onValueChange,
-        modifier,
         singleLine = singleLine,
         keyboardOptions =keyboardOptions,
         visualTransformation = visualTransformation,
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(15.dp),
+        placeholder = placeholder,
+        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
+        isError = isError,
+        supportingText = supportingText,
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
@@ -40,11 +46,12 @@ fun FilledTextField(
             errorIndicatorColor = Color.Transparent,
             unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
             focusedContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest
-        ),
-        placeholder = placeholder,
-        leadingIcon = leadingIcon,
-        trailingIcon = trailingIcon,
-        isError = isError,
-        supportingText = supportingText
+        )
     )
+}
+
+@Preview
+@Composable
+fun TextfieldPreview(){
+    FilledTextField(value = "Hello", onValueChange = {})
 }

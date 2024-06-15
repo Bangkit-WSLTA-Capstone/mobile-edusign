@@ -34,6 +34,8 @@ class AuthManager @Inject constructor(@ApplicationContext private val context: C
         if (getToken().isNotEmpty()) {
             Log.d(TAG, "Emit loginEvent")
             _loginEvent.emit(Unit)
+        }else{
+            _logoutEvent.emit(Unit)
         }
     }
 
