@@ -45,8 +45,17 @@ fun NavigationRootRoutes() {
     val authViewModel: AuthViewModel = hiltViewModel()
 
     LaunchedEffect(Unit) {
+
         authViewModel.logoutEvent.collect {
             navController.navigate(RootRoutes.Login.route) {
+                popUpToTop(navController)
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        authViewModel.loginEvent.collect {
+            navController.navigate(RootRoutes.Home.route) {
                 popUpToTop(navController)
             }
         }

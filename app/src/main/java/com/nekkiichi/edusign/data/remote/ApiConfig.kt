@@ -1,6 +1,7 @@
 package com.nekkiichi.edusign.data.remote
 
 import com.nekkiichi.edusign.BuildConfig
+import com.nekkiichi.edusign.Constant
 import com.nekkiichi.edusign.data.local.AuthManager
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -39,7 +40,7 @@ object ApiConfig {
 
         }
 
-        val baseUrl = ""
+        val baseUrl = Constant.apiUrl ?: ""
         val loggingInterceptor =
             HttpLoggingInterceptor().setLevel(
                 if (BuildConfig.DEBUG) {

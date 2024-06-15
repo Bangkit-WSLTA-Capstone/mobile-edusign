@@ -1,5 +1,6 @@
 package com.nekkiichi.edusign.ui.screens.auth
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,6 +28,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -43,6 +45,7 @@ import com.nekkiichi.edusign.ui.composable.SecondaryButton
 import com.nekkiichi.edusign.ui.composable.TextButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
 import com.nekkiichi.edusign.utils.Status
+import com.nekkiichi.edusign.utils.extension.popUpToTop
 import com.nekkiichi.edusign.utils.isValidEmail
 import com.nekkiichi.edusign.utils.isValidPassword
 import com.nekkiichi.edusign.viewModel.AuthViewModel
@@ -55,6 +58,7 @@ internal class LoginHandler {
 
 @Composable
 fun LoginScreen(navController: NavController, authViewModel: AuthViewModel) {
+    val context = LocalContext.current
     val loginState = authViewModel.loginStatus
     val handler = remember {
         LoginHandler().apply {
@@ -64,7 +68,20 @@ fun LoginScreen(navController: NavController, authViewModel: AuthViewModel) {
         }
     }
 
-
+    LaunchedEffect(loginState) {
+        when (loginState) {
+            is Status.Failed -> {
+                Toast.makeText(context, "Oops: ${loginState.errorMessage}", Toast.LENGTH_SHORT)
+                    .show()
+            }
+            is Status.Success -> {
+                navController.navigate(RootRoutes.Home.route) {
+                    popUpToTop(navController)
+                }
+            }
+            else -> {}
+        }
+    }
 
     LoginScreenContent(navController, loginState, handler)
 }

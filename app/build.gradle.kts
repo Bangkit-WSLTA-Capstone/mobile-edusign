@@ -20,6 +20,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField("String", "API_URL", "\"https://edusign-2frcv7abha-et.a.run.app/api/\"")
     }
 
     buildTypes {

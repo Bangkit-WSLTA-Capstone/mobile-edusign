@@ -94,7 +94,8 @@ fun DashboardScreen(bottomNavController: NavController) {
                                     ) {
                                         Text(
                                             text = "Want to learn?",
-                                            style = MaterialTheme.typography.bodySmall
+                                            style = MaterialTheme.typography.bodySmall,
+                                            minLines = 2
                                         )
                                         Text(
                                             text = "Mini Course",
@@ -120,7 +121,8 @@ fun DashboardScreen(bottomNavController: NavController) {
                                     ) {
                                         Text(
                                             text = "Sign Language directory",
-                                            style = MaterialTheme.typography.bodySmall
+                                            style = MaterialTheme.typography.bodySmall,
+                                            minLines = 2
                                         )
                                         Text(
                                             text = "Glossary",

@@ -8,6 +8,7 @@ import com.nekkiichi.edusign.data.remote.request.RegisterRequest
 import com.nekkiichi.edusign.data.remote.response.LoginResponse
 import com.nekkiichi.edusign.data.remote.response.RegisterResponse
 import com.nekkiichi.edusign.utils.Status
+import com.nekkiichi.edusign.utils.extension.parseToMessage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okhttp3.MediaType.Companion.toMediaType
@@ -26,9 +27,11 @@ class EdusignRepository @Inject constructor(
         val result = try {
             val body = LoginRequest(email, password)
             val temp = apiService.login(body)
+            authManager.saveToken(temp.data?.token ?: "")
             Status.Success(temp)
         } catch (e: Exception) {
-            Status.Failed(e.message.toString())
+
+            Status.Failed(e.parseToMessage())
         }
         emit(result)
     }
@@ -44,7 +47,7 @@ class EdusignRepository @Inject constructor(
             val temp = apiService.register(body)
             Status.Success(temp)
         } catch (e: Exception) {
-            Status.Failed("Failed to fetch error message")
+            Status.Failed(e.parseToMessage())
         }
         emit(result)
     }
@@ -56,11 +59,10 @@ class EdusignRepository @Inject constructor(
             authManager.logout()
             Status.Success("Logout complete")
         } catch (e: Exception) {
-            Status.Failed(e.message.toString())
+            Status.Failed(e.parseToMessage())
         }
         emit(result)
     }
-
 
     fun translateVideo(videoFile: File) = flow {
         emit(Status.Loading)
@@ -70,7 +72,7 @@ class EdusignRepository @Inject constructor(
             val result = apiService.uploadVideoTranslate(videoPartFile)
             Status.Success(result)
         }catch (e: Exception) {
-            Status.Failed(e.message.toString())
+            Status.Failed(e.parseToMessage())
         }
         emit(result)
     }
@@ -88,7 +90,7 @@ class EdusignRepository @Inject constructor(
 
             Status.Success(lists)
         } catch (e: Exception) {
-            Status.Failed("Error message")
+            Status.Failed(e.parseToMessage())
         }
         emit(result)
     }

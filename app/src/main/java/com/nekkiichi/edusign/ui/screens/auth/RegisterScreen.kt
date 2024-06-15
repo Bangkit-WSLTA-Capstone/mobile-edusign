@@ -1,5 +1,6 @@
 package com.nekkiichi.edusign.ui.screens.auth
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -61,7 +63,7 @@ internal class RegisterHandler() {
 
 @Composable
 fun RegisterScreen(navController: NavController, authViewModel: AuthViewModel) {
-
+    val context = LocalContext.current
     val registerState = authViewModel.registerStatus
 
     val handler = remember {
@@ -69,6 +71,21 @@ fun RegisterScreen(navController: NavController, authViewModel: AuthViewModel) {
             register = {
                 authViewModel.register(it.username, it.email, it.password)
             }
+        }
+    }
+
+    LaunchedEffect(registerState) {
+        when(registerState) {
+            is Status.Failed -> {
+                Toast.makeText(context, registerState.errorMessage, Toast.LENGTH_SHORT).show()
+            }
+            is Status.Success -> {
+                Toast.makeText(context, "Account created successfully", Toast.LENGTH_SHORT).show()
+                navController.navigate(RootRoutes.Login.route) {
+                    popUpToTop(navController)
+                }
+            }
+            else -> {}
         }
     }
 
