@@ -20,6 +20,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField("String", "API_URL", "\"https://edusign-2frcv7abha-et.a.run.app/api/\"")
     }
 
     buildTypes {
@@ -61,14 +63,19 @@ android {
 }
 
 dependencies {
+
+    implementation(libs.androidx.datastore.preferences)
+
     implementation(libs.accompanist.permissions)
     implementation(libs.androidx.camera.core)
     implementation(libs.androidx.camera.camera2)
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.lifecycle)
-    implementation("io.coil-kt:coil-gif:2.6.0")
+    implementation(libs.coil.gif)
+    implementation(libs.coil.compose)
 
     implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
     kapt(libs.hilt.android.compiler)
 
     implementation(libs.multiplatform.markdown.renderer.m3.android)
@@ -102,4 +109,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+}
+kapt {
+    correctErrorTypes = true
 }

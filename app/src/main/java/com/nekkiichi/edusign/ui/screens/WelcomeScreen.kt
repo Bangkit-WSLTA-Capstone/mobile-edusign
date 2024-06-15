@@ -55,10 +55,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.mikepenz.markdown.m3.Markdown
 import com.nekkiichi.edusign.R
-import com.nekkiichi.edusign.RootNavRoutes
+import com.nekkiichi.edusign.RootRoutes
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
 import com.nekkiichi.edusign.ui.composable.TextButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
+import com.nekkiichi.edusign.utils.extension.popUpToTop
 import kotlinx.coroutines.launch
 
 @Immutable
@@ -98,18 +99,16 @@ fun WelcomeScreen(navController: NavHostController) {
     }
 
     fun navigateToLogin() {
-        navController.navigate(RootNavRoutes.Login.route) {
-            popUpTo(RootNavRoutes.Welcome.route) {
+        navController.navigate(RootRoutes.Login.route) {
+            popUpTo(RootRoutes.Welcome.route) {
                 inclusive = true
             }
         }
     }
 
     fun navigateToRegister() {
-        navController.navigate(RootNavRoutes.Register.route) {
-            popUpTo(RootNavRoutes.Welcome.route) {
-                inclusive = true
-            }
+        navController.navigate(RootRoutes.Register.route) {
+            popUpToTop(navController)
         }
     }
 

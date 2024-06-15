@@ -1,4 +1,4 @@
-package com.nekkiichi.edusign.utils
+package com.nekkiichi.edusign.utils.extension
 
 import android.content.Context
 import java.io.File
@@ -17,7 +17,7 @@ object FileExt {
      * use current timestamp by default, with format "`yyyyMMdd_HHmmss`"
      */
     fun createTempVideoFile(context: Context): File {
-        val videoFile = File.createTempFile("video_${timestamp}", ".mp4", context.cacheDir)
+        val videoFile = File.createTempFile("video_$timestamp", ".mp4", context.cacheDir)
         return videoFile
     }
 

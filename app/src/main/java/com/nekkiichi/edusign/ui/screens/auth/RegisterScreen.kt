@@ -1,5 +1,6 @@
 package com.nekkiichi.edusign.ui.screens.auth
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,29 +29,84 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.nekkiichi.edusign.RootNavRoutes
+import com.nekkiichi.edusign.RootRoutes
+import com.nekkiichi.edusign.data.remote.response.RegisterResponse
 import com.nekkiichi.edusign.ui.composable.FilledTextField
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
 import com.nekkiichi.edusign.ui.composable.SecondaryButton
 import com.nekkiichi.edusign.ui.composable.TextButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
+import com.nekkiichi.edusign.utils.Status
+import com.nekkiichi.edusign.utils.extension.popUpToTop
 import com.nekkiichi.edusign.utils.isValidEmail
 import com.nekkiichi.edusign.utils.isValidPassword
+import com.nekkiichi.edusign.viewModel.AuthViewModel
 
 
-data class RegisterData(val email: String, val username: String, val password: String)
+internal data class RegisterData(val email: String, val username: String, val password: String)
+
+internal class RegisterHandler() {
+    /**
+     * `Invoke` register function from `viewModel`
+     */
+    var register: (RegisterData) -> Unit = {}
+}
 
 @Composable
-fun RegisterScreen(navController: NavHostController) {
+fun RegisterScreen(navController: NavController, authViewModel: AuthViewModel) {
+    val context = LocalContext.current
+    val registerState = authViewModel.registerStatus
+
+    val handler = remember {
+        RegisterHandler().apply {
+            register = {
+                authViewModel.register(it.username, it.email, it.password)
+            }
+        }
+    }
+
+    LaunchedEffect(registerState) {
+        when(registerState) {
+            is Status.Failed -> {
+                Toast.makeText(context, registerState.errorMessage, Toast.LENGTH_SHORT).show()
+            }
+            is Status.Success -> {
+                Toast.makeText(context, "Account created successfully", Toast.LENGTH_SHORT).show()
+                navController.navigate(RootRoutes.Login.route) {
+                    popUpToTop(navController)
+                }
+            }
+            else -> {}
+        }
+    }
+
+    RegisterScreenContent(navController = navController, registerState, handler)
+}
+
+@Composable
+private fun RegisterScreenContent(
+    navController: NavController, registerState: Status<RegisterResponse>?, handler: RegisterHandler
+) {
+
+    var loading by remember {
+        mutableStateOf(false)
+    }
+
     var registerData: RegisterData? by remember {
         mutableStateOf(null)
+    }
+
+    LaunchedEffect(registerState) {
+        loading = registerState is Status.Loading
     }
 
     Scaffold { paddingScaffold ->
@@ -66,15 +122,14 @@ fun RegisterScreen(navController: NavHostController) {
                 Text(
                     text = "Create an\nAccount for You!",
                     style = MaterialTheme.typography.headlineLarge,
-                    color = MaterialTheme.colorScheme.onPrimary
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "",
-                    color = MaterialTheme.colorScheme.onPrimary
+                    text = "", color = MaterialTheme.colorScheme.onPrimary
                 )
             }
-            RegisterForm(
-                Modifier.padding(horizontal = 16.dp, vertical = 24.dp),
+            RegisterForm(Modifier.padding(horizontal = 16.dp, vertical = 24.dp),
                 onChange = { registerData = it })
             Spacer(modifier = Modifier.weight(1f))
             Column(
@@ -83,9 +138,15 @@ fun RegisterScreen(navController: NavHostController) {
                     .padding(bottom = 8.dp)
                     .widthIn(320.dp)
             ) {
-                PrimaryButton(onCLick = {
-                    //TODO: call viewmodel to send create account
-                }, Modifier.fillMaxWidth(), enabled = registerData != null) {
+                PrimaryButton(
+                    onCLick = {
+                        val form = registerData ?: return@PrimaryButton
+                        handler.register.invoke(form)
+
+                    },
+                    Modifier.fillMaxWidth(),
+                    enabled = registerData != null && !loading
+                ) {
                     Text(text = "REGISTER")
                     Spacer(modifier = Modifier.width(8.dp))
                     Icon(Icons.AutoMirrored.Rounded.Login, contentDescription = "")
@@ -95,7 +156,7 @@ fun RegisterScreen(navController: NavHostController) {
                     onCLick = {
                         //back to login page, if not, navigate to login page
                         if (!navController.popBackStack()) {
-                            navController.navigate(RootNavRoutes.Login.route)
+                            navController.navigate(RootRoutes.Login.route)
                         }
                     },
                     Modifier.fillMaxWidth(),
@@ -104,10 +165,8 @@ fun RegisterScreen(navController: NavHostController) {
                 }
                 TextButton(
                     onCLick = {
-                        navController.navigate(RootNavRoutes.Home.route) {
-                            popUpTo(RootNavRoutes.Register.route) {
-                                inclusive = true
-                            }
+                        navController.navigate(RootRoutes.Home.route) {
+                            popUpToTop(navController)
                         }
                     },
                     Modifier.fillMaxWidth(),
@@ -120,7 +179,7 @@ fun RegisterScreen(navController: NavHostController) {
 }
 
 @Composable
-fun RegisterForm(modifier: Modifier = Modifier, onChange: (RegisterData?) -> Unit) {
+private fun RegisterForm(modifier: Modifier = Modifier, onChange: (form: RegisterData?) -> Unit) {
     var email by remember {
         mutableStateOf("")
     }
@@ -143,9 +202,7 @@ fun RegisterForm(modifier: Modifier = Modifier, onChange: (RegisterData?) -> Uni
     LaunchedEffect(emailError, usernameError, passwordError) {
         if (email.isEmpty() && username.isEmpty() && password.isEmpty()) {
             onChange.invoke(null)
-        } else if (emailError.isEmpty()
-            && usernameError.isEmpty() && passwordError.isEmpty()
-        ) {
+        } else if (emailError.isEmpty() && usernameError.isEmpty() && passwordError.isEmpty()) {
             onChange.invoke(RegisterData(email, username, password))
         } else {
             onChange.invoke(null)
@@ -153,56 +210,34 @@ fun RegisterForm(modifier: Modifier = Modifier, onChange: (RegisterData?) -> Uni
     }
 
     Column(Modifier.then(modifier), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        FilledTextField(
-            email,
-            onValueChange = {
-                email = it
-                emailError = email.isValidEmail() ?: ""
-            },
-            Modifier.fillMaxWidth(),
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email,
-                imeAction = ImeAction.Next
-            ),
+        FilledTextField(email, onValueChange = {
+            email = it
+            emailError = email.isValidEmail() ?: ""
+        }, Modifier.fillMaxWidth(), singleLine = true, keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Email, imeAction = ImeAction.Next
+        ),
 
-            placeholder = { Text(text = "Email") },
-            leadingIcon = {
+            placeholder = { Text(text = "Email") }, leadingIcon = {
                 Icon(Icons.Rounded.Email, contentDescription = "Email")
-            },
-            isError = emailError.isNotEmpty(),
-            supportingText = {
+            }, isError = emailError.isNotEmpty(), supportingText = {
                 // show error is email error contain text
                 if (emailError.isNotEmpty()) {
                     Text(emailError)
                 }
+            })
+        FilledTextField(value = username, onValueChange = {
+            username = it
+            usernameError = if (username.isEmpty()) "Username is required" else ""
+        }, Modifier.fillMaxWidth(), singleLine = true, keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Text, imeAction = ImeAction.Next
+        ), placeholder = { Text(text = "Username") }, leadingIcon = {
+            Icon(Icons.Rounded.Person, contentDescription = "Person")
+        }, isError = usernameError.isNotEmpty(), supportingText = {
+            if (usernameError.isNotEmpty()) {
+                Text(text = usernameError)
             }
-        )
-        FilledTextField(
-            value = username,
-            onValueChange = {
-                username = it
-                usernameError = if (username.isEmpty()) "Username is required" else ""
-            },
-            Modifier.fillMaxWidth(),
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next
-            ),
-            placeholder = { Text(text = "Username") },
-            leadingIcon = {
-                Icon(Icons.Rounded.Person, contentDescription = "Person")
-            },
-            isError = usernameError.isNotEmpty(),
-            supportingText = {
-                if (usernameError.isNotEmpty()) {
-                    Text(text = usernameError)
-                }
-            }
-        )
-        FilledTextField(
-            password,
+        })
+        FilledTextField(password,
             onValueChange = {
                 password = it
                 passwordError = password.isValidPassword() ?: ""
@@ -210,8 +245,7 @@ fun RegisterForm(modifier: Modifier = Modifier, onChange: (RegisterData?) -> Uni
             Modifier.fillMaxWidth(),
             singleLine = true,
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Done
+                keyboardType = KeyboardType.Password, imeAction = ImeAction.Done
             ),
             visualTransformation = PasswordVisualTransformation(),
             placeholder = { Text(text = "Password") },
@@ -223,8 +257,7 @@ fun RegisterForm(modifier: Modifier = Modifier, onChange: (RegisterData?) -> Uni
                 if (passwordError.isNotEmpty()) {
                     Text(passwordError)
                 }
-            }
-        )
+            })
     }
 }
 
@@ -233,7 +266,11 @@ fun RegisterForm(modifier: Modifier = Modifier, onChange: (RegisterData?) -> Uni
 private fun RegisterScreenPreview(modifier: Modifier = Modifier) {
     EduSignTheme {
         Surface {
-            RegisterScreen(navController = rememberNavController())
+            RegisterScreenContent(
+                navController = rememberNavController(),
+                registerState = null,
+                handler = RegisterHandler()
+            )
         }
     }
 }

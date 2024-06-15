@@ -32,13 +32,13 @@ import com.nekkiichi.edusign.ui.theme.EduSignTheme
 import com.nekkiichi.edusign.viewModel.HomeViewModel
 
 
-sealed class HomeNavRoutes(var route: String, val icon: ImageVector?, var title: String) {
-    data object Dashboard : HomeNavRoutes("app_dashboard", Icons.Rounded.Home, "Dashboard")
-    data object Translate : HomeNavRoutes("app_translate", Icons.Rounded.Camera, "Translate")
+sealed class HomeRoutes(var route: String, val icon: ImageVector?, var title: String) {
+    data object Dashboard : HomeRoutes("app_dashboard", Icons.Rounded.Home, "Dashboard")
+    data object Translate : HomeRoutes("app_translate", Icons.Rounded.Camera, "Translate")
     data object Notification :
-        HomeNavRoutes("app_notification", Icons.Rounded.Notifications, "Notification")
+        HomeRoutes("app_notification", Icons.Rounded.Notifications, "Notification")
 
-    data object Account : HomeNavRoutes("app_account", Icons.Rounded.Person, "Account")
+    data object Account : HomeRoutes("app_account", Icons.Rounded.Person, "Account")
 }
 
 
@@ -51,18 +51,18 @@ fun HomeNavScreen(navController: NavController, homeViewModel: HomeViewModel) {
         Box(modifier = Modifier.padding(bottom = it.calculateBottomPadding())) {
             NavHost(
                 navController = bottomBarNavController,
-                startDestination = HomeNavRoutes.Dashboard.route
+                startDestination = HomeRoutes.Dashboard.route
             ) {
-                composable(HomeNavRoutes.Dashboard.route) {
-                    Text(text = "Dashboard")
+                composable(HomeRoutes.Dashboard.route) {
+                    DashboardScreen(bottomBarNavController)
                 }
-                composable(HomeNavRoutes.Translate.route) {
-                    TranslateScreen(navController = navController, homeViewModel)
+                composable(HomeRoutes.Translate.route) {
+                    TranslateScreen(navController, homeViewModel)
                 }
-                composable(HomeNavRoutes.Notification.route) {
+                composable(HomeRoutes.Notification.route) {
                     Text(text = "Notification")
                 }
-                composable(HomeNavRoutes.Account.route) {
+                composable(HomeRoutes.Account.route) {
                     Text(text = "Account")
                 }
 
@@ -77,20 +77,20 @@ private fun BottomNavBar(
     modifier: Modifier = Modifier, bottomNavController: NavHostController
 ) {
     val items = listOf(
-        HomeNavRoutes.Dashboard,
-        HomeNavRoutes.Translate,
-        HomeNavRoutes.Notification,
-        HomeNavRoutes.Account
+        HomeRoutes.Dashboard,
+        HomeRoutes.Translate,
+        HomeRoutes.Notification,
+        HomeRoutes.Account
     )
     var selectedItem by remember {
         mutableIntStateOf(0)
     }
     var currentRoute by remember {
-        mutableStateOf(HomeNavRoutes.Dashboard.route)
+        mutableStateOf(HomeRoutes.Dashboard.route)
     }
     val navBackStackEntry by bottomNavController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
-    NavigationBar {
+    NavigationBar(modifier) {
         items.forEachIndexed { index, navigationItem ->
             NavigationBarItem(selected = currentDestination?.hierarchy?.any { it.route == navigationItem.route } == true,
                 onClick = {
