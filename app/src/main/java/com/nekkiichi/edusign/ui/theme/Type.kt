@@ -9,13 +9,12 @@ import com.nekkiichi.edusign.R
 
 // imported fonts
 var geistMonoFamily = FontFamily(
-    androidx.compose.ui.text.font.Font(R.font.geist_mono_black,FontWeight.Black),
-    androidx.compose.ui.text.font.Font(R.font.geist_mono_bold, FontWeight.Bold),
-    androidx.compose.ui.text.font.Font(R.font.geist_mono_semibold, FontWeight.SemiBold),
-    androidx.compose.ui.text.font.Font(R.font.geist_mono_medium,FontWeight.Medium),
-    androidx.compose.ui.text.font.Font(R.font.geist_mono_regular, FontWeight.Normal),
-    androidx.compose.ui.text.font.Font(R.font.geist_mono_light, FontWeight.Light),
-    androidx.compose.ui.text.font.Font(R.font.geist_mono_thin, FontWeight.Thin)
+    androidx.compose.ui.text.font.Font(R.font.geist_bold, FontWeight.Bold),
+    androidx.compose.ui.text.font.Font(R.font.geist_semibold, FontWeight.SemiBold),
+    androidx.compose.ui.text.font.Font(R.font.geist_medium,FontWeight.Medium),
+    androidx.compose.ui.text.font.Font(R.font.geist_regular, FontWeight.Normal),
+    androidx.compose.ui.text.font.Font(R.font.geist_light, FontWeight.Light),
+    androidx.compose.ui.text.font.Font(R.font.geist_thin, FontWeight.Thin)
 )
 
 val provider = GoogleFont.Provider(

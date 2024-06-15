@@ -1,11 +1,14 @@
 package com.nekkiichi.edusign.ui.composable
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Surface
@@ -19,14 +22,40 @@ import com.nekkiichi.edusign.ui.theme.AppTypography
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
 import com.nekkiichi.edusign.ui.theme.geistMonoFamily
 
-val ButtonShape = RoundedCornerShape(4.dp)
+val ButtonShape = RoundedCornerShape(16.dp)
 
 @Composable
 fun PrimaryButton(
-    onCLick: () -> Unit, modifier: Modifier = Modifier, content: @Composable() (RowScope.() -> Unit)
+    onCLick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    content: @Composable() (RowScope.() -> Unit)
 ) {
-    Button(onClick = onCLick, modifier = modifier, shape = ButtonShape) {
-        ProvideTextStyle(value = AppTypography.labelLarge.copy(fontFamily = geistMonoFamily)) {
+    Button(onClick = onCLick, modifier = modifier, shape = ButtonShape, enabled = enabled) {
+        ProvideTextStyle(value = AppTypography.labelLarge) {
+            content()
+        }
+    }
+}
+
+@Composable
+fun SecondaryButton(
+    onCLick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    content: @Composable() (RowScope.() -> Unit)
+) {
+    Button(
+        onClick = onCLick,
+        modifier = modifier,
+        shape = ButtonShape,
+        enabled = enabled,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.tertiary,
+            contentColor = MaterialTheme.colorScheme.onTertiary
+        )
+    ) {
+        ProvideTextStyle(value = AppTypography.labelLarge) {
             content()
         }
     }
@@ -36,10 +65,17 @@ fun PrimaryButton(
 fun OutlineButton(
     onCLick: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     content: @Composable (RowScope.() -> Unit)
 ) {
-    OutlinedButton(onClick = onCLick, modifier = modifier, shape = ButtonShape) {
-        ProvideTextStyle(value = AppTypography.labelLarge.copy(fontFamily = geistMonoFamily)) {
+    OutlinedButton(
+        onClick = onCLick,
+        modifier = modifier,
+        shape = ButtonShape,
+        enabled = enabled,
+        border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
+    ) {
+        ProvideTextStyle(value = AppTypography.labelLarge) {
             content()
         }
     }
@@ -49,11 +85,13 @@ fun OutlineButton(
 fun TextButton(
     onCLick: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     content: @Composable (RowScope.() -> Unit)
 ) {
     androidx.compose.material3.TextButton(
         onClick = onCLick,
         modifier = modifier,
+        enabled = enabled,
         shape = ButtonShape
     ) {
         ProvideTextStyle(value = AppTypography.labelLarge.copy(fontFamily = geistMonoFamily)) {
@@ -74,6 +112,9 @@ private fun ButtonPreview() {
             ) {
                 PrimaryButton(onCLick = { /*TODO*/ }) {
                     Text(text = "Primary Button")
+                }
+                SecondaryButton(onCLick = { /*TODO*/ }) {
+                    Text(text = "Secondary Button")
                 }
                 OutlineButton(onCLick = { /*TODO*/ }) {
                     Text(text = "Outline Button")
@@ -98,6 +139,9 @@ private fun ButtonPreviewDark() {
             ) {
                 PrimaryButton(onCLick = { /*TODO*/ }) {
                     Text(text = "Primary Button")
+                }
+                SecondaryButton(onCLick = { /*TODO*/ }) {
+                    Text(text = "Secondary Button")
                 }
                 OutlineButton(onCLick = { /*TODO*/ }) {
                     Text(text = "Outline Button")

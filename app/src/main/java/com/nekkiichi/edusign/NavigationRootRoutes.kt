@@ -1,22 +1,30 @@
 package com.nekkiichi.edusign
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.nekkiichi.edusign.ui.screens.GuideScreen
+import com.nekkiichi.edusign.ui.screens.WelcomeScreen
+import com.nekkiichi.edusign.ui.screens.auth.LoginScreen
+import com.nekkiichi.edusign.ui.screens.auth.RegisterScreen
+import com.nekkiichi.edusign.ui.screens.home.HomeNavScreen
+import com.nekkiichi.edusign.ui.screens.home.TranslateScreen
+import com.nekkiichi.edusign.ui.screens.home.camera.CameraScreen
+import com.nekkiichi.edusign.utils.extension.popUpToTop
+import com.nekkiichi.edusign.viewModel.AuthViewModel
+import com.nekkiichi.edusign.viewModel.HomeViewModel
+import java.io.File
 
 
-sealed class Screen(val route: String) {
-    object Home : Screen("home")
-    object Login : Screen("login")
-    object Register : Screen("register")
-    object Welcome : Screen("welcome")
-    object Dashboard : Screen("dashboard")
-    object Translate : Screen("translate")
-    object Profile : Screen("profile")
-    object Settings : Screen("settings")
+sealed class RootRoutes(val route: String) {
+    object Home : RootRoutes("home")
+    object Login : RootRoutes("login")
+    object Register : RootRoutes("register")
+    object Welcome : RootRoutes("welcome")
+    object Camera : RootRoutes("camera")
 
     fun withArgs(vararg arg: String): String {
         return buildString {
@@ -32,45 +40,34 @@ sealed class Screen(val route: String) {
 @Composable
 fun NavigationRootRoutes() {
     val navController = rememberNavController()
+    val homeViewModel: HomeViewModel = viewModel()
 
-    NavHost(navController = navController, startDestination = "home") {
-        composable(Screen.Home.route) {
-            Column {
+    val authViewModel: AuthViewModel = hiltViewModel()
 
+    LaunchedEffect(Unit) {
+        authViewModel.logoutEvent.collect {
+            navController.navigate(RootRoutes.Login.route) {
+                popUpToTop(navController)
             }
         }
-        composable(Screen.Login.route) {
-            Column {
+    }
 
-            }
+    NavHost(navController = navController, startDestination = RootRoutes.Welcome.route) {
+        composable(RootRoutes.Login.route) {
+            LoginScreen(navController, authViewModel)
         }
-        composable(Screen.Register.route) {
-            Column {
-
-            }
+        composable(RootRoutes.Register.route) {
+            RegisterScreen(navController, authViewModel)
         }
-        composable(Screen.Welcome.route) {
-            GuideScreen(navigateToLogin = { navController.navigate("login") })
+        composable(RootRoutes.Welcome.route) {
+            WelcomeScreen(navController)
         }
-        composable(Screen.Dashboard.route) {
-            Column {
-
-            }
+        composable(RootRoutes.Home.route) {
+            homeViewModel.videoFile = it.savedStateHandle.get<File>(TranslateScreen.VIDEO_FILE)
+            HomeNavScreen(navController, homeViewModel)
         }
-        composable(Screen.Translate.route) {
-            Column {
-
-            }
-        }
-        composable(Screen.Profile.route) {
-            Column {
-
-            }
-        }
-        composable(Screen.Settings.route) {
-            Column {
-
-            }
+        composable(RootRoutes.Camera.route) {
+            CameraScreen(navController)
         }
     }
 }

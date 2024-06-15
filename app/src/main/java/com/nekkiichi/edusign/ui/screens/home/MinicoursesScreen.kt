@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.nekkiichi.edusign.ui.screens
+package com.nekkiichi.edusign.ui.screens.home
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -23,8 +23,8 @@ import com.nekkiichi.edusign.ui.theme.EduSignTheme
 fun MinicoursesScreen(navController: NavController) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(text = "MINI COURSE") }, navigationIcon = {
-                IconButton(onClick = { navController.popBackStack() }) {
+            TopAppBar(title = { Text(text = "Mini Course") }, navigationIcon = {
+                IconButton(onClick = { navController.navigateUp() }) {
                     Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "")
                 }
             })

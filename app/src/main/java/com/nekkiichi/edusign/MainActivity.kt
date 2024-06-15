@@ -14,14 +14,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         enableEdgeToEdge()
         setContent {
             EduSignTheme(dynamicColor = false) {
                 NavigationRootRoutes()
+//                CameraScreen(navController = rememberNavController())
             }
         }
     }
