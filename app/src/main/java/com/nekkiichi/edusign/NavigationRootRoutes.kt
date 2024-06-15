@@ -55,6 +55,15 @@ fun NavigationRootRoutes() {
         }
     }
 
+    // show welcome screen only once, and then redirect to login afterwards
+    LaunchedEffect(Unit) {
+        authViewModel.welcomeEvent.collect {
+            navController.navigate(RootRoutes.Welcome.route) {
+                popUpToTop(navController)
+            }
+        }
+    }
+
     LaunchedEffect(Unit) {
         authViewModel.loginEvent.collect {
             navController.navigate(RootRoutes.Home.route) {

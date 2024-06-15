@@ -21,6 +21,7 @@ class AuthViewModel @Inject constructor(
 ) : ViewModel() {
     val logoutEvent = authManager.logoutEvent
     val loginEvent = authManager.loginEvent
+    val welcomeEvent = authManager.welcomeEvent
     var loginStatus by mutableStateOf<Status<LoginResponse>?>(null)
 
     var registerStatus by mutableStateOf<Status<RegisterResponse>?>(null)

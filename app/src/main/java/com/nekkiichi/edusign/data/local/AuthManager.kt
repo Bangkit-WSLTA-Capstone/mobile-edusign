@@ -3,6 +3,7 @@ package com.nekkiichi.edusign.data.local
 import android.content.Context
 import android.util.Log
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -18,18 +19,29 @@ class AuthManager @Inject constructor(@ApplicationContext private val context: C
     private val Context.authDataStore by preferencesDataStore(name = "auth")
 
     private val tokenKey = stringPreferencesKey("token")
+    private val isWelcomeVisitedKey = booleanPreferencesKey("isWelcomeVisited")
 
     private val _logoutEvent = MutableSharedFlow<Unit>()
     val logoutEvent = _logoutEvent.asSharedFlow()
 
     private val _loginEvent = MutableSharedFlow<Unit>()
     val loginEvent = _loginEvent.asSharedFlow()
+    private val _welcomeEvent = MutableSharedFlow<Unit>()
+    val welcomeEvent = _welcomeEvent.asSharedFlow()
 
     init {
 
     }
 
     suspend fun init() {
+        val welcomeVisited = context.authDataStore.data.map { it[isWelcomeVisitedKey] ?: false }.first()
+        if(welcomeVisited == false) {
+            context.authDataStore.edit {
+                it[isWelcomeVisitedKey] = true
+            }
+            _welcomeEvent.emit(Unit)
+            return
+        }
         Log.d(TAG,"Check token validity")
         if (getToken().isNotEmpty()) {
             Log.d(TAG, "Emit loginEvent")
