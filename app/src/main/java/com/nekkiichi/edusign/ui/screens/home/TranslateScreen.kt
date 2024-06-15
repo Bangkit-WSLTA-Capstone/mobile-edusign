@@ -52,7 +52,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.source.MediaSource
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import androidx.media3.ui.PlayerView
 import androidx.navigation.NavController
@@ -62,6 +61,7 @@ import com.nekkiichi.edusign.ui.composable.PrimaryButton
 import com.nekkiichi.edusign.ui.composable.SecondaryButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
 import com.nekkiichi.edusign.viewModel.HomeViewModel
+import java.io.File
 
 object TranslateScreen {
     const val VIDEO_FILE = "video_file"
@@ -74,8 +74,6 @@ private val tabTitles = listOf("Video", "History")
 @Composable
 fun TranslateScreen(navController: NavController, homeViewModel: HomeViewModel) {
     var tabState by remember { mutableIntStateOf(0) }
-
-
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -120,18 +118,12 @@ fun TranslateScreen(navController: NavController, homeViewModel: HomeViewModel) 
             when (tabState) {
                 0 -> {
                     if (homeViewModel.videoFile != null) {
-                        val defaultHttpDataSource = DefaultHttpDataSource.Factory()
-                        val file = homeViewModel.videoFile!!
-                        val uri = Uri.fromFile(file)
-                        val mediaItem = androidx.media3.common.MediaItem.fromUri(uri)
-                        val mediaSource = ProgressiveMediaSource.Factory(defaultHttpDataSource)
-                            .createMediaSource(mediaItem)
                         VideoViewer(
                             Modifier
                                 .padding(16.dp)
                                 .fillMaxWidth()
                                 .height(450.dp),
-                            mediaSource = mediaSource
+                            file = homeViewModel.videoFile
                         )
                     } else {
                         Surface(modifier = Modifier
@@ -213,13 +205,22 @@ fun TranslateScreen(navController: NavController, homeViewModel: HomeViewModel) 
 
 @androidx.annotation.OptIn(UnstableApi::class)
 @Composable
-private fun VideoViewer(modifier: Modifier = Modifier, mediaSource: MediaSource) {
+private fun VideoViewer(modifier: Modifier = Modifier, file: File?) {
     val context = LocalContext.current
     val exoplayer = ExoPlayer.Builder(context).build()
 
-    LaunchedEffect(mediaSource) {
-        exoplayer.setMediaItem(mediaSource.mediaItem)
-        exoplayer.prepare()
+    LaunchedEffect(file) {
+        if(file!= null) {
+            val defaultHttpDataSource = DefaultHttpDataSource.Factory()
+            val uri = Uri.fromFile(file)
+            val mediaItem = androidx.media3.common.MediaItem.fromUri(uri)
+            val mediaSource = ProgressiveMediaSource.Factory(defaultHttpDataSource)
+                .createMediaSource(mediaItem)
+            exoplayer.setMediaItem(mediaSource.mediaItem)
+            exoplayer.prepare()
+        }else {
+            exoplayer.release()
+        }
     }
 
     DisposableEffect(Unit) {
