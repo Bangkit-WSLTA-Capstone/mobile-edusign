@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.nekkiichi.edusign.ui.screens.SplashScreen
 import com.nekkiichi.edusign.ui.screens.WelcomeScreen
 import com.nekkiichi.edusign.ui.screens.auth.LoginScreen
 import com.nekkiichi.edusign.ui.screens.auth.RegisterScreen
@@ -20,6 +21,7 @@ import java.io.File
 
 
 sealed class RootRoutes(val route: String) {
+    object Init : RootRoutes("init")
     object Home : RootRoutes("home")
     object Login : RootRoutes("login")
     object Register : RootRoutes("register")
@@ -44,8 +46,8 @@ fun NavigationRootRoutes() {
 
     val authViewModel: AuthViewModel = hiltViewModel()
 
-    LaunchedEffect(Unit) {
 
+    LaunchedEffect(Unit) {
         authViewModel.logoutEvent.collect {
             navController.navigate(RootRoutes.Login.route) {
                 popUpToTop(navController)
@@ -61,7 +63,10 @@ fun NavigationRootRoutes() {
         }
     }
 
-    NavHost(navController = navController, startDestination = RootRoutes.Welcome.route) {
+    NavHost(navController = navController, startDestination = RootRoutes.Init.route) {
+        composable(RootRoutes.Init.route) {
+            SplashScreen()
+        }
         composable(RootRoutes.Login.route) {
             LoginScreen(navController, authViewModel)
         }
