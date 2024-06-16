@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class TranslationResponse(
     @field:SerializedName("status")
-    val status: String?,
+    val status: Boolean?,
     @field:SerializedName("message")
     val message: String?,
     @field:SerializedName("data")
@@ -12,6 +12,6 @@ data class TranslationResponse(
 )
 
 data class TranslationBodyResponse(
-    @field:SerializedName("history")
-    val history: History
+    @field:SerializedName("Result")
+    val result: String?
 )

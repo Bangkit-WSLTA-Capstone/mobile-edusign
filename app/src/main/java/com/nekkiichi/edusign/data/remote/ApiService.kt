@@ -30,6 +30,6 @@ interface ApiService{
         @Part video: MultipartBody.Part
     ): TranslationResponse
 
-    @GET("history")
+    @GET("translate")
     suspend fun getHistory(): HistoryResponse
 }

@@ -2,7 +2,7 @@ package com.nekkiichi.edusign.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 
-data class History(
+data class TranslateHistory(
     @field:SerializedName("created_at")
     val createAt: String,
     @field:SerializedName("fileLink")
@@ -13,7 +13,7 @@ data class History(
 
 data class HistoryResponse(
     @field:SerializedName("status")
-    val status: String?,
+    val status: Boolean?,
     @field:SerializedName("message")
     val message: String?,
     @field:SerializedName("data")
@@ -22,5 +22,5 @@ data class HistoryResponse(
 
 data class HistoryBodyResponse(
     @field:SerializedName("histories")
-    val histories: List<History>?
+    val histories: List<TranslateHistory>?
 )
