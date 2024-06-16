@@ -4,10 +4,10 @@ import com.google.gson.annotations.SerializedName
 
 data class TranslateHistory(
     @field:SerializedName("created_at")
-    val createAt: String,
-    @field:SerializedName("fileLink")
+    val createdAt: String,
+    @field:SerializedName("FileLink")
     val fileLink: String,
-    @field:SerializedName("result")
+    @field:SerializedName("Result")
     val result: String
 )
 
@@ -17,10 +17,5 @@ data class HistoryResponse(
     @field:SerializedName("message")
     val message: String?,
     @field:SerializedName("data")
-    val data: HistoryBodyResponse?
-)
-
-data class HistoryBodyResponse(
-    @field:SerializedName("histories")
-    val histories: List<TranslateHistory>?
+    val data: List<TranslateHistory>?
 )

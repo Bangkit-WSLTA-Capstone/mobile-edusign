@@ -1,6 +1,7 @@
 package com.nekkiichi.edusign.ui.screens.home
 
 import android.net.Uri
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,10 +19,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Camera
 import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material.icons.rounded.History
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -38,7 +37,6 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -63,6 +61,7 @@ import com.nekkiichi.edusign.data.entities.TranslateHistory
 import com.nekkiichi.edusign.ui.components.ModalTranslateContent
 import com.nekkiichi.edusign.ui.components.ModalTranslateError
 import com.nekkiichi.edusign.ui.components.ModalTranslateLoading
+import com.nekkiichi.edusign.ui.components.TranslateHistoryItem
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
 import com.nekkiichi.edusign.ui.composable.SecondaryButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
@@ -82,30 +81,19 @@ private val tabTitles = listOf("Video", "History")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TranslateScreen(navController: NavController, homeViewModel: HomeViewModel) {
-    val historyViewModel: HistoryViewModel = hiltViewModel()
     val translateViewModel: TranslateViewModel = hiltViewModel()
-    val historyState by historyViewModel.historyState
 
     var tabState by remember { mutableIntStateOf(0) }
     val sheetState = rememberModalBottomSheetState()
-    var showBottomSheet by remember { mutableStateOf(false) }
 
     fun showCamera() {
         navController.navigate(RootRoutes.Camera.route)
     }
     Scaffold(topBar = {
-        TopAppBar(title = { Text("Live Translate") }, actions = {
-            IconButton(onClick = {
-                //TODO: switch screen to history screen
-                showBottomSheet = true
-            }) {
-                Icon(
-                    imageVector = Icons.Rounded.History, contentDescription = "Share"
-                )
-            }
-        }, colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
-        )
+        TopAppBar(
+            title = { Text("Live Translate") }, colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainer
+            )
         )
     }) {
         Column(
@@ -172,7 +160,7 @@ fun TranslateScreen(navController: NavController, homeViewModel: HomeViewModel) 
                             },
                             Modifier
                                 .weight(3f),
-                            enabled = homeViewModel.videoFile != null
+                            enabled = homeViewModel.videoFile != null && translateViewModel.translateResult == null
                         ) {
                             Text(text = "TRANSLATE")
                         }
@@ -187,36 +175,10 @@ fun TranslateScreen(navController: NavController, homeViewModel: HomeViewModel) 
                             Icon(Icons.Rounded.Delete, contentDescription = "Delete")
                         }
                     }
-
-
                 }
 
                 else -> {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        when (val state = historyState) {
-                            is Status.Loading -> {
-                                LinearProgressIndicator(
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .align(Alignment.TopCenter)
-                                )
-
-                            }
-
-                            is Status.Success -> {
-                                val histories = state.value
-                                LazyColumn(Modifier.fillMaxWidth()) {
-                                    items(histories) { item: TranslateHistory ->
-                                        Text(text = item.result)
-                                    }
-                                }
-                            }
-
-                            else -> {}
-                        }
-
-
-                    }
+                    HistoryTabScreen(Modifier.fillMaxSize())
                 }
             }
         }
@@ -228,16 +190,45 @@ fun TranslateScreen(navController: NavController, homeViewModel: HomeViewModel) 
                     is Status.Success -> {
                         ModalTranslateContent(text = result.value.data?.result ?: "")
                     }
-
                     is Status.Failed -> {
                         ModalTranslateError(text = result.errorMessage)
                     }
-
                     else -> {
                         ModalTranslateLoading()
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun HistoryTabScreen(modifier: Modifier = Modifier) {
+    val historyViewModel: HistoryViewModel = hiltViewModel()
+    val historyState by historyViewModel.historyState
+    Box(modifier = modifier) {
+        when (val state = historyState) {
+            is Status.Loading -> {
+                LinearProgressIndicator(
+                    Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.TopCenter)
+                )
+            }
+
+            is Status.Success -> {
+                val histories = state.value
+                if(histories.isEmpty()) {
+                    Text(text = "Empty History", Modifier.align(Alignment.Center))
+                }
+                LazyColumn(Modifier.fillMaxWidth().padding(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    items(histories) { item: TranslateHistory ->
+                        TranslateHistoryItem(title = item.result, date = item.dateCreated)
+                    }
+                }
+            }
+
+            else -> {}
         }
     }
 }
