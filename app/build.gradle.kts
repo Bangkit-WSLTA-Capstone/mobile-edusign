@@ -82,6 +82,7 @@ dependencies {
     implementation(libs.multiplatform.markdown.renderer.android)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
+    implementation(libs.converter.scalars)
     implementation(libs.gson)
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)

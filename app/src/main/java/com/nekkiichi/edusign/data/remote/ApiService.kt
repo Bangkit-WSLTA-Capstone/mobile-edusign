@@ -12,6 +12,7 @@ import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Path
 
 
 interface ApiService{
@@ -34,4 +35,7 @@ interface ApiService{
 
     @GET("translate")
     suspend fun getHistory(): HistoryResponse
+
+    @GET("courses/{filename}")
+    suspend fun getCourseMarkdown(@Path("filename") filename: String): String
 }

@@ -99,4 +99,15 @@ class EdusignRepository @Inject constructor(
         }
         emit(result)
     }
+
+    fun getCourse(filename: String) = flow {
+        emit(Status.Loading)
+        val result = try {
+            val markdownString = apiService.getCourseMarkdown(filename)
+            Status.Success(markdownString)
+        }catch (e:Exception) {
+            Status.Failed(e.parseToMessage())
+        }
+        emit(result)
+    }
 }
