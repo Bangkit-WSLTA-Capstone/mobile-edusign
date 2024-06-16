@@ -6,11 +6,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Camera
@@ -19,6 +22,7 @@ import androidx.compose.material.icons.rounded.History
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.PrimaryTabRow
@@ -26,7 +30,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -43,7 +46,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -57,9 +59,13 @@ import androidx.media3.ui.PlayerView
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.nekkiichi.edusign.RootRoutes
+import com.nekkiichi.edusign.data.entities.TranslateHistory
+import com.nekkiichi.edusign.ui.components.ModalTranslateContent
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
 import com.nekkiichi.edusign.ui.composable.SecondaryButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
+import com.nekkiichi.edusign.utils.Status
+import com.nekkiichi.edusign.viewModel.HistoryViewModel
 import com.nekkiichi.edusign.viewModel.HomeViewModel
 import java.io.File
 
@@ -73,6 +79,9 @@ private val tabTitles = listOf("Video", "History")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TranslateScreen(navController: NavController, homeViewModel: HomeViewModel) {
+    val historyViewModel: HistoryViewModel = viewModel()
+    val historyState by historyViewModel.historyState
+
     var tabState by remember { mutableIntStateOf(0) }
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -177,27 +186,39 @@ fun TranslateScreen(navController: NavController, homeViewModel: HomeViewModel) 
                 }
 
                 else -> {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        when (val state = historyState) {
+                            is Status.Loading -> {
+                                LinearProgressIndicator(
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .align(Alignment.TopCenter)
+                                )
 
-                    TextField(value = "", onValueChange = {})
+                            }
+
+                            is Status.Success -> {
+                                val histories = state.value
+                                LazyColumn(Modifier.fillMaxWidth()) {
+                                    items(histories) { item: TranslateHistory ->
+                                        Text(text = item.result)
+                                    }
+                                }
+                            }
+
+                            else -> {}
+                        }
+
+
+                    }
                 }
             }
         }
         if (showBottomSheet) {
             ModalBottomSheet(onDismissRequest = {
                 showBottomSheet = false
-            },sheetState = sheetState) {
-                Column(Modifier.padding(16.dp)) {
-                    Text(text = "Translated Text: ", style = MaterialTheme.typography.titleMedium)
-                    Column(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(text = "Translate result", textAlign = TextAlign.Center)
-                    }
-
-                }
+            }, sheetState = sheetState) {
+                ModalTranslateContent(text = "Testing")
             }
         }
     }
@@ -210,7 +231,7 @@ private fun VideoViewer(modifier: Modifier = Modifier, file: File?) {
     val exoplayer = ExoPlayer.Builder(context).build()
 
     LaunchedEffect(file) {
-        if(file!= null) {
+        if (file != null) {
             val defaultHttpDataSource = DefaultHttpDataSource.Factory()
             val uri = Uri.fromFile(file)
             val mediaItem = androidx.media3.common.MediaItem.fromUri(uri)
@@ -218,7 +239,7 @@ private fun VideoViewer(modifier: Modifier = Modifier, file: File?) {
                 .createMediaSource(mediaItem)
             exoplayer.setMediaItem(mediaSource.mediaItem)
             exoplayer.prepare()
-        }else {
+        } else {
             exoplayer.release()
         }
     }

@@ -84,7 +84,8 @@ class EdusignRepository @Inject constructor(
             val lists = result.data?.histories?.map { data ->
                 TranslateHistory(
                     fileURl = data.fileLink,
-                    result = data.result
+                    result = data.result,
+                    dateCreated = data.createAt
                 )
             } ?: listOf()
 
