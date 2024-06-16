@@ -40,7 +40,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,6 +49,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultHttpDataSource
@@ -61,12 +61,15 @@ import androidx.navigation.compose.rememberNavController
 import com.nekkiichi.edusign.RootRoutes
 import com.nekkiichi.edusign.data.entities.TranslateHistory
 import com.nekkiichi.edusign.ui.components.ModalTranslateContent
+import com.nekkiichi.edusign.ui.components.ModalTranslateError
+import com.nekkiichi.edusign.ui.components.ModalTranslateLoading
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
 import com.nekkiichi.edusign.ui.composable.SecondaryButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
 import com.nekkiichi.edusign.utils.Status
 import com.nekkiichi.edusign.viewModel.HistoryViewModel
 import com.nekkiichi.edusign.viewModel.HomeViewModel
+import com.nekkiichi.edusign.viewModel.TranslateViewModel
 import java.io.File
 
 object TranslateScreen {
@@ -79,12 +82,12 @@ private val tabTitles = listOf("Video", "History")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TranslateScreen(navController: NavController, homeViewModel: HomeViewModel) {
-    val historyViewModel: HistoryViewModel = viewModel()
+    val historyViewModel: HistoryViewModel = hiltViewModel()
+    val translateViewModel: TranslateViewModel = hiltViewModel()
     val historyState by historyViewModel.historyState
 
     var tabState by remember { mutableIntStateOf(0) }
     val sheetState = rememberModalBottomSheetState()
-    val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
 
     fun showCamera() {
@@ -163,7 +166,10 @@ fun TranslateScreen(navController: NavController, homeViewModel: HomeViewModel) 
                         Modifier.padding(horizontal = 16.dp)
                     ) {
                         PrimaryButton(
-                            onCLick = { homeViewModel.uploadVideo() },
+                            onCLick = {
+                                val video = homeViewModel.videoFile ?: return@PrimaryButton
+                                translateViewModel.translateVideo(video)
+                            },
                             Modifier
                                 .weight(3f),
                             enabled = homeViewModel.videoFile != null
@@ -214,11 +220,23 @@ fun TranslateScreen(navController: NavController, homeViewModel: HomeViewModel) 
                 }
             }
         }
-        if (showBottomSheet) {
+        if (translateViewModel.translateResult != null) {
             ModalBottomSheet(onDismissRequest = {
-                showBottomSheet = false
+                translateViewModel.translateResult = null
             }, sheetState = sheetState) {
-                ModalTranslateContent(text = "Testing")
+                when (val result = translateViewModel.translateResult) {
+                    is Status.Success -> {
+                        ModalTranslateContent(text = result.value.data?.result ?: "")
+                    }
+
+                    is Status.Failed -> {
+                        ModalTranslateError(text = result.errorMessage)
+                    }
+
+                    else -> {
+                        ModalTranslateLoading()
+                    }
+                }
             }
         }
     }

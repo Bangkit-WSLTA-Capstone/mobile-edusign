@@ -67,8 +67,8 @@ class EdusignRepository @Inject constructor(
     fun translateVideo(videoFile: File) = flow {
         emit(Status.Loading)
         val result = try {
-            val videoRequestFile = videoFile.asRequestBody("video/mp4".toMediaType())
-            val videoPartFile = MultipartBody.Part.create(videoRequestFile)
+            val videoRequestFile = videoFile.asRequestBody("video/*".toMediaType())
+            val videoPartFile = MultipartBody.Part.createFormData("video",videoFile.name,videoRequestFile)
             val result = apiService.uploadVideoTranslate(videoPartFile)
             Status.Success(result)
         }catch (e: Exception) {
