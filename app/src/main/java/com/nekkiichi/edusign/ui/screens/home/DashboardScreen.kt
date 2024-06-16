@@ -28,7 +28,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.nekkiichi.edusign.ui.composable.BentoButton
 import com.nekkiichi.edusign.ui.composable.DashboardButton
-import com.nekkiichi.edusign.ui.composable.ProfilePicture
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
 
 
@@ -69,12 +68,11 @@ fun DashboardScreen(bottomNavController: NavController) {
                                     fontWeight = FontWeight.Normal
                                 )
                                 Text(
-                                    text = "Grace",
+                                    text = "Customer",
                                     style = MaterialTheme.typography.headlineMedium,
                                     fontWeight = FontWeight.ExtraBold
                                 )
                             }
-                            ProfilePicture(imageUrl = "", modifier = Modifier.size(75.dp))
                         }
                         Spacer(modifier = Modifier.size(24.dp))
                         Row(
