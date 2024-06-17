@@ -16,6 +16,7 @@ import com.nekkiichi.edusign.ui.screens.auth.LoginScreen
 import com.nekkiichi.edusign.ui.screens.auth.RegisterScreen
 import com.nekkiichi.edusign.ui.screens.home.HomeNavScreen
 import com.nekkiichi.edusign.ui.screens.home.MinicourseScreen
+import com.nekkiichi.edusign.ui.screens.home.MinicoursesScreen
 import com.nekkiichi.edusign.ui.screens.home.TranslateScreen
 import com.nekkiichi.edusign.ui.screens.home.camera.CameraScreen
 import com.nekkiichi.edusign.utils.extension.popUpToTop
@@ -91,6 +92,10 @@ fun NavigationRootRoutes() {
         }
         composable(RootRoutes.Camera.route) {
             CameraScreen(navController)
+        }
+
+        composable(RootRoutes.Minicourse.route) {
+            MinicoursesScreen(navController)
         }
 
         composable(

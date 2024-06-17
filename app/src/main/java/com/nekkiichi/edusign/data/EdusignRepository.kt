@@ -1,5 +1,6 @@
 package com.nekkiichi.edusign.data
 
+import android.util.Log
 import com.nekkiichi.edusign.data.entities.TranslateHistory
 import com.nekkiichi.edusign.data.local.AuthManager
 import com.nekkiichi.edusign.data.remote.ApiService
@@ -11,6 +12,7 @@ import com.nekkiichi.edusign.data.remote.response.RegisterResponse
 import com.nekkiichi.edusign.utils.Status
 import com.nekkiichi.edusign.utils.extension.parseToMessage
 import com.nekkiichi.edusign.utils.extension.toDate
+import com.nekkiichi.edusign.utils.formatToLocalDateFromISOString
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okhttp3.MediaType.Companion.toMediaType
@@ -105,7 +107,13 @@ class EdusignRepository @Inject constructor(
         emit(Status.Loading)
         val result: Status<List<CourseItem>> = try {
             val result = apiService.getCourses()
-            Status.Success(result.data!!)
+            val list = result.data?.map { value ->
+                CourseItem(
+                    coursename = value.coursename,
+                    createdAt = formatToLocalDateFromISOString(value.createdAt)
+                )
+            } ?: listOf()
+            Status.Success(list)
         } catch (e: Exception) {
             Status.Failed(e.parseToMessage())
 
@@ -117,10 +125,16 @@ class EdusignRepository @Inject constructor(
         emit(Status.Loading)
         val result = try {
             val markdownString = apiService.getCourseMarkdown(filename)
+
             Status.Success(markdownString)
         } catch (e: Exception) {
+            Log.e(TAG, "getCourse: error", e)
             Status.Failed(e.parseToMessage())
         }
         emit(result)
+    }
+
+    companion object {
+        private const val TAG = "EdusignRepository"
     }
 }
