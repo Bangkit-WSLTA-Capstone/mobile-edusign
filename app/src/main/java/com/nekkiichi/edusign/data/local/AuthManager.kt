@@ -19,6 +19,7 @@ class AuthManager @Inject constructor(@ApplicationContext private val context: C
     private val Context.authDataStore by preferencesDataStore(name = "auth")
 
     private val tokenKey = stringPreferencesKey("token")
+    private val refreshTokenKey = stringPreferencesKey("refreshToken")
     private val isWelcomeVisitedKey = booleanPreferencesKey("isWelcomeVisited")
 
     private val _logoutEvent = MutableSharedFlow<Unit>()
@@ -34,38 +35,46 @@ class AuthManager @Inject constructor(@ApplicationContext private val context: C
     }
 
     suspend fun init() {
-        val welcomeVisited = context.authDataStore.data.map { it[isWelcomeVisitedKey] ?: false }.first()
-        if(welcomeVisited == false) {
+        val welcomeVisited =
+            context.authDataStore.data.map { it[isWelcomeVisitedKey] ?: false }.first()
+        if (!welcomeVisited) {
             context.authDataStore.edit {
                 it[isWelcomeVisitedKey] = true
             }
             _welcomeEvent.emit(Unit)
             return
         }
-        Log.d(TAG,"Check token validity")
+        Log.d(TAG, "Check token validity")
         if (getToken().isNotEmpty()) {
             Log.d(TAG, "Emit loginEvent")
             _loginEvent.emit(Unit)
-        }else{
+        } else {
             _logoutEvent.emit(Unit)
         }
     }
 
     suspend fun logout() {
-        saveToken("")
+        saveToken("", "")
         _logoutEvent.emit(Unit)
     }
 
-    suspend fun saveToken(token: String) {
+    suspend fun saveToken(token: String, refreshToken: String) {
         Log.d(TAG, "Save token, logged in")
         context.authDataStore.edit {
             it[tokenKey] = token
+            it[refreshTokenKey] = refreshToken
         }
     }
 
     suspend fun getToken(): String {
         Log.d(TAG, "Retrieve token")
         return context.authDataStore.data.map { value: Preferences -> value[tokenKey] ?: "" }
+            .first()
+    }
+
+    suspend fun getRefreshToken(): String {
+        Log.d(TAG, "retrieve refresh token")
+        return context.authDataStore.data.map { value: Preferences -> value[refreshTokenKey] ?: "" }
             .first()
     }
 

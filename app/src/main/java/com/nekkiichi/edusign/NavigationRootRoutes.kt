@@ -1,5 +1,6 @@
 package com.nekkiichi.edusign
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,13 +25,13 @@ import java.io.File
 
 
 sealed class RootRoutes(val route: String) {
-    object Init : RootRoutes("init")
-    object Home : RootRoutes("home")
-    object Login : RootRoutes("login")
-    object Register : RootRoutes("register")
-    object Welcome : RootRoutes("welcome")
-    object Camera : RootRoutes("camera")
-    object Minicourse : RootRoutes("minicourse") {
+    object Init : RootRoutes("/init")
+    object Home : RootRoutes("/home")
+    object Login : RootRoutes("/login")
+    object Register : RootRoutes("/register")
+    object Welcome : RootRoutes("/welcome")
+    object Camera : RootRoutes("/camera")
+    object Minicourse : RootRoutes("/minicourse") {
         fun withFilename(filename: String) = "$route/$filename"
         fun _composable() = "$route/{filename}"
     }
@@ -47,6 +48,7 @@ fun NavigationRootRoutes() {
 
     LaunchedEffect(Unit) {
         authViewModel.logoutEvent.collect {
+            Log.d("RootScreen", "Logout emitted")
             navController.navigate(RootRoutes.Login.route) {
                 popUpToTop(navController)
             }

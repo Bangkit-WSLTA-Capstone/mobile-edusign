@@ -5,6 +5,7 @@ import com.nekkiichi.edusign.data.local.AuthManager
 import com.nekkiichi.edusign.data.remote.ApiService
 import com.nekkiichi.edusign.data.remote.request.LoginRequest
 import com.nekkiichi.edusign.data.remote.request.RegisterRequest
+import com.nekkiichi.edusign.data.remote.response.CourseListBodyResponse
 import com.nekkiichi.edusign.data.remote.response.LoginResponse
 import com.nekkiichi.edusign.data.remote.response.RegisterResponse
 import com.nekkiichi.edusign.utils.Status
@@ -30,7 +31,7 @@ class EdusignRepository @Inject constructor(
         val result = try {
             val body = LoginRequest(email, password)
             val temp = apiService.login(body)
-            authManager.saveToken(temp.data?.token ?: "")
+            authManager.saveToken(temp.data?.accessToken ?: "", temp.data?.refreshToken ?: "")
             Status.Success(temp)
         } catch (e: Exception) {
 
@@ -100,12 +101,24 @@ class EdusignRepository @Inject constructor(
         emit(result)
     }
 
+    fun getCourses() = flow {
+        emit(Status.Loading)
+        val result: Status<List<CourseListBodyResponse>> = try {
+            val result = apiService.getCourses()
+            Status.Success(result.data!!)
+        } catch (e: Exception) {
+            Status.Failed(e.parseToMessage())
+
+        }
+        emit(result)
+    }
+
     fun getCourse(filename: String) = flow {
         emit(Status.Loading)
         val result = try {
             val markdownString = apiService.getCourseMarkdown(filename)
             Status.Success(markdownString)
-        }catch (e:Exception) {
+        } catch (e: Exception) {
             Status.Failed(e.parseToMessage())
         }
         emit(result)

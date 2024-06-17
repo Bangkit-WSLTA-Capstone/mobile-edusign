@@ -14,6 +14,8 @@ data class LoginResponse(
 
 
 data class LoginDataResponse(
-    @field:SerializedName("token")
-    val token: String?
+    @field:SerializedName("access")
+    val accessToken: String?,
+    @field:SerializedName("refresh")
+    val refreshToken: String?
 )
