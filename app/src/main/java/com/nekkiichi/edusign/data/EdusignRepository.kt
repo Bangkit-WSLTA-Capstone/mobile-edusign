@@ -5,7 +5,7 @@ import com.nekkiichi.edusign.data.local.AuthManager
 import com.nekkiichi.edusign.data.remote.ApiService
 import com.nekkiichi.edusign.data.remote.request.LoginRequest
 import com.nekkiichi.edusign.data.remote.request.RegisterRequest
-import com.nekkiichi.edusign.data.remote.response.CourseListBodyResponse
+import com.nekkiichi.edusign.data.remote.response.CourseItem
 import com.nekkiichi.edusign.data.remote.response.LoginResponse
 import com.nekkiichi.edusign.data.remote.response.RegisterResponse
 import com.nekkiichi.edusign.utils.Status
@@ -103,7 +103,7 @@ class EdusignRepository @Inject constructor(
 
     fun getCourses() = flow {
         emit(Status.Loading)
-        val result: Status<List<CourseListBodyResponse>> = try {
+        val result: Status<List<CourseItem>> = try {
             val result = apiService.getCourses()
             Status.Success(result.data!!)
         } catch (e: Exception) {

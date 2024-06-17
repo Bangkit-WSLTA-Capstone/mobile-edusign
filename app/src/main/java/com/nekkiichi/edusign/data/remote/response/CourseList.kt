@@ -9,10 +9,10 @@ data class CourseListResponse(
     @field:SerializedName("message")
     val message: String?,
     @field:SerializedName("data")
-    val data: List<CourseListBodyResponse>?
+    val data: List<CourseItem>?
 )
 
-data class CourseListBodyResponse(
+data class CourseItem(
     @field:SerializedName("coursename")
     val coursename: String,
     @field:SerializedName("created_at")
