@@ -2,8 +2,10 @@ package com.nekkiichi.edusign.data.remote
 
 import com.nekkiichi.edusign.data.remote.request.LoginRequest
 import com.nekkiichi.edusign.data.remote.request.RegisterRequest
+import com.nekkiichi.edusign.data.remote.response.CourseListResponse
 import com.nekkiichi.edusign.data.remote.response.HistoryResponse
 import com.nekkiichi.edusign.data.remote.response.LoginResponse
+import com.nekkiichi.edusign.data.remote.response.RefreshTokenResponse
 import com.nekkiichi.edusign.data.remote.response.RegisterResponse
 import com.nekkiichi.edusign.data.remote.response.TranslationResponse
 import okhttp3.MultipartBody
@@ -27,6 +29,9 @@ interface ApiService{
         @Body body: LoginRequest
     ): LoginResponse
 
+    @POST("refresh")
+    suspend fun refreshToken(): RefreshTokenResponse
+
     @Multipart
     @POST("translate")
     suspend fun uploadVideoTranslate(
@@ -36,6 +41,9 @@ interface ApiService{
     @GET("translate")
     suspend fun getHistory(): HistoryResponse
 
-    @GET("courses/{filename}")
+    @GET("course")
+    suspend fun getCourses(): CourseListResponse
+
+    @GET("course/{filename}")
     suspend fun getCourseMarkdown(@Path("filename") filename: String): String
 }
