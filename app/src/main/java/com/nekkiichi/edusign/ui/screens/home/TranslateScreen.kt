@@ -70,6 +70,8 @@ import com.nekkiichi.edusign.viewModel.HistoryViewModel
 import com.nekkiichi.edusign.viewModel.HomeViewModel
 import com.nekkiichi.edusign.viewModel.TranslateViewModel
 import java.io.File
+import java.time.Instant
+import java.util.Date
 
 object TranslateScreen {
     const val VIDEO_FILE = "video_file"
@@ -190,9 +192,11 @@ fun TranslateScreen(navController: NavController, homeViewModel: HomeViewModel) 
                     is Status.Success -> {
                         ModalTranslateContent(text = result.value.data?.result ?: "")
                     }
+
                     is Status.Failed -> {
                         ModalTranslateError(text = result.errorMessage)
                     }
+
                     else -> {
                         ModalTranslateLoading()
                     }
@@ -218,10 +222,14 @@ fun HistoryTabScreen(modifier: Modifier = Modifier) {
 
             is Status.Success -> {
                 val histories = state.value
-                if(histories.isEmpty()) {
+                if (histories.isEmpty()) {
                     Text(text = "Empty History", Modifier.align(Alignment.Center))
                 }
-                LazyColumn(Modifier.fillMaxWidth().padding(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                LazyColumn(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
                     items(histories) { item: TranslateHistory ->
                         TranslateHistoryItem(title = item.result, date = item.dateCreated)
                     }
@@ -277,6 +285,39 @@ private fun TranslateScreenPreview() {
     EduSignTheme {
         Surface {
             TranslateScreen(rememberNavController(), viewModel())
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun HistoryListPreview() {
+    val dummyData = listOf(
+        TranslateHistory(
+            dateCreated = Date.from(Instant.now()),
+            fileURl = "thisisurl",
+            result = "Aloha"
+        ),TranslateHistory(
+            dateCreated = Date.from(Instant.now()),
+            fileURl = "thisisurl",
+            result = "Aloha"
+        ),TranslateHistory(
+            dateCreated = Date.from(Instant.now()),
+            fileURl = "thisisurl",
+            result = "Aloha"
+        ),
+    )
+    EduSignTheme {
+        Surface {
+            LazyColumn(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                items(dummyData) { item: TranslateHistory ->
+                    TranslateHistoryItem(title = item.result, date = item.dateCreated)
+                }
+            }
         }
     }
 }

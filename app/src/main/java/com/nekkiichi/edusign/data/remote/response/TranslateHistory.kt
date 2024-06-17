@@ -5,9 +5,9 @@ import com.google.gson.annotations.SerializedName
 data class TranslateHistory(
     @field:SerializedName("created_at")
     val createdAt: String,
-    @field:SerializedName("FileLink")
+    @field:SerializedName("filelink")
     val fileLink: String,
-    @field:SerializedName("Result")
+    @field:SerializedName("result")
     val result: String
 )
 

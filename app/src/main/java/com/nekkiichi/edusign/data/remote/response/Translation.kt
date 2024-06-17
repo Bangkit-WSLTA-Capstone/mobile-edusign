@@ -12,6 +12,6 @@ data class TranslationResponse(
 )
 
 data class TranslationBodyResponse(
-    @field:SerializedName("Result")
+    @field:SerializedName("result")
     val result: String?
 )
