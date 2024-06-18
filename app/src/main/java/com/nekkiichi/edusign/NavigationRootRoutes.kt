@@ -1,16 +1,22 @@
 package com.nekkiichi.edusign
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.nekkiichi.edusign.ui.screens.SplashScreen
 import com.nekkiichi.edusign.ui.screens.WelcomeScreen
 import com.nekkiichi.edusign.ui.screens.auth.LoginScreen
 import com.nekkiichi.edusign.ui.screens.auth.RegisterScreen
 import com.nekkiichi.edusign.ui.screens.home.HomeNavScreen
+import com.nekkiichi.edusign.ui.screens.home.MinicourseScreen
+import com.nekkiichi.edusign.ui.screens.home.MinicoursesScreen
 import com.nekkiichi.edusign.ui.screens.home.TranslateScreen
 import com.nekkiichi.edusign.ui.screens.home.camera.CameraScreen
 import com.nekkiichi.edusign.utils.extension.popUpToTop
@@ -20,19 +26,15 @@ import java.io.File
 
 
 sealed class RootRoutes(val route: String) {
-    object Home : RootRoutes("home")
-    object Login : RootRoutes("login")
-    object Register : RootRoutes("register")
-    object Welcome : RootRoutes("welcome")
-    object Camera : RootRoutes("camera")
-
-    fun withArgs(vararg arg: String): String {
-        return buildString {
-            append(route)
-            arg.forEach { arg ->
-                append("/$arg")
-            }
-        }
+    object Init : RootRoutes("/init")
+    object Home : RootRoutes("/home")
+    object Login : RootRoutes("/login")
+    object Register : RootRoutes("/register")
+    object Welcome : RootRoutes("/welcome")
+    object Camera : RootRoutes("/camera")
+    object Minicourse : RootRoutes("/minicourse") {
+        fun withFilename(filename: String) = "$route/$filename"
+        fun _composable() = "$route/{filename}"
     }
 }
 
@@ -44,15 +46,37 @@ fun NavigationRootRoutes() {
 
     val authViewModel: AuthViewModel = hiltViewModel()
 
+
     LaunchedEffect(Unit) {
         authViewModel.logoutEvent.collect {
+            Log.d("RootScreen", "Logout emitted")
             navController.navigate(RootRoutes.Login.route) {
                 popUpToTop(navController)
             }
         }
     }
 
-    NavHost(navController = navController, startDestination = RootRoutes.Welcome.route) {
+    // show welcome screen only once, and then redirect to login afterwards
+    LaunchedEffect(Unit) {
+        authViewModel.welcomeEvent.collect {
+            navController.navigate(RootRoutes.Welcome.route) {
+                popUpToTop(navController)
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        authViewModel.loginEvent.collect {
+            navController.navigate(RootRoutes.Home.route) {
+                popUpToTop(navController)
+            }
+        }
+    }
+
+    NavHost(navController = navController, startDestination = RootRoutes.Init.route) {
+        composable(RootRoutes.Init.route) {
+            SplashScreen()
+        }
         composable(RootRoutes.Login.route) {
             LoginScreen(navController, authViewModel)
         }
@@ -68,6 +92,17 @@ fun NavigationRootRoutes() {
         }
         composable(RootRoutes.Camera.route) {
             CameraScreen(navController)
+        }
+
+        composable(RootRoutes.Minicourse.route) {
+            MinicoursesScreen(navController)
+        }
+
+        composable(
+            RootRoutes.Minicourse._composable(),
+            arguments = listOf(navArgument("filename") { type = NavType.StringType })
+        ) {
+            MinicourseScreen(navController, it.arguments?.getString("filename") ?: "")
         }
     }
 }

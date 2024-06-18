@@ -2,16 +2,19 @@ package com.nekkiichi.edusign.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 
-data class TranslationResponse(
+
+data class CourseListResponse(
     @field:SerializedName("status")
     val status: Boolean?,
     @field:SerializedName("message")
     val message: String?,
     @field:SerializedName("data")
-    val data: TranslationBodyResponse?
+    val data: List<CourseItem>?
 )
 
-data class TranslationBodyResponse(
-    @field:SerializedName("result")
-    val result: String?
+data class CourseItem(
+    @field:SerializedName("coursename")
+    val coursename: String,
+    @field:SerializedName("created_at")
+    val createdAt: String
 )

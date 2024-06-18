@@ -25,21 +25,21 @@ fun ModalTranslateContent(modifier: Modifier = Modifier, text: String) {
                 .padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Markdown(content = text, modifier = Modifier.weight(1f))
+            Markdown(content = text, modifier = Modifier)
         }
 
     }
 }
 
 @Composable
-fun ModalTranslateError(modifier: Modifier = Modifier) {
+fun ModalTranslateError(modifier: Modifier = Modifier, text: String) {
     Column(
         Modifier
             .fillMaxWidth()
             .padding(16.dp)
             .then(modifier)) {
         Text(text = "Failed to retrieve result:", style = MaterialTheme.typography.titleMedium)
-        Text(text = "Error reasong")
+        Text(text = text)
     }
 }
 
@@ -82,7 +82,7 @@ private fun TranslateLoadingPreview() {
 private fun TranslateErrorPreview() {
     EduSignTheme {
         Surface {
-            ModalTranslateError()
+            ModalTranslateError(text = "user not found")
         }
     }
 }

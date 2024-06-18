@@ -20,11 +20,13 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField("String", "API_URL", "\"https://edusign-2frcv7abha-et.a.run.app/api/\"")
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -80,6 +82,7 @@ dependencies {
     implementation(libs.multiplatform.markdown.renderer.android)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
+    implementation(libs.converter.scalars)
     implementation(libs.gson)
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)

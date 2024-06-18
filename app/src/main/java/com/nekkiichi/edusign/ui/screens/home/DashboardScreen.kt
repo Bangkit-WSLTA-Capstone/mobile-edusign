@@ -26,14 +26,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.nekkiichi.edusign.RootRoutes
 import com.nekkiichi.edusign.ui.composable.BentoButton
 import com.nekkiichi.edusign.ui.composable.DashboardButton
-import com.nekkiichi.edusign.ui.composable.ProfilePicture
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
 
 
 @Composable
-fun DashboardScreen(bottomNavController: NavController) {
+fun DashboardScreen(navController: NavController, bottomNavController: NavController) {
 
     fun navigateToTranslate() {
         bottomNavController.navigate(HomeRoutes.Translate.route) {
@@ -45,6 +45,9 @@ fun DashboardScreen(bottomNavController: NavController) {
             launchSingleTop = true
             restoreState = true
         }
+    }
+    fun  navigateToMiniCourse() {
+        navController.navigate(RootRoutes.Minicourse.route)
     }
 
     fun navigateToGlossary() {
@@ -69,19 +72,20 @@ fun DashboardScreen(bottomNavController: NavController) {
                                     fontWeight = FontWeight.Normal
                                 )
                                 Text(
-                                    text = "Grace",
+                                    text = "Customer",
                                     style = MaterialTheme.typography.headlineMedium,
                                     fontWeight = FontWeight.ExtraBold
                                 )
                             }
-                            ProfilePicture(imageUrl = "", modifier = Modifier.size(75.dp))
                         }
                         Spacer(modifier = Modifier.size(24.dp))
                         Row(
                             Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
-                            BentoButton(onClick = { /*TODO*/ }, modifier = Modifier.weight(1f)) {
+                            BentoButton(onClick = {
+                                navigateToMiniCourse()
+                            }, modifier = Modifier.weight(1f)) {
                                 Column(Modifier.padding(12.dp)) {
                                     Icon(
                                         imageVector = Icons.Rounded.TaskAlt,
@@ -94,7 +98,8 @@ fun DashboardScreen(bottomNavController: NavController) {
                                     ) {
                                         Text(
                                             text = "Want to learn?",
-                                            style = MaterialTheme.typography.bodySmall
+                                            style = MaterialTheme.typography.bodySmall,
+                                            minLines = 2
                                         )
                                         Text(
                                             text = "Mini Course",
@@ -120,7 +125,8 @@ fun DashboardScreen(bottomNavController: NavController) {
                                     ) {
                                         Text(
                                             text = "Sign Language directory",
-                                            style = MaterialTheme.typography.bodySmall
+                                            style = MaterialTheme.typography.bodySmall,
+                                            minLines = 2
                                         )
                                         Text(
                                             text = "Glossary",
@@ -181,6 +187,6 @@ fun DashboardScreen(bottomNavController: NavController) {
 @Composable
 private fun DashboardScreenPreview() {
     EduSignTheme {
-        DashboardScreen(bottomNavController = rememberNavController())
+        DashboardScreen(bottomNavController = rememberNavController(), navController = rememberNavController())
     }
 }
