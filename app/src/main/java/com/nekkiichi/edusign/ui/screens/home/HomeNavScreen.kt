@@ -37,8 +37,7 @@ sealed class HomeRoutes(var route: String, val icon: ImageVector?, var title: St
     data object Translate : HomeRoutes("app_translate", Icons.Rounded.Camera, "Translate")
     data object Notification :
         HomeRoutes("app_notification", Icons.Rounded.Notifications, "Notification")
-
-    data object Account : HomeRoutes("app_account", Icons.Rounded.Person, "Account")
+    data object Menu : HomeRoutes("app_menu", Icons.Rounded.Person, "Menu")
 }
 
 
@@ -62,8 +61,9 @@ fun HomeNavScreen(navController: NavController, homeViewModel: HomeViewModel) {
                 composable(HomeRoutes.Notification.route) {
                     Text(text = "Notification")
                 }
-                composable(HomeRoutes.Account.route) {
-                    Text(text = "Account")
+                composable(HomeRoutes.Menu.route) {
+//                    Text(text = "Menu")
+                    MenuScreen(navController)
                 }
 
             }
@@ -80,7 +80,7 @@ private fun BottomNavBar(
         HomeRoutes.Dashboard,
         HomeRoutes.Translate,
         HomeRoutes.Notification,
-        HomeRoutes.Account
+        HomeRoutes.Menu
     )
     var selectedItem by remember {
         mutableIntStateOf(0)
@@ -96,7 +96,6 @@ private fun BottomNavBar(
                 onClick = {
                     selectedItem = index
                     currentRoute = navigationItem.route
-
                     bottomNavController.navigate(navigationItem.route) {
                         bottomNavController.graph.startDestinationRoute?.let {
                             popUpTo(it) {

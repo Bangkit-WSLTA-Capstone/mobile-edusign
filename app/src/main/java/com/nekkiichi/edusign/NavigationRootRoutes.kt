@@ -15,6 +15,7 @@ import com.nekkiichi.edusign.ui.screens.WelcomeScreen
 import com.nekkiichi.edusign.ui.screens.auth.LoginScreen
 import com.nekkiichi.edusign.ui.screens.auth.RegisterScreen
 import com.nekkiichi.edusign.ui.screens.home.HomeNavScreen
+import com.nekkiichi.edusign.ui.screens.home.MenuScreen
 import com.nekkiichi.edusign.ui.screens.home.MinicourseScreen
 import com.nekkiichi.edusign.ui.screens.home.MinicoursesScreen
 import com.nekkiichi.edusign.ui.screens.home.TranslateScreen
@@ -32,6 +33,7 @@ sealed class RootRoutes(val route: String) {
     object Register : RootRoutes("/register")
     object Welcome : RootRoutes("/welcome")
     object Camera : RootRoutes("/camera")
+    object Menu : RootRoutes("/menu")
     object Minicourse : RootRoutes("/minicourse") {
         fun withFilename(filename: String) = "$route/$filename"
         fun _composable() = "$route/{filename}"
@@ -43,9 +45,7 @@ sealed class RootRoutes(val route: String) {
 fun NavigationRootRoutes() {
     val navController = rememberNavController()
     val homeViewModel: HomeViewModel = viewModel()
-
     val authViewModel: AuthViewModel = hiltViewModel()
-
 
     LaunchedEffect(Unit) {
         authViewModel.logoutEvent.collect {
@@ -90,19 +90,23 @@ fun NavigationRootRoutes() {
             homeViewModel.videoFile = it.savedStateHandle.get<File>(TranslateScreen.VIDEO_FILE)
             HomeNavScreen(navController, homeViewModel)
         }
-        composable(RootRoutes.Camera.route) {
-            CameraScreen(navController)
-        }
-
-        composable(RootRoutes.Minicourse.route) {
-            MinicoursesScreen(navController)
-        }
-
-        composable(
-            RootRoutes.Minicourse._composable(),
-            arguments = listOf(navArgument("filename") { type = NavType.StringType })
-        ) {
-            MinicourseScreen(navController, it.arguments?.getString("filename") ?: "")
-        }
+//        composable(RootRoutes.Camera.route) {
+//            CameraScreen(navController)
+//        }
+//
+//        composable(RootRoutes.Minicourse.route) {
+//            MinicoursesScreen(navController)
+//        }
+//
+//        composable(
+//            RootRoutes.Minicourse._composable(),
+//            arguments = listOf(navArgument("filename") { type = NavType.StringType })
+//        ) {
+//            MinicourseScreen(navController, it.arguments?.getString("filename") ?: "")
+//        }
+//
+//        composable(RootRoutes.Menu.route) {
+//            MenuScreen(navController)
+//        }
     }
 }
