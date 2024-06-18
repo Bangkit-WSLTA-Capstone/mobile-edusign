@@ -5,21 +5,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.nekkiichi.edusign.ui.screens.SplashScreen
 import com.nekkiichi.edusign.ui.screens.WelcomeScreen
 import com.nekkiichi.edusign.ui.screens.auth.LoginScreen
 import com.nekkiichi.edusign.ui.screens.auth.RegisterScreen
 import com.nekkiichi.edusign.ui.screens.home.HomeNavScreen
-import com.nekkiichi.edusign.ui.screens.home.MenuScreen
-import com.nekkiichi.edusign.ui.screens.home.MinicourseScreen
-import com.nekkiichi.edusign.ui.screens.home.MinicoursesScreen
+import com.nekkiichi.edusign.ui.screens.home.SignWordsScreen
 import com.nekkiichi.edusign.ui.screens.home.TranslateScreen
-import com.nekkiichi.edusign.ui.screens.home.camera.CameraScreen
 import com.nekkiichi.edusign.utils.extension.popUpToTop
 import com.nekkiichi.edusign.viewModel.AuthViewModel
 import com.nekkiichi.edusign.viewModel.HomeViewModel
@@ -34,6 +29,7 @@ sealed class RootRoutes(val route: String) {
     object Welcome : RootRoutes("/welcome")
     object Camera : RootRoutes("/camera")
     object Menu : RootRoutes("/menu")
+    object Dictionary : RootRoutes("/dictionary")
     object Minicourse : RootRoutes("/minicourse") {
         fun withFilename(filename: String) = "$route/$filename"
         fun _composable() = "$route/{filename}"
@@ -90,6 +86,11 @@ fun NavigationRootRoutes() {
             homeViewModel.videoFile = it.savedStateHandle.get<File>(TranslateScreen.VIDEO_FILE)
             HomeNavScreen(navController, homeViewModel)
         }
+
+        composable(RootRoutes.Dictionary.route) {
+            SignWordsScreen(navController)
+        }
+
 //        composable(RootRoutes.Camera.route) {
 //            CameraScreen(navController)
 //        }

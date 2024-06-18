@@ -134,6 +134,20 @@ class EdusignRepository @Inject constructor(
         emit(result)
     }
 
+    fun getDictionary(word: String): Flow<Status<String>> = flow {
+        emit(Status.Loading)
+
+        val result = try {
+            val response = apiService.getDictionary(word)
+            val link = response.data?.imgUrl ?: ""
+            Status.Success(link)
+        } catch (e: Exception) {
+            Status.Failed(e.parseToMessage())
+        }
+
+        emit(result)
+    }
+
     companion object {
         private const val TAG = "EdusignRepository"
     }

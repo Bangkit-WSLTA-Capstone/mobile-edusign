@@ -3,6 +3,7 @@ package com.nekkiichi.edusign.data.remote
 import com.nekkiichi.edusign.data.remote.request.LoginRequest
 import com.nekkiichi.edusign.data.remote.request.RegisterRequest
 import com.nekkiichi.edusign.data.remote.response.CourseListResponse
+import com.nekkiichi.edusign.data.remote.response.DictionaryResponse
 import com.nekkiichi.edusign.data.remote.response.HistoryResponse
 import com.nekkiichi.edusign.data.remote.response.LoginResponse
 import com.nekkiichi.edusign.data.remote.response.RefreshTokenResponse
@@ -40,6 +41,9 @@ interface ApiService{
 
     @GET("translate")
     suspend fun getHistory(): HistoryResponse
+
+    @GET("dictionary/{word}")
+    suspend fun getDictionary(@Path("word") word: String) : DictionaryResponse
 
     @GET("course")
     suspend fun getCourses(): CourseListResponse
