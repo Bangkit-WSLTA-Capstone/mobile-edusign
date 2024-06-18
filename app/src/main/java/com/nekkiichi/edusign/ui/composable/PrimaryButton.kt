@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -29,9 +30,10 @@ fun PrimaryButton(
     onCLick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    colors: ButtonColors = ButtonDefaults.buttonColors(),
     content: @Composable() (RowScope.() -> Unit)
 ) {
-    Button(onClick = onCLick, modifier = modifier, shape = ButtonShape, enabled = enabled) {
+    Button(onClick = onCLick, modifier = modifier, shape = ButtonShape, enabled = enabled, colors = colors) {
         ProvideTextStyle(value = AppTypography.labelLarge) {
             content()
         }

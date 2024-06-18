@@ -4,16 +4,21 @@ import android.content.res.Configuration
 import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,7 +30,9 @@ import com.nekkiichi.edusign.ui.theme.EduSignTheme
 @Preview(showBackground = true)
 @Composable
 fun AccountHero(){
-    Image(painter = painterResource(id = R.drawable.example_avatar), contentDescription = "users avatar", modifier = Modifier.width(64.dp).height(64.dp))
+    Image(painter = painterResource(id = R.drawable.example_avatar), contentDescription = "users avatar", modifier = Modifier
+        .width(64.dp)
+        .height(64.dp))
 }
 @Composable
 fun AccountScreen() {
@@ -37,6 +44,17 @@ fun AccountScreen() {
                     .padding(15.dp)) {
                 PrimaryButton(onCLick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth()) {
                     Text(text= "Edit Your Profile")
+                }
+                Spacer(modifier = Modifier.height(15.dp))
+                PrimaryButton(
+                    onCLick = { /*TODO*/ },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error,
+                        contentColor = Color.White
+                    )
+                    ) {
+                    Text(text= "Logout")
                 }
             }
         }
