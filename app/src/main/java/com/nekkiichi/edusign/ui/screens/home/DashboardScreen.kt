@@ -51,7 +51,7 @@ fun DashboardScreen(navController: NavController, bottomNavController: NavContro
     }
 
     fun navigateToGlossary() {
-        bottomNavController.navigate(HomeRoutes.Notification.route)
+        navController.navigate(RootRoutes.Dictionary.route)
     }
 
     Scaffold {
@@ -108,7 +108,9 @@ fun DashboardScreen(navController: NavController, bottomNavController: NavContro
                                 }
                             }
                             BentoButton(
-                                onClick = { /*TODO*/ },
+                                onClick = {
+                                    navigateToGlossary()
+                                },
                                 modifier = Modifier.weight(1f),
                                 color = MaterialTheme.colorScheme.tertiary
                             ) {
