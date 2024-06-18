@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -35,6 +36,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
+import com.nekkiichi.edusign.viewModel.AuthViewModel
 import com.nekkiichi.edusign.viewModel.HomeViewModel
 
 
@@ -48,7 +50,7 @@ sealed class HomeRoutes(var route: String, val icon: ImageVector?, var title: St
 
 
 @Composable
-fun HomeNavScreen(navController: NavController, homeViewModel: HomeViewModel) {
+fun HomeNavScreen(navController: NavController, homeViewModel: HomeViewModel, authViewModel: AuthViewModel) {
     val bottomBarNavController = rememberNavController()
     Scaffold(bottomBar = {
         BottomNavBar(bottomNavController = bottomBarNavController)
@@ -69,7 +71,7 @@ fun HomeNavScreen(navController: NavController, homeViewModel: HomeViewModel) {
                 }
                 composable(HomeRoutes.Menu.route) {
 //                    Text(text = "Menu")
-                    MenuScreen(navController)
+                    MenuScreen(navController, authViewModel)
                 }
 
             }
@@ -138,6 +140,6 @@ private fun BottomNavBar(
 @Composable
 private fun HomeRootScreenPreview() {
     EduSignTheme {
-        HomeNavScreen(navController = rememberNavController(), viewModel())
+        HomeNavScreen(navController = rememberNavController(),  viewModel(), hiltViewModel())
     }
 }

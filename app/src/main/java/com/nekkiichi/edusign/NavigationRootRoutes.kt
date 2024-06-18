@@ -88,7 +88,7 @@ fun NavigationRootRoutes() {
         }
         composable(RootRoutes.Home.route) {
             homeViewModel.videoFile = it.savedStateHandle.get<File>(TranslateScreen.VIDEO_FILE)
-            HomeNavScreen(navController, homeViewModel)
+            HomeNavScreen(navController, homeViewModel, authViewModel)
         }
 //        composable(RootRoutes.Camera.route) {
 //            CameraScreen(navController)

@@ -56,7 +56,6 @@ fun DashboardScreen(navController: NavController, bottomNavController: NavContro
 
     Scaffold {
         Surface(Modifier.fillMaxSize()) {
-
             Column(Modifier.padding(it)) {
                 // HERO SECTION
                 Surface(tonalElevation = 4.dp) {
