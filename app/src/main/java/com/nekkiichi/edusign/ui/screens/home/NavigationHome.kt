@@ -50,7 +50,7 @@ sealed class HomeRoutes(var route: String, val icon: ImageVector?, var title: St
 
 
 @Composable
-fun HomeNavScreen(navController: NavController, homeViewModel: HomeViewModel, authViewModel: AuthViewModel) {
+fun NavigationHome(navController: NavController, homeViewModel: HomeViewModel) {
     val bottomBarNavController = rememberNavController()
     Scaffold(bottomBar = {
         BottomNavBar(bottomNavController = bottomBarNavController)
@@ -71,7 +71,7 @@ fun HomeNavScreen(navController: NavController, homeViewModel: HomeViewModel, au
                 }
                 composable(HomeRoutes.Menu.route) {
 //                    Text(text = "Menu")
-                    MenuScreen(navController, authViewModel)
+                    MenuScreen(navController)
                 }
 
             }
@@ -140,6 +140,6 @@ private fun BottomNavBar(
 @Composable
 private fun HomeRootScreenPreview() {
     EduSignTheme {
-        HomeNavScreen(navController = rememberNavController(),  viewModel(), hiltViewModel())
+        NavigationHome(navController = rememberNavController(),  viewModel())
     }
 }

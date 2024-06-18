@@ -12,7 +12,7 @@ import com.nekkiichi.edusign.ui.screens.SplashScreen
 import com.nekkiichi.edusign.ui.screens.WelcomeScreen
 import com.nekkiichi.edusign.ui.screens.auth.LoginScreen
 import com.nekkiichi.edusign.ui.screens.auth.RegisterScreen
-import com.nekkiichi.edusign.ui.screens.home.HomeNavScreen
+import com.nekkiichi.edusign.ui.screens.home.NavigationHome
 import com.nekkiichi.edusign.ui.screens.home.SignWordsScreen
 import com.nekkiichi.edusign.ui.screens.home.TranslateScreen
 import com.nekkiichi.edusign.utils.extension.popUpToTop
@@ -84,7 +84,7 @@ fun NavigationRootRoutes() {
         }
         composable(RootRoutes.Home.route) {
             homeViewModel.videoFile = it.savedStateHandle.get<File>(TranslateScreen.VIDEO_FILE)
-            HomeNavScreen(navController, homeViewModel, authViewModel)
+            NavigationHome(navController, homeViewModel)
         }
 
         composable(RootRoutes.Dictionary.route) {

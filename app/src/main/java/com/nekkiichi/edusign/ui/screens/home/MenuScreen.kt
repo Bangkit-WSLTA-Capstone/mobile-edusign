@@ -37,18 +37,17 @@ import com.nekkiichi.edusign.R
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
 import com.nekkiichi.edusign.viewModel.AuthViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 
 
 @Composable
-fun MenuScreen(navController: NavController, authViewModel: AuthViewModel) {
-    val loginState = authViewModel.loginStatus
+fun MenuScreen(navController: NavController) {
+//    val loginState = authViewModel.loginStatus
     Scaffold {
         Surface(
             Modifier
                 .fillMaxSize()
                 .padding(it)) {
-            Text(text = "Status Login ${loginState.toString()}")
+//            Text(text = "Status Login ${loginState.toString()}")
             MenuContent()
         }
     }
@@ -56,7 +55,7 @@ fun MenuScreen(navController: NavController, authViewModel: AuthViewModel) {
 
 @Composable
 fun MenuContent() {
-    Column() {
+    Column {
 //              Hero Section
         Surface(tonalElevation = 5.dp) {
             MenuHero(modifier = Modifier.padding(defaultNum.dp))
@@ -133,6 +132,6 @@ fun PreviewMenuHero() {
 @Composable
 fun PreviewMenuScreen() {
     EduSignTheme {
-        MenuScreen(navController = rememberNavController(), authViewModel = hiltViewModel())
+        MenuScreen(navController = rememberNavController())
     }
 }
