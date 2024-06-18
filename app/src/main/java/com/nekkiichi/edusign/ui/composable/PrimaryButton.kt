@@ -19,9 +19,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.nekkiichi.edusign.Constant.defaultShape
 import com.nekkiichi.edusign.ui.theme.AppTypography
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
-import com.nekkiichi.edusign.ui.theme.geistMonoFamily
+import com.nekkiichi.edusign.ui.theme.plusJakartaSansFamily
 
 val ButtonShape = RoundedCornerShape(16.dp)
 
@@ -31,9 +32,16 @@ fun PrimaryButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     colors: ButtonColors = ButtonDefaults.buttonColors(),
+    shape: RoundedCornerShape = defaultShape,
     content: @Composable() (RowScope.() -> Unit)
 ) {
-    Button(onClick = onCLick, modifier = modifier, shape = ButtonShape, enabled = enabled, colors = colors) {
+    Button(
+        onClick = onCLick,
+        modifier = modifier,
+        shape = shape,
+        enabled = enabled,
+        colors = colors
+    ) {
         ProvideTextStyle(value = AppTypography.labelLarge) {
             content()
         }
@@ -96,7 +104,7 @@ fun TextButton(
         enabled = enabled,
         shape = ButtonShape
     ) {
-        ProvideTextStyle(value = AppTypography.labelLarge.copy(fontFamily = geistMonoFamily)) {
+        ProvideTextStyle(value = AppTypography.labelLarge.copy(fontFamily = plusJakartaSansFamily)) {
             content()
         }
     }
