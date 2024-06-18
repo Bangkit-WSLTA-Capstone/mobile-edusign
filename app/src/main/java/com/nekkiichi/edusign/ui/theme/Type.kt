@@ -9,7 +9,7 @@ import com.nekkiichi.edusign.R
 
 // imported fonts
 var plusJakartaSansFamily = FontFamily(
-//    androidx.compose.ui.text.font.Font(R.font.pjs_bold, FontWeight.ExtraBold),
+    androidx.compose.ui.text.font.Font(R.font.plus_jakarta_sans_extrabold, FontWeight.ExtraBold),
     androidx.compose.ui.text.font.Font(R.font.plus_jakarta_sans_bold, FontWeight.Bold),
     androidx.compose.ui.text.font.Font(R.font.plus_jakarta_sans_semibold, FontWeight.SemiBold),
     androidx.compose.ui.text.font.Font(R.font.plus_jakarta_sans_medium,FontWeight.Medium),

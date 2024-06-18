@@ -2,7 +2,9 @@ package com.nekkiichi.edusign.ui.screens.home
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -42,26 +44,34 @@ import com.nekkiichi.edusign.ui.theme.EduSignTheme
 
 
 @Composable
-fun MenuHero() {
-    Row(modifier = Modifier.fillMaxWidth()) {
-        Image(
-            painter = painterResource(id = R.drawable.example_avatar),
-            contentDescription = "users avatar",
-            modifier = Modifier
-                .width(64.dp)
-                .height(64.dp)
-                .clip(defaultShapeByPercent)
-                .border(2.dp, MaterialTheme.colorScheme.primary, defaultShapeByPercent)
+fun MenuHero(modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
+        Text(
+            text = "Menu and Settings",
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = defaultNum.sp
         )
-        Spacer(modifier = Modifier.width(defaultGap))
-        Column {
-            Text(
-                text = "User Name",
-                fontWeight = FontWeight.Bold,
-                fontSize = (defaultNum * 5 / 3).sp
+        Spacer(modifier = Modifier.height((defaultNum * 2).dp))
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Image(
+                painter = painterResource(id = R.drawable.example_avatar),
+                contentDescription = "users avatar",
+                modifier = Modifier
+                    .width(64.dp)
+                    .height(64.dp)
+                    .clip(defaultShapeByPercent)
+                    .border(3.dp, MaterialTheme.colorScheme.primary, defaultShapeByPercent)
             )
-            Text(text = "user@email.com")
+            Spacer(modifier = Modifier.width(defaultGap))
+            Column {
+                Text(
+                    text = "User Name",
+                    fontSize = (defaultNum * 5 / 3).sp
+                )
+                Text(text = "user@email.com", fontWeight = FontWeight.Light)
+            }
         }
+        Spacer(modifier = Modifier.height((defaultNum).dp))
     }
 }
 
@@ -81,29 +91,35 @@ fun MenuScreen(navController: NavController) {
             Column(
                 Modifier
                     .padding(it)
-                    .padding(15.dp)
+
             ) {
-                MenuHero()
-                Spacer(modifier = Modifier.height(15.dp))
-                PrimaryButton(
-                    onCLick = { /*TODO*/ },
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = false
-                ) {
-                    Text(text = "Edit Your Profile")
+//              Hero Section
+                Surface(tonalElevation = 4.dp) {
+                    MenuHero(modifier = Modifier.padding(defaultNum.dp))
                 }
-                Spacer(modifier = Modifier.height((defaultNum / 2).dp))
-                HorizontalDivider()
-                Spacer(modifier = Modifier.height((defaultNum / 2).dp))
-                PrimaryButton(
-                    onCLick = { /*TODO*/ },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.error,
-                        contentColor = Color.White
-                    )
-                ) {
-                    Text(text = "Logout")
+                Spacer(modifier = Modifier.height(15.dp))
+//              Content Section
+                Column(modifier = Modifier.padding(defaultNum.dp)) {
+                    PrimaryButton(
+                        onCLick = { /*TODO*/ },
+                        modifier = Modifier.fillMaxWidth(),
+                        enabled = false
+                    ) {
+                        Text(text = "Edit Your Profile")
+                    }
+                    Spacer(modifier = Modifier.height((defaultNum / 2).dp))
+                    HorizontalDivider()
+                    Spacer(modifier = Modifier.height((defaultNum / 2).dp))
+                    PrimaryButton(
+                        onCLick = { /*TODO*/ },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.error,
+                            contentColor = Color.White
+                        )
+                    ) {
+                        Text(text = "Logout")
+                    }
                 }
             }
         }
