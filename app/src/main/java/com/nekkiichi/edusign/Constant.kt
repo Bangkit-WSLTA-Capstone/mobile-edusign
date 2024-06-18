@@ -8,4 +8,5 @@ object Constant {
     val defaultNum = 15
     val defaultGap = (defaultNum).dp
     val defaultShape = RoundedCornerShape(defaultGap)
+    val defaultShapeByPercent = RoundedCornerShape(percent = defaultNum)
 }

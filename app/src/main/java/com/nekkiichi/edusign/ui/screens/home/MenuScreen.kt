@@ -2,6 +2,7 @@ package com.nekkiichi.edusign.ui.screens.home
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,7 +11,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -30,6 +35,7 @@ import androidx.navigation.compose.rememberNavController
 import com.nekkiichi.edusign.Constant.defaultGap
 import com.nekkiichi.edusign.Constant.defaultNum
 import com.nekkiichi.edusign.Constant.defaultShape
+import com.nekkiichi.edusign.Constant.defaultShapeByPercent
 import com.nekkiichi.edusign.R
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
@@ -44,12 +50,13 @@ fun MenuHero() {
             modifier = Modifier
                 .width(64.dp)
                 .height(64.dp)
-                .clip(defaultShape)
+                .clip(defaultShapeByPercent)
+                .border(2.dp, MaterialTheme.colorScheme.primary, defaultShapeByPercent)
         )
         Spacer(modifier = Modifier.width(defaultGap))
         Column {
             Text(
-                text = "Grace Abignale",
+                text = "User Name",
                 fontWeight = FontWeight.Bold,
                 fontSize = (defaultNum * 5 / 3).sp
             )
@@ -80,10 +87,13 @@ fun MenuScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(15.dp))
                 PrimaryButton(
                     onCLick = { /*TODO*/ },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = false
                 ) {
                     Text(text = "Edit Your Profile")
                 }
+                Spacer(modifier = Modifier.height((defaultNum / 2).dp))
+                HorizontalDivider()
                 Spacer(modifier = Modifier.height((defaultNum / 2).dp))
                 PrimaryButton(
                     onCLick = { /*TODO*/ },
