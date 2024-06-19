@@ -150,7 +150,7 @@ private fun LoginScreenContent(
                 }, Modifier.fillMaxWidth()) {
                     Text(text = "CREATE ACCOUNT")
                 }
-                TextButton(onCLick = {
+                SecondaryButton(onCLick = {
                     navController.navigate(RootRoutes.Home.route) {
                         popUpTo(RootRoutes.Login.route) {
                             inclusive = true

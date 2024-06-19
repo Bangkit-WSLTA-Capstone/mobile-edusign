@@ -48,7 +48,7 @@ class AuthInterceptor(private val authManager: AuthManager) : Interceptor {
         return runBlocking {
             // return response if access token valid
             val response = doRequestWithAccessToken(chain)
-            if (response.code != HttpURLConnection.HTTP_UNAUTHORIZED) {
+            if (response.code != HttpURLConnection.HTTP_UNAUTHORIZED) { // 401
                 return@runBlocking response
             }
 
@@ -124,44 +124,6 @@ object ApiConfig {
     fun provideApiService(
         authInterceptor: AuthInterceptor
     ): ApiService {
-
-//        val authInterceptor: Interceptor = Interceptor { chain ->
-//
-//            val originalRequest = chain.request()
-//            if (
-//                originalRequest.url.pathSegments[0] == "login"
-//                ||
-//                originalRequest.url.pathSegments[0] == "register"
-//            ) {
-//                return@Interceptor chain.proceed(originalRequest)
-//            }
-//
-//            // by default, use
-//            if (originalRequest.url.pathSegments[0] == "refresh") {
-//                return@Interceptor runBlocking {
-//                    val refreshRequestBuilder = chain.request().newBuilder()
-//                    val refreshToken = authManager.getRefreshToken()
-//                    refreshRequestBuilder.addHeader("Authorization", "Bearer $refreshToken")
-//                    val response = chain.proceed(refreshRequestBuilder.build())
-//                    if (response.code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-//                        authManager.logout()
-//                    }
-//                    response
-//                }
-//            }
-//
-//            return@Interceptor runBlocking {
-//                val requestBuilder = chain.request().newBuilder()
-//                val token = authManager.getToken()
-//                requestBuilder.addHeader("Authorization", "Bearer $token")
-//                val response = chain.proceed(requestBuilder.build())
-//                if (response.code == HttpURLConnection.HTTP_UNAUTHORIZED) {
-//                    authManager.logout()
-//                }
-//                response
-//            }
-//
-//        }
 
         val baseUrl = Constant.apiUrl
         val loggingInterceptor =
