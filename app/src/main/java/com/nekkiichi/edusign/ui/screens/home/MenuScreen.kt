@@ -1,7 +1,6 @@
 package com.nekkiichi.edusign.ui.screens.home
 
 import android.content.res.Configuration
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -33,28 +32,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.nekkiichi.edusign.Constant.defaultGap
 import com.nekkiichi.edusign.Constant.defaultNum
 import com.nekkiichi.edusign.Constant.defaultShapeByPercent
 import com.nekkiichi.edusign.R
-import com.nekkiichi.edusign.RootRoutes
-import com.nekkiichi.edusign.data.EdusignRepository
-import com.nekkiichi.edusign.data.local.AuthManager
-import com.nekkiichi.edusign.data.remote.ApiService
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
-import com.nekkiichi.edusign.ui.screens.auth.LoginForm
-import com.nekkiichi.edusign.ui.screens.auth.LoginHandler
-import com.nekkiichi.edusign.ui.screens.auth.RegisterData
-import com.nekkiichi.edusign.ui.screens.auth.RegisterHandler
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
 import com.nekkiichi.edusign.utils.Status
-import com.nekkiichi.edusign.utils.extension.popUpToTop
-import com.nekkiichi.edusign.viewModel.AuthViewModel
 import com.nekkiichi.edusign.viewModel.MenuViewModel
-import kotlin.math.log
 
 internal class MenuHandler {
     var logout: () -> Unit = {}
@@ -175,6 +161,6 @@ fun PreviewMenuHero() {
 @Composable
 fun PreviewMenuScreen() {
     EduSignTheme {
-        MenuScreen(navController = rememberNavController())
+        MenuContent(MenuHandler())
     }
 }
