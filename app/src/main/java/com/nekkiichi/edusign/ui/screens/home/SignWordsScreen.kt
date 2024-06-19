@@ -21,6 +21,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
 import com.nekkiichi.edusign.utils.Status
 import com.nekkiichi.edusign.viewModel.SignWordViewModel
@@ -97,7 +98,9 @@ private fun SignWordsContent(state: Status<String>?, handler: ScreenHandler) {
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(text = "Sign Word Dictionary") })
+            TopAppBar(title = { Text(text = "Sign Word Dictionary") }, colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainer
+            ))
         }
     ) {
         Box(
@@ -158,10 +161,17 @@ private fun SignDialog(handler: ScreenHandler, state: Status<String>) {
 
                     is Status.Success -> {
                         Column(Modifier.align(Alignment.Center)) {
-                            AsyncImage(
+                            SubcomposeAsyncImage(
                                 model = state.value,
                                 contentDescription = "Sign Image",
-                                modifier = Modifier.fillMaxWidth()
+                                loading = {
+                                    Box(modifier = Modifier.fillMaxSize()) {
+                                        CircularProgressIndicator(Modifier.align(Alignment.Center))
+                                    }
+                                },
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clip(RoundedCornerShape(4.dp))
                             )
                         }
                     }

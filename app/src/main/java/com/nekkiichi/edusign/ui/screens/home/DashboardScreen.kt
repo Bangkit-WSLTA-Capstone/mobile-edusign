@@ -51,7 +51,7 @@ fun DashboardScreen(navController: NavController, bottomNavController: NavContro
     }
 
     fun navigateToGlossary() {
-        navController.navigate(RootRoutes.Dictionary.route)
+        bottomNavController.navigate(HomeRoutes.Dictionary.route)
     }
 
     Scaffold {
