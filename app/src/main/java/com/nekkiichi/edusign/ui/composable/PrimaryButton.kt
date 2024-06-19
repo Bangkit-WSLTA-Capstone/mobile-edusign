@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.nekkiichi.edusign.Constant.defaultShape
@@ -61,8 +62,8 @@ fun SecondaryButton(
         shape = ButtonShape,
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.tertiary,
-            contentColor = MaterialTheme.colorScheme.onTertiary
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = Color.White
         )
     ) {
         ProvideTextStyle(value = AppTypography.labelLarge) {

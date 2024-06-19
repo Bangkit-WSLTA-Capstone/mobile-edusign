@@ -97,7 +97,7 @@ class AuthInterceptor(private val authManager: AuthManager) : Interceptor {
                 Log.d(TAG, "New token retrieved")
                 try {
                     val newToken = Gson().fromJson(
-                        result.body.toString(),
+                        result.body?.string(),
                         TypeToken.get(RefreshTokenResponse::class.java)
                     )
                     Log.d(TAG, "New token saved")

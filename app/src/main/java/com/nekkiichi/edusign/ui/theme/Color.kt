@@ -3,7 +3,7 @@ package com.nekkiichi.edusign.ui.theme
 import androidx.compose.ui.graphics.Color
 
 
-val primaryLight = Color(0xFF06BB4D)
+val primaryLight = Color(0xFF00FF64)
 val onPrimaryLight = Color(0xFFF5FAFF)
 val primaryContainerLight = Color(0xFFB9F0B7)
 val onPrimaryContainerLight = Color(0xFF002106)

@@ -1,5 +1,6 @@
 package com.nekkiichi.edusign.ui.screens.auth
 
+import android.content.res.Configuration
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -114,11 +115,11 @@ private fun LoginScreenContent(
                 Text(
                     text = "Welcome Back!",
                     style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold),
-                    color = MaterialTheme.colorScheme.onPrimary
+                    color = MaterialTheme.colorScheme.secondary
                 )
                 Text(
                     text = "Let's Sign in with your account!",
-                    color = MaterialTheme.colorScheme.onPrimary
+                    color = MaterialTheme.colorScheme.secondary
                 )
             }
             LoginForm(
@@ -140,7 +141,7 @@ private fun LoginScreenContent(
                     Modifier.fillMaxWidth(),
                     enabled = loginForm != null && !loading // enable button if not in loading state
                 ) {
-                    Text(text = "SIGN IN")
+                    Text(text = "Sign in")
                     Spacer(modifier = Modifier.width(8.dp))
                     Icon(Icons.AutoMirrored.Rounded.Login, contentDescription = "")
                 }
@@ -148,7 +149,7 @@ private fun LoginScreenContent(
                 SecondaryButton(onCLick = {
                     navController.navigate(RootRoutes.Register.route)
                 }, Modifier.fillMaxWidth()) {
-                    Text(text = "CREATE ACCOUNT")
+                    Text(text = "Create an account")
                 }
                 SecondaryButton(onCLick = {
                     navController.navigate(RootRoutes.Home.route) {
@@ -157,7 +158,7 @@ private fun LoginScreenContent(
                         }
                     }
                 }, Modifier.fillMaxWidth()) {
-                    Text(text = "START AS GUEST")
+                    Text(text = "Start as guest")
                 }
             }
         }
@@ -230,7 +231,8 @@ private fun LoginForm(modifier: Modifier = Modifier, onChange: (form: LoginForm?
 }
 
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun LoginScreenPreview(modifier: Modifier = Modifier) {
     EduSignTheme() {

@@ -1,5 +1,6 @@
 package com.nekkiichi.edusign.ui.composable
 
+import android.content.res.Configuration
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
@@ -11,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.nekkiichi.edusign.ui.theme.EduSignTheme
 
 @Composable
 fun FilledTextField(
@@ -50,8 +52,11 @@ fun FilledTextField(
     )
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun TextfieldPreview(){
-    FilledTextField(value = "Hello", onValueChange = {})
+    EduSignTheme {
+        FilledTextField(value = "Hello", onValueChange = {})
+    }
 }
