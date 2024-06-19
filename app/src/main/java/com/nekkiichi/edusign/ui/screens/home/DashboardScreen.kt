@@ -112,7 +112,7 @@ fun DashboardScreen(navController: NavController, bottomNavController: NavContro
                                     navigateToGlossary()
                                 },
                                 modifier = Modifier.weight(1f),
-                                color = MaterialTheme.colorScheme.secondaryContainer
+                                color = MaterialTheme.colorScheme.secondary
                             ) {
                                 Column(Modifier.padding(12.dp)) {
                                     Icon(

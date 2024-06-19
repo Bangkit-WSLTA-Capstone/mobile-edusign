@@ -62,7 +62,7 @@ fun SecondaryButton(
         shape = ButtonShape,
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            containerColor = MaterialTheme.colorScheme.secondary,
             contentColor = Color.White
         )
     ) {
