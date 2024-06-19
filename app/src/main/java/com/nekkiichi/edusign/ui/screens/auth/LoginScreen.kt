@@ -1,6 +1,5 @@
 package com.nekkiichi.edusign.ui.screens.auth
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -43,7 +42,6 @@ import com.nekkiichi.edusign.data.remote.response.LoginResponse
 import com.nekkiichi.edusign.ui.composable.FilledTextField
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
 import com.nekkiichi.edusign.ui.composable.SecondaryButton
-import com.nekkiichi.edusign.ui.composable.TextButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
 import com.nekkiichi.edusign.utils.Status
 import com.nekkiichi.edusign.utils.extension.popUpToTop
@@ -79,6 +77,7 @@ fun LoginScreen(navController: NavController, authViewModel: AuthViewModel) {
                 navController.navigate(RootRoutes.Home.route) {
                     popUpToTop(navController)
                 }
+                authViewModel.reset()
             }
             else -> {}
         }

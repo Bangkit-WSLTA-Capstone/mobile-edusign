@@ -20,6 +20,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,7 +51,7 @@ internal class MenuHandler {
 fun MenuScreen(navController: NavController) {
     val context = LocalContext.current
     val menuViewModel: MenuViewModel = hiltViewModel()
-    val logoutState = menuViewModel.logoutStatus
+    val logoutState by menuViewModel.logoutStatus.collectAsState()
 
     val handler = remember {
         MenuHandler().apply {
@@ -60,9 +62,9 @@ fun MenuScreen(navController: NavController) {
     }
 
     LaunchedEffect(logoutState) {
-        when(logoutState) {
+        when(val state = logoutState) {
             is Status.Failed -> {
-                Toast.makeText(context, logoutState.errorMessage, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, state.errorMessage, Toast.LENGTH_SHORT).show()
             }
             is Status.Success -> {
                 Toast.makeText(context, "Logging you out", Toast.LENGTH_SHORT).show()

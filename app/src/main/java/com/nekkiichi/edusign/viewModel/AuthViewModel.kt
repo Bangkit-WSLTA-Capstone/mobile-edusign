@@ -1,6 +1,5 @@
 package com.nekkiichi.edusign.viewModel
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -23,6 +22,7 @@ class AuthViewModel @Inject constructor(
     val logoutEvent = authManager.logoutEvent
     val loginEvent = authManager.loginEvent
     val welcomeEvent = authManager.welcomeEvent
+
     var loginStatus by mutableStateOf<Status<LoginResponse>?>(null)
     var registerStatus by mutableStateOf<Status<RegisterResponse>?>(null)
 
@@ -51,7 +51,7 @@ class AuthViewModel @Inject constructor(
     }
 
 
-    private fun reset() {
+    fun reset() {
         loginStatus = null
         registerStatus = null
     }
