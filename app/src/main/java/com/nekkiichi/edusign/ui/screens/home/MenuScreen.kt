@@ -45,6 +45,8 @@ import com.nekkiichi.edusign.data.EdusignRepository
 import com.nekkiichi.edusign.data.local.AuthManager
 import com.nekkiichi.edusign.data.remote.ApiService
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
+import com.nekkiichi.edusign.ui.screens.auth.LoginForm
+import com.nekkiichi.edusign.ui.screens.auth.LoginHandler
 import com.nekkiichi.edusign.ui.screens.auth.RegisterData
 import com.nekkiichi.edusign.ui.screens.auth.RegisterHandler
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
@@ -54,11 +56,22 @@ import com.nekkiichi.edusign.viewModel.AuthViewModel
 import com.nekkiichi.edusign.viewModel.MenuViewModel
 import kotlin.math.log
 
+internal class MenuHandler {
+    var logout: () -> Unit = {}
+}
 @Composable
 fun MenuScreen(navController: NavController) {
     val context = LocalContext.current
     val menuViewModel: MenuViewModel = hiltViewModel()
     val logoutState = menuViewModel.logoutStatus
+
+    val handler = remember {
+        MenuHandler().apply {
+            logout = {
+                menuViewModel.logout()
+            }
+        }
+    }
 
     LaunchedEffect(logoutState) {
         when(logoutState) {
@@ -66,14 +79,9 @@ fun MenuScreen(navController: NavController) {
                 Toast.makeText(context, logoutState.errorMessage, Toast.LENGTH_SHORT).show()
             }
             is Status.Success -> {
-                Toast.makeText(context, "Account created successfully", Toast.LENGTH_SHORT).show()
-                navController.navigate(RootRoutes.Login.route) {
-                    popUpToTop(navController)
-                }
+                Toast.makeText(context, "Logging you out", Toast.LENGTH_SHORT).show()
             }
-            else -> {
-                Log.d("test", "ok")
-            }
+            else -> {}
         }
     }
 
@@ -83,13 +91,13 @@ fun MenuScreen(navController: NavController) {
                 .fillMaxSize()
                 .padding(it)) {
 //            Text(text = "Status Login ${loginState.toString()}")
-            MenuContent(menuViewModel)
+            MenuContent(handler)
         }
     }
 }
 
 @Composable
-private fun MenuContent(menuViewModel: MenuViewModel) {
+private fun MenuContent(handler: MenuHandler) {
     Column {
 //              Hero Section
         Surface(tonalElevation = 5.dp) {
@@ -108,7 +116,7 @@ private fun MenuContent(menuViewModel: MenuViewModel) {
             HorizontalDivider()
             Spacer(modifier = Modifier.height((defaultNum / 2).dp))
             PrimaryButton(
-                onCLick = { menuViewModel.logout() },
+                onCLick = { handler.logout() },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.error,

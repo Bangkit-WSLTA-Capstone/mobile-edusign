@@ -1,5 +1,6 @@
 package com.nekkiichi.edusign.ui.screens.auth
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

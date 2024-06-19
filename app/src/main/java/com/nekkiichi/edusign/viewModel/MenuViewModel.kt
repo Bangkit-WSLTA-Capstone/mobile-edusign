@@ -19,16 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MenuViewModel @Inject constructor(private val repository: EdusignRepository) : ViewModel() {
     var logoutStatus by mutableStateOf<Status<String>?>(null)
-    //    init {
-//        fetchAccount()
-//    }
-//init {
-//    viewModelScope.launch {
-//        authManager.init()
-//    }
-//}
+
     fun logout() {
-        Log.d("test", "logout")
         viewModelScope.launch {
             repository.logout().collect {
                 logoutStatus = it

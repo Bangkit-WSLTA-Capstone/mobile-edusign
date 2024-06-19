@@ -59,7 +59,7 @@ class AuthManager @Inject constructor(@ApplicationContext private val context: C
     }
 
     suspend fun saveToken(token: String, refreshToken: String) {
-        Log.d(TAG, "Save token, logged in")
+        Log.d(TAG, "Save token")
         context.authDataStore.edit {
             it[tokenKey] = token
             it[refreshTokenKey] = refreshToken
