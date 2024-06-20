@@ -110,7 +110,9 @@ class EdusignRepository @Inject constructor(
             val list = result.data?.map { value ->
                 CourseItem(
                     coursename = value.coursename,
-                    createdAt = formatToLocalDateFromISOString(value.createdAt)
+                    createdAt = formatToLocalDateFromISOString(value.createdAt),
+                    title = value.title,
+                    description = value.description
                 )
             } ?: listOf()
             Status.Success(list)

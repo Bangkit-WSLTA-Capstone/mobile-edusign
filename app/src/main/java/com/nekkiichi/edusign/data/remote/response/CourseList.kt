@@ -16,5 +16,10 @@ data class CourseItem(
     @field:SerializedName("coursename")
     val coursename: String,
     @field:SerializedName("created_at")
-    val createdAt: String
+    val createdAt: String,
+    @field:SerializedName("title")
+
+    val title: String,
+    @field:SerializedName("description")
+    val description: String?
 )

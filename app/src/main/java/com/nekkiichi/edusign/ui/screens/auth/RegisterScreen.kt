@@ -43,7 +43,6 @@ import com.nekkiichi.edusign.data.remote.response.RegisterResponse
 import com.nekkiichi.edusign.ui.composable.FilledTextField
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
 import com.nekkiichi.edusign.ui.composable.SecondaryButton
-import com.nekkiichi.edusign.ui.composable.TextButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
 import com.nekkiichi.edusign.utils.Status
 import com.nekkiichi.edusign.utils.extension.popUpToTop
@@ -147,7 +146,7 @@ private fun RegisterScreenContent(
                     Modifier.fillMaxWidth(),
                     enabled = registerData != null && !loading
                 ) {
-                    Text(text = "Registerr")
+                    Text(text = "Register")
                     Spacer(modifier = Modifier.width(8.dp))
                     Icon(Icons.AutoMirrored.Rounded.Login, contentDescription = "")
                 }

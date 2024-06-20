@@ -22,6 +22,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -107,8 +108,7 @@ private fun MinicoursesContent(
                     ) {
                         items(state.value) { item ->
                             ListItem(
-
-                                headlineContent = { Text(text = item.coursename) },
+                                headlineContent = { Text(text = item.title) },
                                 Modifier.clickable {
                                     handler.navigateToCourse.invoke(item.coursename)
                                 },
@@ -117,8 +117,11 @@ private fun MinicoursesContent(
                                         text = item.createdAt
                                     )
                                 },
+                                supportingContent = {
+                                    Text(text = item.description ?: "", overflow = TextOverflow.Ellipsis, maxLines = 2)
+                                },
 
-                                )
+                            )
                         }
                     }
                 }
@@ -142,7 +145,16 @@ private fun MinicoursesContent(
 private fun MinicourseScreenPreview() {
     EduSignTheme {
         MinicoursesContent(
-            state = Status.Success(listOf(CourseItem("test.md", "28 feb"))),
+            state = Status.Success(
+                listOf(
+                    CourseItem(
+                        "test.md",
+                        "28 feb",
+                        "Welcome",
+                        "this is description"
+                    )
+                )
+            ),
             handler = MinicoursesHandler()
         )
     }
