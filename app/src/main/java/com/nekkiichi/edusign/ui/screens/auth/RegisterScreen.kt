@@ -147,7 +147,7 @@ private fun RegisterScreenContent(
                     Modifier.fillMaxWidth(),
                     enabled = registerData != null && !loading
                 ) {
-                    Text(text = "REGISTER")
+                    Text(text = "Registerr")
                     Spacer(modifier = Modifier.width(8.dp))
                     Icon(Icons.AutoMirrored.Rounded.Login, contentDescription = "")
                 }
@@ -161,9 +161,9 @@ private fun RegisterScreenContent(
                     },
                     Modifier.fillMaxWidth(),
                 ) {
-                    Text(text = "BACK TO LOGIN")
+                    Text(text = "Back to login")
                 }
-                TextButton(
+                SecondaryButton(
                     onCLick = {
                         navController.navigate(RootRoutes.Home.route) {
                             popUpToTop(navController)
@@ -171,7 +171,7 @@ private fun RegisterScreenContent(
                     },
                     Modifier.fillMaxWidth(),
                 ) {
-                    Text(text = "START AS GUEST")
+                    Text(text = "Start as guest")
                 }
             }
         }

@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -33,7 +34,6 @@ import com.nekkiichi.edusign.RootRoutes
 import com.nekkiichi.edusign.ui.composable.BentoButton
 import com.nekkiichi.edusign.ui.composable.DashboardButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
-
 
 @Composable
 fun DashboardScreen(navController: NavController, bottomNavController: NavController) {
@@ -124,12 +124,13 @@ fun DashboardScreen(navController: NavController, bottomNavController: NavContro
                                     navigateToGlossary()
                                 },
                                 modifier = Modifier.weight(1f),
-                                color = MaterialTheme.colorScheme.tertiary
+                                color = MaterialTheme.colorScheme.secondary
                             ) {
                                 Column(Modifier.padding(12.dp)) {
                                     Icon(
                                         imageVector = Icons.Rounded.LocalLibrary,
-                                        contentDescription = "Mini Course Icon"
+                                        contentDescription = "Mini Course Icon",
+                                        tint = Color.White
                                     )
                                     Spacer(modifier = Modifier.size(4.dp))
                                     Column(
@@ -139,11 +140,13 @@ fun DashboardScreen(navController: NavController, bottomNavController: NavContro
                                         Text(
                                             text = "Sign Language directory",
                                             style = MaterialTheme.typography.bodySmall,
-                                            minLines = 2
+                                            minLines = 2,
+                                            color = Color.White
                                         )
                                         Text(
                                             text = "Glossary",
-                                            style = MaterialTheme.typography.titleLarge
+                                            style = MaterialTheme.typography.titleLarge,
+                                            color = Color.White
                                         )
                                     }
                                 }
@@ -172,7 +175,8 @@ fun DashboardScreen(navController: NavController, bottomNavController: NavContro
                             icon = {
                                 Icon(
                                     Icons.Rounded.CameraAlt,
-                                    contentDescription = null
+                                    contentDescription = null,
+                                    tint = Color.White
                                 )
                             }, label = "Open Camera", description = "Video translate"
                         )
