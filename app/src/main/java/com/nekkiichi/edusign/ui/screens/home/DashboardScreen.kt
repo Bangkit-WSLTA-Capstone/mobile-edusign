@@ -21,11 +21,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.nekkiichi.edusign.R
 import com.nekkiichi.edusign.RootRoutes
 import com.nekkiichi.edusign.ui.composable.BentoButton
 import com.nekkiichi.edusign.ui.composable.DashboardButton
@@ -34,7 +37,8 @@ import com.nekkiichi.edusign.ui.theme.EduSignTheme
 
 @Composable
 fun DashboardScreen(navController: NavController, bottomNavController: NavController) {
-
+    val uriHandler = LocalUriHandler.current
+    val repositoryUrl = stringResource(id = R.string.repository_url)
     fun navigateToTranslate() {
         bottomNavController.navigate(HomeRoutes.Translate.route) {
             bottomNavController.graph.startDestinationRoute?.let {
@@ -51,7 +55,15 @@ fun DashboardScreen(navController: NavController, bottomNavController: NavContro
     }
 
     fun navigateToGlossary() {
-        bottomNavController.navigate(HomeRoutes.Dictionary.route)
+        bottomNavController.navigate(HomeRoutes.Dictionary.route) {
+            bottomNavController.graph.startDestinationRoute?.let {
+                popUpTo(it) {
+                    saveState = true
+                }
+                launchSingleTop = true
+                restoreState = true
+            }
+        }
     }
 
     Scaffold {
@@ -174,7 +186,9 @@ fun DashboardScreen(navController: NavController, bottomNavController: NavContro
                     )
                     Text(text = "Help us to improve our product!")
                     Spacer(modifier = Modifier.size(16.dp))
-                    DashboardButton(onClick = {}, label = "Link to repository")
+                    DashboardButton(onClick = {
+                        uriHandler.openUri(repositoryUrl)
+                    }, label = "Link to repository")
                 }
             }
         }
