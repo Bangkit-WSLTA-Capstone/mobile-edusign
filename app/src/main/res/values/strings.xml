@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Edu Sign</string>
+    <string name="repository_url">https://github.com/Bangkit-WSLTA-Capstone</string>
 </resources>
