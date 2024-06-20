@@ -136,6 +136,10 @@ class EdusignRepository @Inject constructor(
         emit(result)
     }
 
+    fun getUser() = flow {
+        emit(Status.Success(authManager.getToken()))
+    }
+
     fun getDictionary(word: String): Flow<Status<String>> = flow {
         emit(Status.Loading)
 

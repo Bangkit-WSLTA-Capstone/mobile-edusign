@@ -77,6 +77,7 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
     kapt(libs.hilt.android.compiler)
+    implementation(libs.jwtdecode)
 
     implementation(libs.multiplatform.markdown.renderer.m3.android)
     implementation(libs.multiplatform.markdown.renderer.android)

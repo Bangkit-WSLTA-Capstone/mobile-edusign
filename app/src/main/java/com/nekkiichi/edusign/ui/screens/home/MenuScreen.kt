@@ -34,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.nekkiichi.edusign.Constant.defaultGap
 import com.nekkiichi.edusign.Constant.defaultNum
@@ -79,17 +80,17 @@ fun MenuScreen(navController: NavController) {
                 .fillMaxSize()
                 .padding(it)) {
 //            Text(text = "Status Login ${loginState.toString()}")
-            MenuContent(handler)
+            MenuContent(handler, menuViewModel)
         }
     }
 }
 
 @Composable
-private fun MenuContent(handler: MenuHandler) {
+private fun MenuContent(handler: MenuHandler, menuViewModel: MenuViewModel) {
     Column {
 //              Hero Section
         Surface(tonalElevation = 5.dp) {
-            MenuHero(modifier = Modifier.padding(defaultNum.dp))
+            MenuHero(modifier = Modifier.padding(defaultNum.dp), menuViewModel)
         }
 //              Content Section
         Column(modifier = Modifier.padding(defaultNum.dp)) {
@@ -118,7 +119,10 @@ private fun MenuContent(handler: MenuHandler) {
 }
 
 @Composable
-fun MenuHero(modifier: Modifier = Modifier) {
+fun MenuHero(modifier: Modifier = Modifier, menuViewModel: MenuViewModel) {
+    val usernameState by menuViewModel.username.collectAsState()
+    val emailState by menuViewModel.email.collectAsState()
+
     Column(modifier = modifier) {
         Text(
             text = "Menu and Settings",
@@ -139,11 +143,11 @@ fun MenuHero(modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.width(defaultGap))
             Column {
                 Text(
-                    text = "User Name",
+                    text = usernameState ?: "Guest Mode",
                     fontWeight = FontWeight.Bold,
                     fontSize = (defaultNum * 5 / 3).sp
                 )
-                Text(text = "user@email.com", fontWeight = FontWeight.Light)
+                Text(text = emailState ?: "guest@edusign.com", fontWeight = FontWeight.Light)
             }
         }
         Spacer(modifier = Modifier.height((defaultNum).dp))
@@ -154,7 +158,7 @@ fun MenuHero(modifier: Modifier = Modifier) {
 @Composable
 fun PreviewMenuHero() {
     EduSignTheme {
-        MenuHero()
+        MenuHero(Modifier, viewModel())
     }
 }
 
@@ -163,6 +167,6 @@ fun PreviewMenuHero() {
 @Composable
 fun PreviewMenuScreen() {
     EduSignTheme {
-        MenuContent(MenuHandler())
+        MenuContent(MenuHandler(), viewModel())
     }
 }
