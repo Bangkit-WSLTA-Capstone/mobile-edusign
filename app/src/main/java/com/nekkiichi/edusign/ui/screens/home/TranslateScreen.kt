@@ -270,7 +270,6 @@ private fun VideoViewer(modifier: Modifier = Modifier, file: File?) {
         factory = { ctx ->
             PlayerView(ctx).apply {
                 player = exoplayer
-
             }
         },
         Modifier
