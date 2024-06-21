@@ -19,6 +19,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.nekkiichi.edusign.R
@@ -34,9 +37,14 @@ import com.nekkiichi.edusign.RootRoutes
 import com.nekkiichi.edusign.ui.composable.BentoButton
 import com.nekkiichi.edusign.ui.composable.DashboardButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
+import com.nekkiichi.edusign.viewModel.MenuViewModel
 
 @Composable
 fun DashboardScreen(navController: NavController, bottomNavController: NavController) {
+    val menuViewModel: MenuViewModel = hiltViewModel()
+    val usernameState by menuViewModel.username.collectAsState()
+
+
     val uriHandler = LocalUriHandler.current
     val repositoryUrl = stringResource(id = R.string.repository_url)
     fun navigateToTranslate() {
@@ -83,7 +91,7 @@ fun DashboardScreen(navController: NavController, bottomNavController: NavContro
                                     fontWeight = FontWeight.Normal
                                 )
                                 Text(
-                                    text = "Customer",
+                                    text = usernameState ?: "Guest",
                                     style = MaterialTheme.typography.headlineMedium,
                                     fontWeight = FontWeight.ExtraBold
                                 )
