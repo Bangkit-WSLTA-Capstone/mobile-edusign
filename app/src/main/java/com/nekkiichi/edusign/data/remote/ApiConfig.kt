@@ -138,9 +138,9 @@ object ApiConfig {
             .newBuilder()
             .addInterceptor(loggingInterceptor)
             .addInterceptor(authInterceptor)
-            .connectTimeout(Duration.ofSeconds(45))
-            .readTimeout(Duration.ofSeconds(60))
-            .writeTimeout(Duration.ofSeconds(60))
+            .connectTimeout(Duration.ofSeconds(60))
+            .readTimeout(Duration.ofSeconds(70))
+            .writeTimeout(Duration.ofSeconds(70))
             .build()
         val retrofit =
             Retrofit.Builder()
