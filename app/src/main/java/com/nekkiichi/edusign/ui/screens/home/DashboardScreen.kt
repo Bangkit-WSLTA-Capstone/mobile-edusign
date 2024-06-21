@@ -19,22 +19,34 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.nekkiichi.edusign.R
+import com.nekkiichi.edusign.RootRoutes
 import com.nekkiichi.edusign.ui.composable.BentoButton
 import com.nekkiichi.edusign.ui.composable.DashboardButton
-import com.nekkiichi.edusign.ui.composable.ProfilePicture
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
-
+import com.nekkiichi.edusign.viewModel.MenuViewModel
 
 @Composable
-fun DashboardScreen(bottomNavController: NavController) {
+fun DashboardScreen(navController: NavController, bottomNavController: NavController) {
+    val menuViewModel: MenuViewModel = hiltViewModel()
+    val usernameState by menuViewModel.username.collectAsState()
 
+
+    val uriHandler = LocalUriHandler.current
+    val repositoryUrl = stringResource(id = R.string.repository_url)
     fun navigateToTranslate() {
         bottomNavController.navigate(HomeRoutes.Translate.route) {
             bottomNavController.graph.startDestinationRoute?.let {
@@ -46,14 +58,24 @@ fun DashboardScreen(bottomNavController: NavController) {
             restoreState = true
         }
     }
+    fun  navigateToMiniCourse() {
+        navController.navigate(RootRoutes.Minicourse.route)
+    }
 
     fun navigateToGlossary() {
-        bottomNavController.navigate(HomeRoutes.Notification.route)
+        bottomNavController.navigate(HomeRoutes.Dictionary.route) {
+            bottomNavController.graph.startDestinationRoute?.let {
+                popUpTo(it) {
+                    saveState = true
+                }
+                launchSingleTop = true
+                restoreState = true
+            }
+        }
     }
 
     Scaffold {
         Surface(Modifier.fillMaxSize()) {
-
             Column(Modifier.padding(it)) {
                 // HERO SECTION
                 Surface(tonalElevation = 4.dp) {
@@ -69,19 +91,20 @@ fun DashboardScreen(bottomNavController: NavController) {
                                     fontWeight = FontWeight.Normal
                                 )
                                 Text(
-                                    text = "Grace",
+                                    text = usernameState ?: "Guest",
                                     style = MaterialTheme.typography.headlineMedium,
                                     fontWeight = FontWeight.ExtraBold
                                 )
                             }
-                            ProfilePicture(imageUrl = "", modifier = Modifier.size(75.dp))
                         }
                         Spacer(modifier = Modifier.size(24.dp))
                         Row(
                             Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(16.dp)
                         ) {
-                            BentoButton(onClick = { /*TODO*/ }, modifier = Modifier.weight(1f)) {
+                            BentoButton(onClick = {
+                                navigateToMiniCourse()
+                            }, modifier = Modifier.weight(1f)) {
                                 Column(Modifier.padding(12.dp)) {
                                     Icon(
                                         imageVector = Icons.Rounded.TaskAlt,
@@ -94,7 +117,8 @@ fun DashboardScreen(bottomNavController: NavController) {
                                     ) {
                                         Text(
                                             text = "Want to learn?",
-                                            style = MaterialTheme.typography.bodySmall
+                                            style = MaterialTheme.typography.bodySmall,
+                                            minLines = 2
                                         )
                                         Text(
                                             text = "Mini Course",
@@ -104,14 +128,17 @@ fun DashboardScreen(bottomNavController: NavController) {
                                 }
                             }
                             BentoButton(
-                                onClick = { /*TODO*/ },
+                                onClick = {
+                                    navigateToGlossary()
+                                },
                                 modifier = Modifier.weight(1f),
-                                color = MaterialTheme.colorScheme.tertiary
+                                color = MaterialTheme.colorScheme.secondary
                             ) {
                                 Column(Modifier.padding(12.dp)) {
                                     Icon(
                                         imageVector = Icons.Rounded.LocalLibrary,
-                                        contentDescription = "Mini Course Icon"
+                                        contentDescription = "Mini Course Icon",
+                                        tint = Color.White
                                     )
                                     Spacer(modifier = Modifier.size(4.dp))
                                     Column(
@@ -120,11 +147,14 @@ fun DashboardScreen(bottomNavController: NavController) {
                                     ) {
                                         Text(
                                             text = "Sign Language directory",
-                                            style = MaterialTheme.typography.bodySmall
+                                            style = MaterialTheme.typography.bodySmall,
+                                            minLines = 2,
+                                            color = Color.White
                                         )
                                         Text(
                                             text = "Glossary",
-                                            style = MaterialTheme.typography.titleLarge
+                                            style = MaterialTheme.typography.titleLarge,
+                                            color = Color.White
                                         )
                                     }
                                 }
@@ -153,7 +183,8 @@ fun DashboardScreen(bottomNavController: NavController) {
                             icon = {
                                 Icon(
                                     Icons.Rounded.CameraAlt,
-                                    contentDescription = null
+                                    contentDescription = null,
+                                    tint = Color.White
                                 )
                             }, label = "Open Camera", description = "Video translate"
                         )
@@ -167,7 +198,9 @@ fun DashboardScreen(bottomNavController: NavController) {
                     )
                     Text(text = "Help us to improve our product!")
                     Spacer(modifier = Modifier.size(16.dp))
-                    DashboardButton(onClick = {}, label = "Link to repository")
+                    DashboardButton(onClick = {
+                        uriHandler.openUri(repositoryUrl)
+                    }, label = "Link to repository")
                 }
             }
         }
@@ -181,6 +214,6 @@ fun DashboardScreen(bottomNavController: NavController) {
 @Composable
 private fun DashboardScreenPreview() {
     EduSignTheme {
-        DashboardScreen(bottomNavController = rememberNavController())
+        DashboardScreen(bottomNavController = rememberNavController(), navController = rememberNavController())
     }
 }

@@ -1,5 +1,6 @@
 package com.nekkiichi.edusign.ui.composable
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -48,7 +49,7 @@ fun DashboardButton(
                     Modifier
                         .clip(RoundedCornerShape(8.dp))
                         .size(64.dp),
-                    color = MaterialTheme.colorScheme.tertiary
+                    color = MaterialTheme.colorScheme.secondary
                 ) {
                     Box {
                         Column(
@@ -78,7 +79,8 @@ fun DashboardButton(
     }
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun DashboardButtonPreview() {
     EduSignTheme {

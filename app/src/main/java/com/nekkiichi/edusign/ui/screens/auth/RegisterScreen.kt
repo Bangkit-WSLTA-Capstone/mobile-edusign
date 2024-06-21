@@ -1,5 +1,6 @@
 package com.nekkiichi.edusign.ui.screens.auth
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -41,7 +43,6 @@ import com.nekkiichi.edusign.data.remote.response.RegisterResponse
 import com.nekkiichi.edusign.ui.composable.FilledTextField
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
 import com.nekkiichi.edusign.ui.composable.SecondaryButton
-import com.nekkiichi.edusign.ui.composable.TextButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
 import com.nekkiichi.edusign.utils.Status
 import com.nekkiichi.edusign.utils.extension.popUpToTop
@@ -61,7 +62,7 @@ internal class RegisterHandler() {
 
 @Composable
 fun RegisterScreen(navController: NavController, authViewModel: AuthViewModel) {
-
+    val context = LocalContext.current
     val registerState = authViewModel.registerStatus
 
     val handler = remember {
@@ -69,6 +70,21 @@ fun RegisterScreen(navController: NavController, authViewModel: AuthViewModel) {
             register = {
                 authViewModel.register(it.username, it.email, it.password)
             }
+        }
+    }
+
+    LaunchedEffect(registerState) {
+        when(registerState) {
+            is Status.Failed -> {
+                Toast.makeText(context, registerState.errorMessage, Toast.LENGTH_SHORT).show()
+            }
+            is Status.Success -> {
+                Toast.makeText(context, "Account created successfully", Toast.LENGTH_SHORT).show()
+                navController.navigate(RootRoutes.Login.route) {
+                    popUpToTop(navController)
+                }
+            }
+            else -> {}
         }
     }
 
@@ -130,7 +146,7 @@ private fun RegisterScreenContent(
                     Modifier.fillMaxWidth(),
                     enabled = registerData != null && !loading
                 ) {
-                    Text(text = "REGISTER")
+                    Text(text = "Register")
                     Spacer(modifier = Modifier.width(8.dp))
                     Icon(Icons.AutoMirrored.Rounded.Login, contentDescription = "")
                 }
@@ -144,9 +160,9 @@ private fun RegisterScreenContent(
                     },
                     Modifier.fillMaxWidth(),
                 ) {
-                    Text(text = "BACK TO LOGIN")
+                    Text(text = "Back to login")
                 }
-                TextButton(
+                SecondaryButton(
                     onCLick = {
                         navController.navigate(RootRoutes.Home.route) {
                             popUpToTop(navController)
@@ -154,7 +170,7 @@ private fun RegisterScreenContent(
                     },
                     Modifier.fillMaxWidth(),
                 ) {
-                    Text(text = "START AS GUEST")
+                    Text(text = "Start as guest")
                 }
             }
         }

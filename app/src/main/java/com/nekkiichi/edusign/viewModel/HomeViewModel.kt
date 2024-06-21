@@ -12,6 +12,9 @@ class HomeViewModel : ViewModel() {
 
     }
     fun clearVideo() {
+        if(videoFile != null ) {
+            videoFile?.delete()
+        }
         videoFile = null
     }
 }

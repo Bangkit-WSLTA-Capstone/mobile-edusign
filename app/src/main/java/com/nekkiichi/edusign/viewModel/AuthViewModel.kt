@@ -16,16 +16,24 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    authManager: AuthManager,
+    private val authManager: AuthManager,
     private val repository: EdusignRepository
 ) : ViewModel() {
     val logoutEvent = authManager.logoutEvent
+    val loginEvent = authManager.loginEvent
+    val welcomeEvent = authManager.welcomeEvent
 
     var loginStatus by mutableStateOf<Status<LoginResponse>?>(null)
-
     var registerStatus by mutableStateOf<Status<RegisterResponse>?>(null)
 
+    init {
+        viewModelScope.launch {
+            authManager.init()
+        }
+    }
+
     fun login(email: String, password: String) {
+        reset()
         viewModelScope.launch {
             repository.login(email, password).collect { data ->
                 loginStatus = data
@@ -34,10 +42,17 @@ class AuthViewModel @Inject constructor(
     }
 
     fun register(username: String, email: String, password: String) {
+        reset()
         viewModelScope.launch {
             repository.register(username, email, password).collect {
                 registerStatus = it
             }
         }
+    }
+
+
+    fun reset() {
+        loginStatus = null
+        registerStatus = null
     }
 }

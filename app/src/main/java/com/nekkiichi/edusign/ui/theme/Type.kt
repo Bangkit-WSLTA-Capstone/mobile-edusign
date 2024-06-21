@@ -8,13 +8,14 @@ import androidx.compose.ui.text.googlefonts.GoogleFont
 import com.nekkiichi.edusign.R
 
 // imported fonts
-var geistMonoFamily = FontFamily(
-    androidx.compose.ui.text.font.Font(R.font.geist_bold, FontWeight.Bold),
-    androidx.compose.ui.text.font.Font(R.font.geist_semibold, FontWeight.SemiBold),
-    androidx.compose.ui.text.font.Font(R.font.geist_medium,FontWeight.Medium),
-    androidx.compose.ui.text.font.Font(R.font.geist_regular, FontWeight.Normal),
-    androidx.compose.ui.text.font.Font(R.font.geist_light, FontWeight.Light),
-    androidx.compose.ui.text.font.Font(R.font.geist_thin, FontWeight.Thin)
+var plusJakartaSansFamily = FontFamily(
+    androidx.compose.ui.text.font.Font(R.font.plus_jakarta_sans_extrabold, FontWeight.ExtraBold),
+    androidx.compose.ui.text.font.Font(R.font.plus_jakarta_sans_bold, FontWeight.Bold),
+    androidx.compose.ui.text.font.Font(R.font.plus_jakarta_sans_semibold, FontWeight.SemiBold),
+    androidx.compose.ui.text.font.Font(R.font.plus_jakarta_sans_medium,FontWeight.Medium),
+    androidx.compose.ui.text.font.Font(R.font.plus_jakarta_sans_regular, FontWeight.Normal),
+    androidx.compose.ui.text.font.Font(R.font.plus_jakarta_sans_light, FontWeight.Light),
+    androidx.compose.ui.text.font.Font(R.font.plus_jakarta_sans_extralight, FontWeight.ExtraLight)
 )
 
 val provider = GoogleFont.Provider(
@@ -41,21 +42,21 @@ val bodyFontFamily = FontFamily(
 private val baseline = Typography()
 
 val AppTypography = Typography(
-    displayLarge = baseline.displayLarge.copy(fontFamily = geistMonoFamily),
-    displayMedium = baseline.displayMedium.copy(fontFamily = geistMonoFamily),
-    displaySmall = baseline.displaySmall.copy(fontFamily = geistMonoFamily),
-    headlineLarge = baseline.headlineLarge.copy(fontFamily = geistMonoFamily),
-    headlineMedium = baseline.headlineMedium.copy(fontFamily = geistMonoFamily),
-    headlineSmall = baseline.headlineSmall.copy(fontFamily = geistMonoFamily),
-    titleLarge = baseline.titleLarge.copy(fontFamily = geistMonoFamily),
-    titleMedium = baseline.titleMedium.copy(fontFamily = geistMonoFamily),
-    titleSmall = baseline.titleSmall.copy(fontFamily = geistMonoFamily),
-    bodyLarge = baseline.bodyLarge.copy(fontFamily = bodyFontFamily),
-    bodyMedium = baseline.bodyMedium.copy(fontFamily = bodyFontFamily),
-    bodySmall = baseline.bodySmall.copy(fontFamily = bodyFontFamily),
-    labelLarge = baseline.labelLarge.copy(fontFamily = bodyFontFamily),
-    labelMedium = baseline.labelMedium.copy(fontFamily = bodyFontFamily),
-    labelSmall = baseline.labelSmall.copy(fontFamily = bodyFontFamily),
+    displayLarge = baseline.displayLarge.copy(fontFamily = plusJakartaSansFamily),
+    displayMedium = baseline.displayMedium.copy(fontFamily = plusJakartaSansFamily),
+    displaySmall = baseline.displaySmall.copy(fontFamily = plusJakartaSansFamily),
+    headlineLarge = baseline.headlineLarge.copy(fontFamily = plusJakartaSansFamily),
+    headlineMedium = baseline.headlineMedium.copy(fontFamily = plusJakartaSansFamily),
+    headlineSmall = baseline.headlineSmall.copy(fontFamily = plusJakartaSansFamily),
+    titleLarge = baseline.titleLarge.copy(fontFamily = plusJakartaSansFamily),
+    titleMedium = baseline.titleMedium.copy(fontFamily = plusJakartaSansFamily),
+    titleSmall = baseline.titleSmall.copy(fontFamily = plusJakartaSansFamily),
+    bodyLarge = baseline.bodyLarge.copy(fontFamily = plusJakartaSansFamily),
+    bodyMedium = baseline.bodyMedium.copy(fontFamily = plusJakartaSansFamily),
+    bodySmall = baseline.bodySmall.copy(fontFamily = plusJakartaSansFamily),
+    labelLarge = baseline.labelLarge.copy(fontFamily = plusJakartaSansFamily),
+    labelMedium = baseline.labelMedium.copy(fontFamily = plusJakartaSansFamily),
+    labelSmall = baseline.labelSmall.copy(fontFamily = plusJakartaSansFamily),
 
 )
 

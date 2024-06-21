@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -16,11 +17,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.nekkiichi.edusign.Constant.defaultShape
 import com.nekkiichi.edusign.ui.theme.AppTypography
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
-import com.nekkiichi.edusign.ui.theme.geistMonoFamily
+import com.nekkiichi.edusign.ui.theme.plusJakartaSansFamily
 
 val ButtonShape = RoundedCornerShape(16.dp)
 
@@ -29,9 +32,17 @@ fun PrimaryButton(
     onCLick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    colors: ButtonColors = ButtonDefaults.buttonColors(),
+    shape: RoundedCornerShape = defaultShape,
     content: @Composable() (RowScope.() -> Unit)
 ) {
-    Button(onClick = onCLick, modifier = modifier, shape = ButtonShape, enabled = enabled) {
+    Button(
+        onClick = onCLick,
+        modifier = modifier,
+        shape = shape,
+        enabled = enabled,
+        colors = colors
+    ) {
         ProvideTextStyle(value = AppTypography.labelLarge) {
             content()
         }
@@ -51,8 +62,8 @@ fun SecondaryButton(
         shape = ButtonShape,
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.tertiary,
-            contentColor = MaterialTheme.colorScheme.onTertiary
+            containerColor = MaterialTheme.colorScheme.secondary,
+            contentColor = Color.White
         )
     ) {
         ProvideTextStyle(value = AppTypography.labelLarge) {
@@ -94,7 +105,7 @@ fun TextButton(
         enabled = enabled,
         shape = ButtonShape
     ) {
-        ProvideTextStyle(value = AppTypography.labelLarge.copy(fontFamily = geistMonoFamily)) {
+        ProvideTextStyle(value = AppTypography.labelLarge.copy(fontFamily = plusJakartaSansFamily)) {
             content()
         }
     }

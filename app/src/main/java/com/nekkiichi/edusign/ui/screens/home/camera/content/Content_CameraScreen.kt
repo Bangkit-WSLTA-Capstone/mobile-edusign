@@ -103,7 +103,7 @@ fun Content_CameraScreen(navController: NavController, modifier: Modifier = Modi
                         Toast.makeText(context, "Recording successfully", Toast.LENGTH_SHORT).show()
                         Log.d("CameraScreen", "path: ${outputFile.path}")
 
-
+                        camController.unbind()
                         navController.previousBackStackEntry?.savedStateHandle?.set(
                             TranslateScreen.VIDEO_FILE,
                             outputFile
@@ -114,6 +114,7 @@ fun Content_CameraScreen(navController: NavController, modifier: Modifier = Modi
                 }
 
                 is VideoRecordEvent.Start -> {
+
                     startTime = SystemClock.elapsedRealtime()
                     handler.post(updateTimer)
                 }

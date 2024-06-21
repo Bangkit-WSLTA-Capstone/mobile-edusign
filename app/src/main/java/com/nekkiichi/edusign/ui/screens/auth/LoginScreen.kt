@@ -1,5 +1,7 @@
 package com.nekkiichi.edusign.ui.screens.auth
 
+import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,6 +29,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -40,9 +43,9 @@ import com.nekkiichi.edusign.data.remote.response.LoginResponse
 import com.nekkiichi.edusign.ui.composable.FilledTextField
 import com.nekkiichi.edusign.ui.composable.PrimaryButton
 import com.nekkiichi.edusign.ui.composable.SecondaryButton
-import com.nekkiichi.edusign.ui.composable.TextButton
 import com.nekkiichi.edusign.ui.theme.EduSignTheme
 import com.nekkiichi.edusign.utils.Status
+import com.nekkiichi.edusign.utils.extension.popUpToTop
 import com.nekkiichi.edusign.utils.isValidEmail
 import com.nekkiichi.edusign.utils.isValidPassword
 import com.nekkiichi.edusign.viewModel.AuthViewModel
@@ -55,6 +58,7 @@ internal class LoginHandler {
 
 @Composable
 fun LoginScreen(navController: NavController, authViewModel: AuthViewModel) {
+    val context = LocalContext.current
     val loginState = authViewModel.loginStatus
     val handler = remember {
         LoginHandler().apply {
@@ -64,7 +68,21 @@ fun LoginScreen(navController: NavController, authViewModel: AuthViewModel) {
         }
     }
 
-
+    LaunchedEffect(loginState) {
+        when (loginState) {
+            is Status.Failed -> {
+                Toast.makeText(context, "Oops: ${loginState.errorMessage}", Toast.LENGTH_SHORT)
+                    .show()
+            }
+            is Status.Success -> {
+                navController.navigate(RootRoutes.Home.route) {
+                    popUpToTop(navController)
+                }
+                authViewModel.reset()
+            }
+            else -> {}
+        }
+    }
 
     LoginScreenContent(navController, loginState, handler)
 }
@@ -97,11 +115,11 @@ private fun LoginScreenContent(
                 Text(
                     text = "Welcome Back!",
                     style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold),
-                    color = MaterialTheme.colorScheme.onPrimary
+                    color = MaterialTheme.colorScheme.secondary
                 )
                 Text(
                     text = "Let's Sign in with your account!",
-                    color = MaterialTheme.colorScheme.onPrimary
+                    color = MaterialTheme.colorScheme.secondary
                 )
             }
             LoginForm(
@@ -123,7 +141,7 @@ private fun LoginScreenContent(
                     Modifier.fillMaxWidth(),
                     enabled = loginForm != null && !loading // enable button if not in loading state
                 ) {
-                    Text(text = "SIGN IN")
+                    Text(text = "Sign in")
                     Spacer(modifier = Modifier.width(8.dp))
                     Icon(Icons.AutoMirrored.Rounded.Login, contentDescription = "")
                 }
@@ -131,16 +149,16 @@ private fun LoginScreenContent(
                 SecondaryButton(onCLick = {
                     navController.navigate(RootRoutes.Register.route)
                 }, Modifier.fillMaxWidth()) {
-                    Text(text = "CREATE ACCOUNT")
+                    Text(text = "Create an account")
                 }
-                TextButton(onCLick = {
+                SecondaryButton(onCLick = {
                     navController.navigate(RootRoutes.Home.route) {
                         popUpTo(RootRoutes.Login.route) {
                             inclusive = true
                         }
                     }
                 }, Modifier.fillMaxWidth()) {
-                    Text(text = "START AS GUEST")
+                    Text(text = "Start as guest")
                 }
             }
         }
@@ -213,7 +231,8 @@ private fun LoginForm(modifier: Modifier = Modifier, onChange: (form: LoginForm?
 }
 
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun LoginScreenPreview(modifier: Modifier = Modifier) {
     EduSignTheme() {

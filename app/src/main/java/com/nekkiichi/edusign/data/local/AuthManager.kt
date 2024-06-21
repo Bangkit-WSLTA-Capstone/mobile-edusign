@@ -1,7 +1,9 @@
 package com.nekkiichi.edusign.data.local
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -17,22 +19,66 @@ class AuthManager @Inject constructor(@ApplicationContext private val context: C
     private val Context.authDataStore by preferencesDataStore(name = "auth")
 
     private val tokenKey = stringPreferencesKey("token")
+    private val refreshTokenKey = stringPreferencesKey("refreshToken")
+    private val isWelcomeVisitedKey = booleanPreferencesKey("isWelcomeVisited")
 
     private val _logoutEvent = MutableSharedFlow<Unit>()
     val logoutEvent = _logoutEvent.asSharedFlow()
 
+    private val _loginEvent = MutableSharedFlow<Unit>()
+    val loginEvent = _loginEvent.asSharedFlow()
+    private val _welcomeEvent = MutableSharedFlow<Unit>()
+    val welcomeEvent = _welcomeEvent.asSharedFlow()
+
+    init {
+
+    }
+
+    suspend fun init() {
+        val welcomeVisited =
+            context.authDataStore.data.map { it[isWelcomeVisitedKey] ?: false }.first()
+        if (!welcomeVisited) {
+            context.authDataStore.edit {
+                it[isWelcomeVisitedKey] = true
+            }
+            _welcomeEvent.emit(Unit)
+            return
+        }
+        Log.d(TAG, "Check token validity")
+        if (getToken().isNotEmpty()) {
+            Log.d(TAG, "Emit loginEvent")
+            _loginEvent.emit(Unit)
+        } else {
+            _logoutEvent.emit(Unit)
+        }
+    }
+
     suspend fun logout() {
-        saveToken("")
+        saveToken("", "")
         _logoutEvent.emit(Unit)
     }
 
-    suspend fun saveToken(token: String) {
-         context.authDataStore.edit {
+    suspend fun saveToken(token: String, refreshToken: String) {
+        Log.d(TAG, "Save token")
+        context.authDataStore.edit {
             it[tokenKey] = token
+            it[refreshTokenKey] = refreshToken
         }
     }
 
     suspend fun getToken(): String {
-        return context.authDataStore.data.map { value: Preferences -> value[tokenKey] ?: "" }.first()
+        Log.d(TAG, "Retrieve token")
+        return context.authDataStore.data.map { value: Preferences -> value[tokenKey] ?: "" }
+            .first()
+    }
+
+    suspend fun getRefreshToken(): String {
+        Log.d(TAG, "retrieve refresh token")
+        return context.authDataStore.data.map { value: Preferences -> value[refreshTokenKey] ?: "" }
+            .first()
+    }
+
+    companion object {
+        private const val TAG = "AuthManager"
     }
 }
